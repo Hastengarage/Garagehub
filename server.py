@@ -1,7 +1,9 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 import json
 import urllib.parse
+import urllib.request
 import hashlib
+import re
 import os
 
 DATA_FILE = 'data.json'
@@ -156,9 +158,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             is_admin = u_info.get("is_admin", False)
             can_see_admin = u_info.get("can_see_admin_inv", False)
 
-            # BEHÖRIGHETS-LOGIK:
-            # Admin ser ALLT.
-            # Vanlig användare ser sina egna delar + Admin-delar om Admin godkänt.
             visible_parts = []
             for p in db["parts"]:
                 owner = p.get('user', '').lower()
@@ -192,7 +191,7 @@ class CustomHandler(SimpleHTTPRequestHandler):
             reg_nr = query_params.get('reg', [''])[0].strip().upper().replace(" ", "")
 
             self.send_json_response()
-            car_data = self.fetch_car_data(reg_nr)
+            car_data = self.fetch_real_car_data(reg_nr)
             self.wfile.write(json.dumps(car_data).encode('utf-8'))
             return
 
@@ -203,13 +202,65 @@ class CustomHandler(SimpleHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
 
-    def fetch_car_data(self, reg):
-        if reg.startswith("B"):
-            return {"success": True, "reg": reg, "make": "Volvo", "model": "V70 D4", "year": "2012", "engine": "D4204T5 (2.0L)", "fuel": "Diesel", "power": "163 hk / 120 kW"}
-        elif reg.startswith("A"):
-            return {"success": True, "reg": reg, "make": "BMW", "model": "320i Touring", "year": "2009", "engine": "N43B20A (2.0L)", "fuel": "Bensin", "power": "170 hk / 125 kW"}
-        else:
-            return {"success": True, "reg": reg, "make": "Ford", "model": "Focus RS", "year": "2016", "engine": "2.3L EcoBoost", "fuel": "Bensin", "power": "350 hk / 257 kW"}
+    def fetch_real_car_data(self, reg):
+        reg = reg.strip().upper().replace(" ", "")
+        if not reg or len(reg) < 5:
+            return {"success": False, "message": "Ogiltigt registreringsnummer"}
+
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept-Language': 'sv-SE,sv;q=0.9,en-US;q=0.8'
+        }
+
+        # RIKTIG LIVESÖKNING MOT BILREGISTRET (Biluppgifter)
+        try:
+            url = f"https://biluppgifter.se/fordon/{reg}"
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=5) as response:
+                html = response.read().decode('utf-8', errors='ignore')
+                
+                title_match = re.search(r'<title>(.*?)</title>', html, re.IGNORECASE)
+                if title_match:
+                    full_title = title_match.group(1).strip()
+                    
+                    if reg in full_title.upper():
+                        # Exempel: "PDO760 - Volkswagen Golf VII Variant 1.2 TSI - Biluppgifter.se"
+                        clean_title = full_title.split('- Biluppgifter')[0].strip()
+                        clean_title = clean_title.replace(reg, '').replace('-', '').strip()
+                        
+                        year_match = re.search(r'\b(19\d\d|20\d\d)\b', clean_title)
+                        year = year_match.group(1) if year_match else ""
+                        
+                        text_no_year = re.sub(r'\b(19\d\d|20\d\d)\b', '', clean_title).strip()
+                        
+                        parts = text_no_year.split()
+                        make = parts[0] if len(parts) > 0 else "Okänd"
+                        model = " ".join(parts[1:]) if len(parts) > 1 else text_no_year
+
+                        fuel = "Bensin"
+                        if "diesel" in html.lower(): fuel = "Diesel"
+                        elif "el" in html.lower() or "hybrid" in html.lower(): fuel = "El/Hybrid"
+
+                        power_match = re.search(r'(\d+\s*hk|\d+\s*kW)', html, re.IGNORECASE)
+                        power = power_match.group(1) if power_match else ""
+
+                        return {
+                            "success": True,
+                            "reg": reg,
+                            "make": make.capitalize(),
+                            "model": model,
+                            "year": year,
+                            "engine": "Standard",
+                            "fuel": fuel,
+                            "power": power
+                        }
+        except Exception as e:
+            print(f"Livesökning misslyckades: {e}")
+
+        return {
+            "success": False,
+            "message": f"Kunde inte hämta fordonsdata automatiskt för {reg}."
+        }
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
