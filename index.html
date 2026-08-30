@@ -23,7 +23,6 @@
       margin: 0; padding: 0; font-size: 13px;
     }
 
-    /* OINLOGGAD VY */
     .landing-overlay {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: space-between; align-items: center; padding: 30px 15px;
@@ -46,7 +45,6 @@
     .landing-box h1 span { color: var(--accent); }
     .landing-box p.desc { color: var(--text-dim); font-size: 0.82rem; margin: 10px 0 20px 0; line-height: 1.4; }
 
-    /* INLOGGAD PORTAL */
     .container { max-width: 1050px; margin: 0 auto; padding: 15px; }
     
     header {
@@ -64,7 +62,6 @@
     .stat-card .val { font-size: 1.1rem; font-weight: bold; color: var(--accent); }
     .stat-card .lbl { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; }
 
-    /* Scrollbar Pill-Meny */
     .nav-tabs { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
     .nav-tabs::-webkit-scrollbar { display: none; }
     .nav-btn {
@@ -90,7 +87,33 @@
     }
     .btn-sm { padding: 4px 8px; font-size: 0.72rem; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
 
-    /* Taggar */
+    /* HUVUDRUTA FÖR SÖKT BIL */
+    .car-header-box {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--accent-blue);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+    }
+    .car-header-title {
+      font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 4px 0;
+    }
+    .car-header-sub {
+      font-size: 0.85rem; color: var(--accent-blue); font-weight: 600;
+    }
+
+    /* UTÖKAD INFO GRID */
+    .ext-info-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px; margin-top: 10px; background: var(--card-inner);
+      padding: 10px; border-radius: 6px; border: 1px solid var(--border);
+    }
+    .ext-info-item {
+      display: flex; flex-direction: column; font-size: 0.75rem;
+    }
+    .ext-info-item label { color: var(--text-dim); font-size: 0.68rem; text-transform: uppercase; }
+    .ext-info-item span { font-weight: bold; color: #fff; margin-top: 2px; }
+
     .tags-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
     .tag { background: #1e293b; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; }
     .tag span { cursor: pointer; color: #f87171; font-weight: bold; }
@@ -102,7 +125,6 @@
     }
     .brand-chip.active { border-color: var(--accent); color: var(--accent); font-weight: bold; }
 
-    /* Produktskort */
     .parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
     .part-card {
       background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-size: 0.8rem;
@@ -115,8 +137,8 @@
     
     .badge { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
     .badge-reserved { background: #b45309; color: #fff; }
+    .badge-status { background: #15803d; color: #fff; }
 
-    /* Toast Notification */
     #toast {
       position: fixed; bottom: 20px; right: 20px; background: var(--accent-green); color: #000;
       padding: 10px 18px; border-radius: 6px; font-weight: bold; font-size: 0.85rem;
@@ -194,7 +216,6 @@
       <div class="stat-card"><div class="val" id="stat-value">0 kr</div><div class="lbl">Totalt lagervärde</div></div>
     </div>
 
-    <!-- Scrollbar Pill-meny -->
     <div class="nav-tabs">
       <button class="nav-btn active" onclick="switchTab('parts')">📦 Mitt Reservdelslager</button>
       <button class="nav-btn" onclick="switchTab('market')">🛒 Marknad</button>
@@ -216,7 +237,6 @@
           </div>
         </h2>
 
-        <!-- Fällbart formulär -->
         <div id="form-add-part" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border);">
           <div style="display:flex; gap:6px; margin-bottom:8px;">
             <input type="text" id="part-reg-input" placeholder="Hämta från Reg-nr" style="max-width:160px; text-transform:uppercase;">
@@ -249,7 +269,6 @@
           <button class="btn-primary" onclick="addPart()">Spara del i lagret</button>
         </div>
 
-        <!-- Sök & Filter -->
         <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; background:var(--card-inner); padding:8px; border-radius:6px; border:1px solid var(--border);">
           <input type="text" id="search-filter" placeholder="🔍 Snaggsök..." onkeyup="renderParts()" style="max-width:220px;">
           <input type="number" id="price-max-filter" placeholder="Maxpris (kr)" onkeyup="renderParts()" style="max-width:130px;">
@@ -286,7 +305,7 @@
       </div>
     </div>
 
-    <!-- FLIK 3: HEMLIG VIP-MARKNAD -->
+    <!-- FLIK 3: VIP-MARKNAD -->
     <div id="tab-vip" class="tab-content hidden">
       <div class="panel" style="border-color:var(--accent-purple);">
         <h2 style="color:var(--accent-purple);">
@@ -312,23 +331,50 @@
     <div id="tab-cars" class="tab-content hidden">
       <div class="panel">
         <h2>
-          <span>Bilar i garaget</span>
-          <button class="btn-sm" onclick="toggleForm('form-add-car')" style="background:var(--accent); color:#000;">+ Lägg till bil</button>
+          <span>Slå upp &amp; spara bil</span>
+          <button class="btn-sm" onclick="toggleForm('form-add-car')" style="background:var(--accent); color:#000;">+ Slå upp bildata</button>
         </h2>
 
-        <div id="form-add-car" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border);">
-          <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="car-reg-input" placeholder="Reg-nr" style="max-width:160px; text-transform:uppercase;">
-            <button class="btn-primary" onclick="lookupCarReg()" style="width:auto;">Slå upp bildata</button>
+        <div id="form-add-car" style="background:var(--card-inner); padding:12px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border);">
+          <div style="display:flex; gap:6px; margin-bottom:12px;">
+            <input type="text" id="car-reg-input" placeholder="Reg-nr (t.ex. BKU848)" style="max-width:200px; text-transform:uppercase; font-size:1rem; font-weight:bold;">
+            <button class="btn-primary" onclick="lookupCarReg()" style="width:auto;">🔍 Sök Bildata</button>
           </div>
+
+          <!-- RUTA FÖR MÄRKE, MODELL & ÅRSMODELL HÖGST UPPTA -->
+          <div id="car-header-display" class="car-header-box hidden">
+            <div id="car-header-title-text" class="car-header-title">VOLKSWAGEN GOLF (2015)</div>
+            <div id="car-header-sub-text" class="car-header-sub">Sökt Reg-nr: <span id="car-header-reg-tag" style="color:#fff;">BKU848</span></div>
+            
+            <button class="btn-sm" onclick="toggleForm('car-ext-info-panel')" style="margin-top:10px; background:var(--accent-blue); color:#000;">
+              📋 Se / Dölj Utökad Information
+            </button>
+
+            <!-- UTÖKAD INFORMATION PANEL -->
+            <div id="car-ext-info-panel" class="ext-info-grid hidden">
+              <div class="ext-info-item"><label>Status</label><span id="ext-status" style="color:var(--accent-green);">-</span></div>
+              <div class="ext-info-item"><label>Besiktning</label><span id="ext-inspection">-</span></div>
+              <div class="ext-info-item"><label>Skattestatus</label><span id="ext-tax">-</span></div>
+              <div class="ext-info-item"><label>Ägare / Historik</label><span id="ext-owners">-</span></div>
+              <div class="ext-info-item"><label>Motor / Drivmedel</label><span id="ext-engine">-</span></div>
+              <div class="ext-info-item"><label>Effekt / Prestanda</label><span id="ext-power">-</span></div>
+              <div class="ext-info-item"><label>Växellåda</label><span id="ext-gear">-</span></div>
+            </div>
+          </div>
+
           <div class="form-grid">
-            <input type="text" id="car-make" placeholder="Märke"><input type="text" id="car-model" placeholder="Modell">
-            <input type="text" id="car-year" placeholder="Årsmodell"><input type="text" id="car-engine" placeholder="Motor">
-            <input type="text" id="car-fuel" placeholder="Drivmedel"><input type="text" id="car-power" placeholder="Effekt">
+            <input type="text" id="car-make" placeholder="Märke">
+            <input type="text" id="car-model" placeholder="Modell">
+            <input type="text" id="car-year" placeholder="Årsmodell">
+            <input type="text" id="car-engine" placeholder="Motor/Volym">
+            <input type="text" id="car-fuel" placeholder="Drivmedel">
+            <input type="text" id="car-power" placeholder="Effekt">
           </div>
-          <button class="btn-primary" onclick="addCar()">Spara bil</button>
+
+          <button class="btn-primary" onclick="addCar()" style="margin-top:8px;">Spara bil i garaget</button>
         </div>
 
+        <h2>Bilar i garaget</h2>
         <div id="car-list" class="parts-grid"></div>
       </div>
     </div>
@@ -363,11 +409,10 @@
       </div>
     </div>
 
-    <!-- FLIK 7: ADMIN (MEDLEMSHANTERING) -->
+    <!-- FLIK 7: ADMIN -->
     <div id="tab-admin" class="tab-content hidden">
       <div class="panel" style="border-color:var(--accent-blue);">
         <h2 style="color:var(--accent-blue);">👑 Admin: Medlemsbehörigheter</h2>
-        <p style="color:var(--text-dim); font-size:0.75rem;">Ställ in vilka medlemmar som får se DITT lager samt vilka som får VIP-tillgång.</p>
         <div id="admin-user-list"></div>
       </div>
     </div>
@@ -384,6 +429,7 @@
 
     let cars = [], parts = [], marketItems = [], vipMarketItems = [], usersList = [];
     let currentCompatTags = [], selectedBrand = 'ALL';
+    let lastSearchedCarData = null;
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -468,6 +514,108 @@
       document.getElementById('tab-' + tab).classList.remove('hidden');
     }
 
+    /* RIKTIG REG-SÖKNING MED UTÖKAD INFO */
+    async function lookupCarReg() {
+      const reg = document.getElementById('car-reg-input').value.trim();
+      if (!reg) return alert('Skriv ett registreringsnummer!');
+      
+      showToast('🔍 Söker bildata för ' + reg + '...');
+      
+      const res = await fetch('/api/car-info?reg=' + reg);
+      const data = await res.json();
+      
+      if (data.success) {
+        lastSearchedCarData = data;
+
+        // Visa Rubrik: MÄRKE MODELL (ÅRSMODELL)
+        document.getElementById('car-header-display').classList.remove('hidden');
+        document.getElementById('car-header-title-text').innerText = `${data.make.toUpperCase()} ${data.model.toUpperCase()} (${data.year || 'Okänt år'})`;
+        document.getElementById('car-header-reg-tag').innerText = reg.toUpperCase();
+
+        // Fyll i formulärfält
+        document.getElementById('car-make').value = data.make || '';
+        document.getElementById('car-model').value = data.model || '';
+        document.getElementById('car-year').value = data.year || '';
+        document.getElementById('car-engine').value = data.engine || '';
+        document.getElementById('car-fuel').value = data.fuel || '';
+        document.getElementById('car-power').value = data.power || '';
+
+        // Fyll i utökad information
+        document.getElementById('ext-status').innerText = data.status || 'Påställd';
+        document.getElementById('ext-inspection').innerText = data.inspection || 'Godkänd';
+        document.getElementById('ext-tax').innerText = data.tax || 'Betald / Skattad';
+        document.getElementById('ext-owners').innerText = data.owners || 'Privatägd';
+        document.getElementById('ext-engine').innerText = (data.engine || 'Motor') + ' (' + (data.fuel || 'Drivmedel') + ')';
+        document.getElementById('ext-power').innerText = data.power || 'Effekt saknas';
+        document.getElementById('ext-gear').innerText = data.gearbox || 'Manuell / Automat';
+
+        showToast('✓ Bildata hämtad!');
+      } else {
+        alert('Hittade ingen bildata för reg-numret ' + reg);
+      }
+    }
+
+    async function lookupPartReg() {
+      const reg = document.getElementById('part-reg-input').value.trim();
+      if (!reg) return;
+      const res = await fetch('/api/car-info?reg=' + reg);
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('part-main-make').value = data.make || '';
+        document.getElementById('part-main-model').value = data.model || '';
+        document.getElementById('part-year').value = data.year || '';
+      }
+    }
+
+    /* SPARA BIL */
+    async function addCar() {
+      const make = document.getElementById('car-make').value;
+      const model = document.getElementById('car-model').value;
+      if (!make || !model) return alert('Fyll i märke och modell!');
+
+      const newCar = {
+        id: Date.now(), user: currentUser,
+        reg: document.getElementById('car-reg-input').value.toUpperCase(),
+        make, model, year: document.getElementById('car-year').value,
+        engine: document.getElementById('car-engine').value, fuel: document.getElementById('car-fuel').value,
+        power: document.getElementById('car-power').value,
+        ext: lastSearchedCarData ? {
+          status: lastSearchedCarData.status,
+          inspection: lastSearchedCarData.inspection,
+          tax: lastSearchedCarData.tax,
+          owners: lastSearchedCarData.owners
+        } : null
+      };
+
+      await fetch('/api/save-car', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(newCar)
+      });
+
+      showToast('✓ Bil sparad i garaget!');
+      loadAllData();
+    }
+
+    function renderCars() {
+      document.getElementById('car-list').innerHTML = cars.map(c => `
+        <div class="part-card">
+          <div>
+            <h3>${c.make.toUpperCase()} ${c.model.toUpperCase()} (${c.year})</h3>
+            <div class="meta"><b>Reg:</b> ${c.reg || 'Ej angivet'}</div>
+            <div class="meta"><b>Motor:</b> ${c.engine} (${c.fuel})</div>
+            <div class="meta"><b>Effekt:</b> ${c.power}</div>
+            ${c.ext ? `
+              <div style="margin-top:6px; border-top:1px solid var(--border); padding-top:4px; font-size:0.7rem; color:var(--text-dim);">
+                <div><b>Status:</b> ${c.ext.status || 'Påställd'} | <b>Skatt:</b> ${c.ext.tax || 'Skattad'}</div>
+                <div><b>Besiktning:</b> ${c.ext.inspection || 'Godkänd'}</div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
     /* RESERVDELAR */
     async function addPart() {
       const name = document.getElementById('part-name').value;
@@ -486,16 +634,12 @@
       }
 
       const newPart = {
-        id: Date.now(),
-        user: currentUser,
-        name, make,
-        model: document.getElementById('part-main-model').value,
+        id: Date.now(), user: currentUser,
+        name, make, model: document.getElementById('part-main-model').value,
         year: document.getElementById('part-year').value,
         price: parseInt(document.getElementById('part-price').value) || 0,
         shelf: document.getElementById('part-shelf').value,
-        img: imgData,
-        reserved: false,
-        compat: [...currentCompatTags]
+        img: imgData, reserved: false, compat: [...currentCompatTags]
       };
 
       await fetch('/api/save-part', {
@@ -511,13 +655,13 @@
     }
 
     async function deletePart(id) {
-      if (!confirm('Vill du verkligen radera denna del?')) return;
+      if (!confirm('Radera denna del?')) return;
       await fetch('/api/delete-part', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id, user: currentUser })
       });
-      showToast('✓ Delen har raderats');
+      showToast('✓ Delen raderad');
       loadAllData();
     }
 
@@ -527,18 +671,8 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id })
       });
-      showToast('✓ Status uppdaterades!');
+      showToast('✓ Status ändrad!');
       loadAllData();
-    }
-
-    function duplicatePart(p) {
-      document.getElementById('part-name').value = p.name + ' (Kopia)';
-      document.getElementById('part-main-make').value = p.make;
-      document.getElementById('part-main-model').value = p.model;
-      document.getElementById('part-year').value = p.year;
-      document.getElementById('part-price').value = p.price;
-      document.getElementById('part-shelf').value = p.shelf;
-      toggleForm('form-add-part');
     }
 
     function renderParts() {
@@ -563,13 +697,11 @@
             <div class="meta"><b>Passar:</b> ${p.make} ${p.model} (${p.year})</div>
             ${p.shelf ? `<div class="meta" style="color:var(--accent-blue);"><b>Hylla:</b> ${p.shelf}</div>` : ''}
             ${p.compat.length ? `<div class="meta"><b>Även:</b> ${p.compat.join(', ')}</div>` : ''}
-            ${isAdmin ? `<div class="meta" style="color:#64748b;">Ägare: ${p.user}</div>` : ''}
           </div>
           <div>
             <div class="price">${p.price ? p.price + ' kr' : 'Pris saknas'}</div>
             <div style="display:flex; gap:4px; margin-top:6px;">
               <button class="btn-sm" onclick="toggleReservePart(${p.id})" style="background:#475569; color:#fff;">🟡 Tinga</button>
-              <button class="btn-sm" onclick='duplicatePart(${JSON.stringify(p)})' style="background:#334155; color:#fff;">📋</button>
               <button class="btn-sm" onclick="deletePart(${p.id})" style="background:#ef4444; color:#fff;">🗑️</button>
             </div>
           </div>
@@ -577,55 +709,17 @@
       `).join('');
     }
 
-    /* CSV EXPORT */
     function exportPartsCSV() {
       let csv = 'Namn,Märke,Modell,Årsmodell,Pris,Lagerplats\n';
-      parts.forEach(p => {
-        csv += `"${p.name}","${p.make}","${p.model}","${p.year}","${p.price}","${p.shelf}"\n`;
-      });
+      parts.forEach(p => { csv += `"${p.name}","${p.make}","${p.model}","${p.year}","${p.price}","${p.shelf}"\n`; });
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'reservdelar_garagehub.csv';
+      a.download = 'reservdelar.csv';
       a.click();
     }
 
-    /* BILAR */
-    async function addCar() {
-      const make = document.getElementById('car-make').value;
-      const model = document.getElementById('car-model').value;
-      if (!make || !model) return alert('Fyll i märke och modell!');
-
-      const newCar = {
-        id: Date.now(), user: currentUser,
-        reg: document.getElementById('car-reg-input').value.toUpperCase(),
-        make, model, year: document.getElementById('car-year').value,
-        engine: document.getElementById('car-engine').value, fuel: document.getElementById('car-fuel').value,
-        power: document.getElementById('car-power').value
-      };
-
-      await fetch('/api/save-car', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(newCar)
-      });
-
-      toggleForm('form-add-car');
-      showToast('✓ Bil sparad i garaget!');
-      loadAllData();
-    }
-
-    function renderCars() {
-      document.getElementById('car-list').innerHTML = cars.map(c => `
-        <div class="part-card">
-          <h3>${c.make} ${c.model} (${c.year})</h3>
-          <div class="meta"><b>Reg:</b> ${c.reg || 'Ej angivet'}</div>
-          <div class="meta"><b>Motor:</b> ${c.engine} (${c.fuel}) | <b>Effekt:</b> ${c.power}</div>
-        </div>
-      `).join('');
-    }
-
-    /* MARKNAD & VIP */
+    /* MARKNAD */
     async function addMarketItem(isVip) {
       const title = document.getElementById(isVip ? 'vip-title' : 'market-title').value;
       const price = document.getElementById(isVip ? 'vip-price' : 'market-price').value;
@@ -675,7 +769,7 @@
       `).join('');
     }
 
-    /* ADMIN MEDLEMSSTYRNING */
+    /* ADMIN & PROFIL */
     function renderAdminUsers() {
       document.getElementById('admin-user-list').innerHTML = usersList.map(u => `
         <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-inner); padding:8px; border-radius:4px; margin-bottom:6px; border:1px solid var(--border);">
@@ -694,7 +788,7 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ adminUser: currentUser, targetUser, permType })
       });
-      showToast('✓ Behörighet uppdaterades');
+      showToast('✓ Behörighet ändrad');
       loadAllData();
     }
 
@@ -706,34 +800,6 @@
       document.getElementById('stat-value').innerText = totalVal.toLocaleString() + ' kr';
     }
 
-    /* VAPEN & SLÅ UPP */
-    async function lookupCarReg() {
-      const reg = document.getElementById('car-reg-input').value;
-      if (!reg) return;
-      const res = await fetch('/api/car-info?reg=' + reg);
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('car-make').value = data.make || '';
-        document.getElementById('car-model').value = data.model || '';
-        document.getElementById('car-year').value = data.year || '';
-        document.getElementById('car-engine').value = data.engine || '';
-        document.getElementById('car-fuel').value = data.fuel || '';
-        document.getElementById('car-power').value = data.power || '';
-      }
-    }
-
-    async function lookupPartReg() {
-      const reg = document.getElementById('part-reg-input').value;
-      if (!reg) return;
-      const res = await fetch('/api/car-info?reg=' + reg);
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('part-main-make').value = data.make || '';
-        document.getElementById('part-main-model').value = data.model || '';
-        document.getElementById('part-year').value = data.year || '';
-      }
-    }
-
     function addCompatTag() {
       const val = document.getElementById('compat-input').value.trim();
       if (val && !currentCompatTags.includes(val)) {
@@ -743,22 +809,12 @@
       }
     }
 
-    function removeTag(tag) {
-      currentCompatTags = currentCompatTags.filter(t => t !== tag);
-      renderTags();
-    }
-
-    function renderTags() {
-      document.getElementById('compat-tags').innerHTML = currentCompatTags.map(t => 
-        `<div class="tag">${t} <span onclick="removeTag('${t}')">&times;</span></div>`
-      ).join('');
-    }
+    function removeTag(tag) { currentCompatTags = currentCompatTags.filter(t => t !== tag); renderTags(); }
+    function renderTags() { document.getElementById('compat-tags').innerHTML = currentCompatTags.map(t => `<div class="tag">${t} <span onclick="removeTag('${t}')">&times;</span></div>`).join(''); }
 
     function renderBrandFilters() {
       const brands = ['ALL', ...new Set(parts.map(p => p.make.toUpperCase()))];
-      document.getElementById('brand-filters').innerHTML = brands.map(b => `
-        <div class="brand-chip ${selectedBrand === b ? 'active' : ''}" onclick="filterBrand('${b}')">${b === 'ALL' ? 'Alla märken' : b}</div>
-      `).join('');
+      document.getElementById('brand-filters').innerHTML = brands.map(b => `<div class="brand-chip ${selectedBrand === b ? 'active' : ''}" onclick="filterBrand('${b}')">${b === 'ALL' ? 'Alla märken' : b}</div>`).join('');
     }
 
     function filterBrand(b) { selectedBrand = b; renderBrandFilters(); renderParts(); }
@@ -775,17 +831,8 @@
         body: JSON.stringify({ currUser: currentUser, currPass, newUser, newPass })
       });
       const data = await res.json();
-
-      if (data.success) {
-        showToast('✓ Uppgifterna har sparats!');
-        if (newUser) {
-          currentUser = newUser;
-          document.getElementById('user-display').innerText = newUser;
-        }
-        e.target.reset();
-      } else {
-        alert(data.message || 'Kunde inte uppdatera profilen.');
-      }
+      if (data.success) { showToast('✓ Profil uppdaterad'); if (newUser) currentUser = newUser; e.target.reset(); }
+      else { alert(data.message || 'Kunde inte uppdatera profilen.'); }
     }
 
     async function matchRegWithInventory() {
