@@ -12,7 +12,7 @@
       --accent: #f97316;
       --accent-green: #22c55e;
       --accent-blue: #38bdf8;
-      --accent-purple: #a855f7; /* VIP-lila */
+      --accent-purple: #a855f7;
       --text: #f8fafc;
       --text-dim: #94a3b8;
       --border: #1f293d;
@@ -23,6 +23,7 @@
       margin: 0; padding: 0; font-size: 13px;
     }
 
+    /* OINLOGGAD LANDNINGSSIDA */
     .landing-overlay {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: space-between; align-items: center; padding: 30px 15px;
@@ -40,13 +41,14 @@
     .landing-box {
       background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(10px);
       border: 1px solid var(--border); border-radius: 12px; padding: 25px;
-      width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      width: 100%; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       z-index: 2; text-align: center;
     }
     .landing-box h1 { font-size: 2.5rem; margin: 0; color: #fff; letter-spacing: -1px; }
     .landing-box h1 span { color: var(--accent); }
     .landing-box p.desc { color: var(--text-dim); font-size: 0.82rem; margin: 10px 0 20px 0; line-height: 1.4; }
 
+    /* INLOGGAD PORTAL */
     .container { max-width: 1050px; margin: 0 auto; padding: 15px; }
     
     header {
@@ -105,9 +107,6 @@
     .part-card h3 { margin: 0 0 4px 0; font-size: 0.9rem; color: #fff; }
     .part-card .meta { color: var(--text-dim); font-size: 0.72rem; margin-bottom: 3px; }
     .part-card .price { color: var(--accent-green); font-weight: bold; font-size: 0.85rem; margin-top: 4px; }
-    .badge { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
-    .badge-sell { background: #16a34a; color: #fff; }
-    .badge-buy { background: #2563eb; color: #fff; }
 
     footer { text-align: center; color: var(--text-dim); font-size: 0.75rem; padding: 20px 0; margin-top: 20px; border-top: 1px solid var(--border); }
 
@@ -116,6 +115,7 @@
 </head>
 <body>
 
+  <!-- OINLOGGAD LANDNINGSSIDA -->
   <div id="view-landing" class="landing-overlay">
     <div class="horse-watermark"></div>
 
@@ -126,7 +126,7 @@
 
     <div class="landing-box" id="login-box">
       <h2 style="margin-top:0; color:var(--accent); font-size:1.2rem;">🔐 Medlemsinloggning</h2>
-      <p class="desc">Logga in för tillgång till portalen. Krypterad anslutning (256-bit AES/SHA-256).</p>
+      <p class="desc">Slutet reservdelslager för privatbruk. Här kan du lägga till dina bilar, hålla koll på reservdelar samt handla på medlemsmarknaden.</p>
       
       <form onsubmit="doLogin(event)">
         <div style="margin-bottom:10px;"><input type="text" id="login-user" placeholder="Användarnamn" required></div>
@@ -146,7 +146,7 @@
         <div style="margin-bottom:8px;"><input type="text" id="app-name" placeholder="Ditt Namn" required></div>
         <div style="margin-bottom:8px;"><input type="email" id="app-email" placeholder="E-postadress" required></div>
         <div style="margin-bottom:8px;"><input type="tel" id="app-phone" placeholder="Telefonnummer" required></div>
-        <div style="margin-bottom:10px;"><textarea id="app-msg" rows="3" placeholder="Vad har du för bil/projekt?"></textarea></div>
+        <div style="margin-bottom:10px;"><textarea id="app-msg" rows="3" placeholder="Berätta kort om dina bilar/projekt..."></textarea></div>
         <button type="submit" class="btn-primary" style="background:var(--accent-green);">Skicka Ansökan</button>
       </form>
       <div style="margin-top:12px;">
@@ -155,11 +155,12 @@
     </div>
 
     <footer>
-      🔒 Skyddad portal | Grundat &amp; Byggt <b>2026</b> av GarageHub
+      🔒 GarageHub Portal | Byggt &amp; Grundat <b>2026</b>
     </footer>
   </div>
 
 
+  <!-- INLOGGAD PORTAL -->
   <div id="view-portal" class="container hidden">
     <header>
       <h1>Garage<span>Hub</span></h1>
@@ -178,13 +179,14 @@
 
     <div class="nav-tabs">
       <button class="nav-btn active" onclick="switchTab('parts')">📦 Mitt Reservdelslager</button>
-      <button class="nav-btn" onclick="switchTab('market')">🛒 Köp, Sälj &amp; Byt</button>
+      <button class="nav-btn" onclick="switchTab('market')">🛒 Marknad</button>
       <button class="nav-btn vip-btn hidden" id="vip-tab-btn" onclick="switchTab('vip')">🔒 VIP-Marknad (Hemlig)</button>
       <button class="nav-btn" onclick="switchTab('cars')">🏎️ Mina Bilar</button>
       <button class="nav-btn" onclick="switchTab('match')">⚡ Reg-nr Matchning</button>
       <button class="nav-btn" onclick="switchTab('profile')">⚙️ Min Profil</button>
     </div>
 
+    <!-- FLIK 1: Reservdelslager -->
     <div id="tab-parts" class="tab-content">
       <div class="panel">
         <h2>+ Lägg till del i mitt lager</h2>
@@ -224,28 +226,30 @@
       </div>
     </div>
 
+    <!-- FLIK 2: Marknad -->
     <div id="tab-market" class="tab-content hidden">
       <div class="panel">
-        <h2>🛒 Skapa Öppen Annons</h2>
+        <h2>🛒 Skapa Marknadsannons</h2>
         <div class="form-grid">
           <select id="market-type">
             <option value="Säljes">🟢 Säljes</option>
-            <option value="Sökes/Köpes">🔵 Sökes / Köpes</option>
+            <option value="Köpes">🔵 Köpes / Sökes</option>
           </select>
-          <input type="text" id="market-title" placeholder="Rubrik...">
+          <input type="text" id="market-title" placeholder="Rubrik på annonsen...">
           <input type="number" id="market-price" placeholder="Pris (kr)">
           <input type="text" id="market-contact" placeholder="Kontakt (Tel/Namn)">
         </div>
-        <div style="margin-bottom:8px;"><textarea id="market-desc" rows="2" placeholder="Beskrivning..."></textarea></div>
-        <button class="btn-primary" onclick="addMarketItem(false)">Publicera Öppen Annons</button>
+        <div style="margin-bottom:8px;"><textarea id="market-desc" rows="2" placeholder="Beskrivning av det du säljer eller letar efter..."></textarea></div>
+        <button class="btn-primary" onclick="addMarketItem(false)">Publicera Annons</button>
       </div>
 
       <div class="panel">
-        <h2>Öppen Medlemsmarknad</h2>
+        <h2>Medlemsmarknad</h2>
         <div id="market-list" class="parts-grid"></div>
       </div>
     </div>
 
+    <!-- FLIK 3: HEMLIG VIP-MARKNAD -->
     <div id="tab-vip" class="tab-content hidden">
       <div class="panel" style="border-color:var(--accent-purple);">
         <h2 style="color:var(--accent-purple);">🔒 Skapa VIP-Annons (Hemlig)</h2>
@@ -266,6 +270,7 @@
       </div>
     </div>
 
+    <!-- FLIK 4: Mina Bilar -->
     <div id="tab-cars" class="tab-content hidden">
       <div class="panel">
         <h2>+ Slå upp &amp; spara bil</h2>
@@ -283,6 +288,7 @@
       <div class="panel"><h2>Bilar i garaget</h2><div id="car-list" class="parts-grid"></div></div>
     </div>
 
+    <!-- FLIK 5: Reg-nr Matchning -->
     <div id="tab-match" class="tab-content hidden">
       <div class="panel">
         <h2>⚡ Reg-nr Matchning</h2>
@@ -295,6 +301,7 @@
       </div>
     </div>
 
+    <!-- FLIK 6: MIN PROFIL (ÄNDRA ANVÄNDARNAMN / LÖSENORD) -->
     <div id="tab-profile" class="tab-content hidden">
       <div class="panel">
         <h2>⚙️ Ändra mina inloggningsuppgifter</h2>
@@ -314,7 +321,7 @@
     </div>
 
     <footer>
-      🔒 GarageHub Portal | Grundat &amp; Byggt <b>2026</b>
+      🔒 GarageHub Portal | Byggt &amp; Grundat <b>2026</b>
     </footer>
   </div>
 
