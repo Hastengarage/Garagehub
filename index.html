@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GarageHub</title>
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --card-bg: rgba(23, 32, 51, 0.75);
+            --accent-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --coral-pop: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+            --success-gradient: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+            --text: #f8fafc;
+            --subtext: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --input-bg: rgba(255, 255, 255, 0.04);
+            --card-glow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        body.light-theme {
+            --bg: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #0f172a;
+            --subtext: #64748b;
+            --border: rgba(0, 0, 0, 0.08);
+            --input-bg: rgba(0, 0, 0, 0.03);
+            --card-glow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 25px; transition: background 0.3s; }
+        .container { width: 100%; max-width: 980px; }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--card-glow);
+            margin-bottom: 25px;
+        }
+
+        .brand-logo {
+            font-size: 2.8rem; font-weight: 900; letter-spacing: -1.5px;
+            background: var(--accent-gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; display: inline-block;
+        }
+
+        h2, h3, h4 { font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-row { display: flex; gap: 12px; }
+        .form-row .form-group { flex: 1; }
+
+        label { display: block; font-size: 0.75rem; color: var(--subtext); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
+        input, select, textarea {
+            width: 100%; background: var(--input-bg); border: 1px solid var(--border);
+            padding: 12px 16px; border-radius: 12px; color: var(--text); font-size: 0.95rem; outline: none; transition: all 0.2s;
+        }
+        select option { background-color: #0b0f19; color: #fff; }
+        input:focus, select:focus, textarea:focus { border-color: #4facfe; box-shadow: 0 0 12px rgba(79, 172, 254, 0.2); }
+
+        .btn {
+            width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 600;
+            color: #fff; cursor: pointer; background: var(--accent-gradient); transition: all 0.2s; margin-top: 5px;
+        }
+        .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+        .btn-coral { background: var(--coral-pop); }
+        .btn-success { background: var(--success-gradient); }
+        .btn-sm { width: auto; padding: 8px 14px; font-size: 0.82rem; }
+        .btn-danger-sm { width: auto; padding: 4px 8px; font-size: 0.75rem; background: #ff0844; border: none; border-radius: 6px; color: #fff; cursor: pointer; }
+
+        .nav-tabs { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+        .tab-btn {
+            flex: 1; padding: 12px 16px; background: var(--input-bg); border: 1px solid var(--border);
+            color: var(--subtext); border-radius: 14px; cursor: pointer; font-weight: 600; text-align: center; transition: all 0.2s; font-size: 0.9rem;
+        }
+        .tab-btn.active { background: var(--accent-gradient); color: #fff; border: none; }
+
+        .hidden { display: none !important; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; margin-top: 15px; }
+        .item-card {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            border-radius: 18px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; margin-bottom: 8px; }
+        .badge-part { background: rgba(79,172,254,0.15); color: #4facfe; }
+        .badge-year { background: rgba(60, 186, 146, 0.15); color: #3cba92; }
+        .badge-art { background: rgba(246, 211, 101, 0.15); color: #f6d365; }
+
+        .reg-box-compact {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border);
+            padding: 10px 14px; border-radius: 14px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .footer-text {
+            text-align: center; font-size: 0.8rem; color: var(--subtext); margin-top: 25px;
+            display: flex; align-items: center; justify-content: center; gap: 6px; opacity: 0.4;
+        }
+
+        .user-menu-container { position: relative; }
+        .user-menu-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .user-menu-dropdown { position: absolute; right: 0; top: 45px; width: 210px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 8px; backdrop-filter: blur(20px); z-index: 100; }
+        .dropdown-item { width: 100%; text-align: left; padding: 10px 12px; background: transparent; border: none; color: var(--text); font-size: 0.85rem; border-radius: 8px; cursor: pointer; }
+        .dropdown-item:hover { background: rgba(255,255,255,0.08); }
+        
+        .comment-thread { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .comment-item { font-size: 0.78rem; background: rgba(0,0,0,0.25); padding: 6px 10px; border-radius: 6px; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- INLOGGNING -->
+    <div id="auth-section" class="glass-card" style="text-align: center; padding: 45px 32px;">
+        <div class="brand-logo">GarageHub</div>
+        <p style="color: var(--subtext); font-size: 0.95rem; margin-top: 6px; margin-bottom: 28px;">
+            Portalen för reservdelar, garageprojekt och servicelogg.
+        </p>
+
+        <form id="login-form" onsubmit="handleLogin(event)" style="max-width: 400px; margin: 0 auto;">
+            <div class="form-group" style="text-align: left;">
+                <label for="login-user">Användarnamn</label>
+                <input type="text" id="login-user" required placeholder="Ditt användarnamn">
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label for="login-pass">Lösenord</label>
+                <input type="password" id="login-pass" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn">Logga in</button>
+        </form>
+
+        <div class="footer-text">
+            <span style="font-size: 1.1rem; opacity: 0.6;">🐴</span> <span>Estate 2026</span>
+        </div>
+    </div>
+
+    <!-- HUVUDPORTAL -->
+    <div id="main-portal" class="hidden">
+        <div class="glass-card flex-between" style="padding: 16px 24px; margin-bottom: 18px;">
+            <div class="brand-logo" style="font-size: 1.8rem;">GarageHub</div>
+            
+            <div class="user-menu-container">
+                <button onclick="toggleUserMenu()" class="user-menu-btn">
+                    <span>👤 <strong id="current-user-display">Hasten</strong></span>
+                    <span>⚙️</span>
+                </button>
+                <div id="user-menu-dropdown" class="user-menu-dropdown hidden">
+                    <button class="dropdown-item" onclick="switchTab('my-garage'); toggleUserMenu();">🏎️ Mitt Garage</button>
+                    <button class="dropdown-item" onclick="toggleTheme(); toggleUserMenu();">🌗 Växla Tema</button>
+                    <div style="border-top: 1px solid var(--border); margin: 4px 0;"></div>
+                    <button class="dropdown-item" onclick="handleLogout()" style="color: #ff0844;">🚪 Logga ut</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button type="button" class="tab-btn active" onclick="switchTab('parts')">📦 Lagret</button>
+            <button type="button" class="tab-btn" onclick="switchTab('my-garage')">🏎️ Mitt Garage</button>
+            <button type="button" class="tab-btn" onclick="switchTab('add-part')">➕ Lägg till Del</button>
+            <button type="button" class="tab-btn" onclick="switchTab('messages')">💬 Meddelanden</button>
+            <button type="button" class="tab-btn" onclick="switchTab('admin')">🛡️ Admin & Logg</button>
+        </div>
+
+        <!-- FLIK 1: LAGRET -->
+        <div id="tab-parts" class="glass-card">
+            <div class="flex-between" style="margin-bottom: 15px;">
+                <h3>Reservdelslager</h3>
+                <input type="text" id="search-input" onkeyup="renderParts()" placeholder="Sök del, artikelnummer, modell..." style="width: 280px; padding: 8px 12px;">
+            </div>
+            <div id="parts-grid" class="grid-cards"></div>
+        </div>
+
+        <!-- FLIK: MITT GARAGE -->
+        <div id="tab-my-garage" class="glass-card hidden">
+            <div class="reg-box-compact" style="margin-bottom: 20px;">
+                <span style="font-size: 0.85rem; color: #3cba92; font-weight: 600; white-space: nowrap;">🔍 Hämta bil via Regnr:</span>
+                <input type="text" id="garage-reg-input" placeholder="XYZ 789" style="padding: 6px 12px; font-weight: 700; text-transform: uppercase; width: 130px;">
+                <button onclick="lookupGarageReg()" class="btn btn-sm btn-success" style="margin:0;">Slå upp & Skapa</button>
+                <div id="garage-reg-info" style="font-size: 0.8rem; color: var(--subtext);"></div>
+            </div>
+
+            <div class="flex-between" style="margin-bottom: 20px;">
+                <h3>Mina Projektbilar</h3>
+                <button onclick="toggleAddProjectForm()" class="btn btn-sm" style="margin:0;">➕ Lägg till manuellt</button>
+            </div>
+
+            <form id="add-project-form" class="hidden" onsubmit="handleAddProject(event)" style="background: rgba(0,0,0,0.2); padding: 18px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border);">
+                <div class="form-group">
+                    <label>Bilmärke & Modell</label>
+                    <input type="text" id="proj-name" required placeholder="T.ex. Volvo 740 TIC">
+                </div>
+                <div class="form-group">
+                    <label>Årsmodell & Info</label>
+                    <input type="text" id="proj-year" placeholder="T.ex. 1988">
+                </div>
+                <button type="submit" class="btn btn-success btn-sm">Spara Bil</button>
+            </form>
+
+            <div id="my-projects-grid" class="grid-cards"></div>
+        </div>
+
+        <!-- FLIK 2: LÄGG TILL DEL -->
+        <div id="tab-add-part" class="glass-card hidden">
+            <h3>Dokumentera Ny Reservdel</h3>
+            <form onsubmit="handleAddPart(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Delens Namn / Typ *</label>
+                        <input type="text" id="part-name" required placeholder="T.ex. Turbo Garrett GT2860R">
+                    </div>
+                    <div class="form-group">
+                        <label>Artikelnummer / OEM</label>
+                        <input type="text" id="part-artno" placeholder="T.ex. 8603883, 116177">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Huvudmodell & Årsmodell</label>
+                        <input type="text" id="part-models" placeholder="T.ex. Volvo V70 (2004)">
+                    </div>
+                    <div class="form-group">
+                        <label>Passar även (Kompatibilitet)</label>
+                        <input type="text" id="part-compat" placeholder="T.ex. S60, S80, XC70">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select id="part-cat"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Skick</label>
+                        <select id="part-condition">
+                            <option value="Begagnad">Begagnad</option>
+                            <option value="Ny / Oanvänd">Ny / Oanvänd</option>
+                            <option value="Renoverad">Renoverad</option>
+                            <option value="Defekt / Reservdelsdel">Defekt / Reservdelsdel</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Lagerplats / Hylla (Valfritt)</label>
+                        <input type="text" id="part-location" placeholder="T.ex. Låda B4, Hylla 2">
+                    </div>
+                    <div class="form-group">
+                        <label>Pris / Prisförslag (Valfritt)</label>
+                        <input type="text" id="part-price" placeholder="T.ex. 500 kr / Bud">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Kommentarer / Beskrivning</label>
+                    <textarea id="part-comments" rows="3" placeholder="Övriga detaljer, skick, funktion..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">Spara i Lagret</button>
+            </form>
+        </div>
+
+        <!-- FLIK 3: MEDDELANDEN -->
+        <div id="tab-messages" class="glass-card hidden">
+            <h3>💬 Direktmeddelanden</h3>
+            <div id="message-history" style="height: 180px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; margin-bottom: 12px;"></div>
+        </div>
+
+        <!-- FLIK 4: ADMIN & KATEGORIER -->
+        <div id="tab-admin" class="glass-card hidden">
+            <div style="margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px;">
+                <h3>🏷️ Hantera Kategorier</h3>
+                <form onsubmit="handleAddCategory(event)" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="text" id="new-cat-input" required placeholder="Ny kategori...">
+                    <button type="submit" class="btn btn-sm" style="margin: 0; min-width: 120px;">➕ Lägg till</button>
+                </form>
+                <div id="admin-category-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+            </div>
+
+            <h3>📋 Aktivitetslogg</h3>
+            <div id="activity-log"></div>
+        </div>
+
+        <div class="footer-text">
+            <span style="font-size: 1.1rem; opacity: 0.6;">🐴</span> <span>Estate 2026</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const DEFAULT_USERS = { 'Hasten': 'blomma123', 'Mekanikern': 'pass123' };
+    const DEFAULT_CATEGORIES = ["Motor & Internt", "Turboladdning", "Växellåda & Drivlina", "Chassi & Stötdämpare", "Bromsar", "Kaross & Styling", "Fälgar & Däck", "El & Tändning", "Specialverktyg"];
+
+    let currentUser = null;
+    let dbData = { parts: [], projects: {}, categories: DEFAULT_CATEGORIES };
+
+    function escapeHTML(str) { return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
+
+    async function fetchDB() {
+        try {
+            const res = await fetch('/api/data');
+            dbData = await res.json();
+            if (!dbData.projects) dbData.projects = {};
+            if (!dbData.parts) dbData.parts = [];
+            if (!dbData.categories) dbData.categories = DEFAULT_CATEGORIES;
+        } catch(e) { console.error("Kunde inte hämta JSON-data", e); }
+    }
+
+    async function saveDB() {
+        try {
+            await fetch('/api/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dbData)
+            });
+        } catch(e) { console.error("Kunde inte spara till JSON", e); }
+    }
+
+    function toggleUserMenu() { document.getElementById('user-menu-dropdown').classList.toggle('hidden'); }
+    function toggleTheme() { document.body.classList.toggle('light-theme'); }
+    function toggleAddProjectForm() { document.getElementById('add-project-form').classList.toggle('hidden'); }
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        const u = document.getElementById('login-user').value.trim();
+        const p = document.getElementById('login-pass').value.trim();
+        
+        if (DEFAULT_USERS[u] && DEFAULT_USERS[u] === p) {
+            currentUser = u;
+            await fetchDB();
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('main-portal').classList.remove('hidden');
+            document.getElementById('current-user-display').innerText = currentUser;
+            renderCategorySelect();
+            renderAdminCategories();
+            renderProjects();
+            renderParts();
+        } else {
+            alert("Felaktigt användarnamn eller lösenord!");
+        }
+    }
+
+    function handleLogout() {
+        currentUser = null;
+        document.getElementById('main-portal').classList.add('hidden');
+        document.getElementById('auth-section').classList.remove('hidden');
+        document.getElementById('user-menu-dropdown').classList.add('hidden');
+    }
+
+    function switchTab(tab) {
+        const tabs = ['parts', 'my-garage', 'add-part', 'messages', 'admin'];
+        document.querySelectorAll('#main-portal .tab-btn').forEach((btn, idx) => { btn.classList.toggle('active', tabs[idx] === tab); });
+        tabs.forEach(t => document.getElementById(`tab-${t}`).classList.add('hidden'));
+        document.getElementById(`tab-${tab}`).classList.remove('hidden');
+        if (tab === 'parts') renderParts();
+        if (tab === 'my-garage') renderProjects();
+        if (tab === 'add-part') renderCategorySelect();
+        if (tab === 'admin') renderAdminCategories();
+    }
+
+    /* KATEGORIHANTERING */
+    function renderCategorySelect() {
+        const sel = document.getElementById('part-cat');
+        const cats = dbData.categories || DEFAULT_CATEGORIES;
+        if (sel) sel.innerHTML = cats.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+    }
+
+    function renderAdminCategories() {
+        const container = document.getElementById('admin-category-list');
+        const cats = dbData.categories || DEFAULT_CATEGORIES;
+        if (container) {
+            container.innerHTML = cats.map(c => `
+                <span class="badge badge-part" style="display: inline-flex; align-items: center; gap: 6px;">
+                    ${escapeHTML(c)}
+                    <b onclick="removeCategory('${escapeHTML(c)}')" style="cursor: pointer; color: #ff0844;">✕</b>
+                </span>
+            `).join('');
+        }
+    }
+
+    async function handleAddCategory(e) {
+        e.preventDefault();
+        const input = document.getElementById('new-cat-input');
+        const val = input.value.trim();
+        if (!val) return;
+        if (!dbData.categories) dbData.categories = DEFAULT_CATEGORIES;
+        if (!dbData.categories.includes(val)) {
+            dbData.categories.push(val);
+            await saveDB();
+            renderCategorySelect();
+            renderAdminCategories();
+        }
+        input.value = '';
+    }
+
+    async function removeCategory(catName) {
+        if (!dbData.categories) return;
+        dbData.categories = dbData.categories.filter(c => c !== catName);
+        await saveDB();
+        renderCategorySelect();
+        renderAdminCategories();
+    }
+
+    /* MITT GARAGE */
+    async function lookupGarageReg() {
+        const input = document.getElementById('garage-reg-input').value.trim().toUpperCase();
+        const info = document.getElementById('garage-reg-info');
+        if (!input) return;
+
+        info.innerText = "⏳ Slår upp i bilregistret...";
+        try {
+            const res = await fetch(`/api/lookup?regnr=${encodeURIComponent(input)}`);
+            const data = await res.json();
+            if (data.found) {
+                if (!dbData.projects[currentUser]) dbData.projects[currentUser] = [];
+                dbData.projects[currentUser].unshift({
+                    id: Date.now(),
+                    name: `${data.car} (${input})`,
+                    year: data.year,
+                    items: [],
+                    serviceLog: []
+                });
+                await saveDB();
+                renderProjects();
+                info.innerText = `✅ Lagt till: ${data.car}!`;
+                document.getElementById('garage-reg-input').value = '';
+            }
+        } catch(e) { info.innerText = "⚠️ Fel vid hämtning."; }
+    }
+
+    async function handleAddProject(e) {
+        e.preventDefault();
+        if (!dbData.projects[currentUser]) dbData.projects[currentUser] = [];
+        dbData.projects[currentUser].unshift({
+            id: Date.now(),
+            name: document.getElementById('proj-name').value,
+            year: document.getElementById('proj-year').value || 'Projekt',
+            items: [],
+            serviceLog: []
+        });
+        await saveDB();
+        e.target.reset();
+        toggleAddProjectForm();
+        renderProjects();
+    }
+
+    async function addShoppingItem(projId) {
+        const input = document.getElementById(`proj-item-input-${projId}`);
+        const text = input ? input.value.trim() : '';
+        if (!text) return;
+        const proj = (dbData.projects[currentUser] || []).find(p => p.id === Number(projId));
+        if (proj) {
+            if (!proj.items) proj.items = [];
+            proj.items.push({ id: Date.now(), text: text });
+            await saveDB();
+            renderProjects();
+        }
+    }
+
+    async function addServiceLogEntry(projId) {
+        const input = document.getElementById(`proj-service-input-${projId}`);
+        const text = input ? input.value.trim() : '';
+        if (!text) return;
+        const proj = (dbData.projects[currentUser] || []).find(p => p.id === Number(projId));
+        if (proj) {
+            if (!proj.serviceLog) proj.serviceLog = [];
+            const dateStr = new Date().toLocaleDateString('sv-SE');
+            proj.serviceLog.unshift({ id: Date.now(), date: dateStr, text: text });
+            await saveDB();
+            renderProjects();
+        }
+    }
+
+    function renderProjects() {
+        const grid = document.getElementById('my-projects-grid');
+        const userProjs = dbData.projects[currentUser] || [];
+        grid.innerHTML = '';
+
+        if (userProjs.length === 0) {
+            grid.innerHTML = '<p style="color: var(--subtext); grid-column: 1/-1;">Inga projektbilar sparade. Slå upp ett regnr ovan!</p>';
+            return;
+        }
+
+        userProjs.forEach(p => {
+            const itemsHtml = (p.items || []).map(i => `<div style="font-size:0.78rem; margin-bottom:2px;">• ${escapeHTML(i.text)}</div>`).join('');
+            const serviceHtml = (p.serviceLog || []).map(s => `<div style="font-size:0.75rem; color:var(--subtext); margin-bottom:2px;">📅 <strong>${s.date}:</strong> ${escapeHTML(s.text)}</div>`).join('');
+
+            grid.innerHTML += `
+                <div class="item-card">
+                    <div>
+                        <span class="badge badge-year">${escapeHTML(p.year)}</span>
+                        <h4>${escapeHTML(p.name)}</h4>
+                        
+                        <div style="margin-top:10px; border-top:1px solid var(--border); padding-top:8px;">
+                            <span style="font-size:0.75rem; color: #00f2fe; font-weight:600;">🛠️ Inköpslista:</span>
+                            <div>${itemsHtml || '<p style="font-size:0.72rem; color:var(--subtext);">Tom lista.</p>'}</div>
+                            <div style="display:flex; gap:4px; margin-top:4px;">
+                                <input type="text" id="proj-item-input-${p.id}" placeholder="Ny del..." style="padding:4px 6px; font-size:0.75rem;">
+                                <button onclick="addShoppingItem(${p.id})" class="btn btn-sm" style="margin:0; padding:2px 8px;">+</button>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px; border-top:1px solid var(--border); padding-top:8px;">
+                            <span style="font-size:0.75rem; color: #3cba92; font-weight:600;">📖 Service- & Reparationslogg:</span>
+                            <div style="max-height:80px; overflow-y:auto; margin-top:4px;">${serviceHtml || '<p style="font-size:0.72rem; color:var(--subtext);">Inga loggar ännu.</p>'}</div>
+                            <div style="display:flex; gap:4px; margin-top:4px;">
+                                <input type="text" id="proj-service-input-${p.id}" placeholder="Oljebyte, stift..." style="padding:4px 6px; font-size:0.75rem;">
+                                <button onclick="addServiceLogEntry(${p.id})" class="btn btn-sm btn-success" style="margin:0; padding:2px 8px;">Logga</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    /* DOKUMENTERA RESERVDEL & KOMMENTARER */
+    async function handleAddPart(e) {
+        e.preventDefault();
+        const newPart = {
+            id: Date.now(),
+            name: document.getElementById('part-name').value,
+            artno: document.getElementById('part-artno').value.trim() || 'Ej angivet',
+            models: document.getElementById('part-models').value || 'Universal',
+            compat: document.getElementById('part-compat').value.trim() || '',
+            cat: document.getElementById('part-cat').value,
+            condition: document.getElementById('part-condition').value,
+            location: document.getElementById('part-location').value.trim() || '',
+            price: document.getElementById('part-price').value.trim() || '',
+            comments: document.getElementById('part-comments').value.trim() || '',
+            user: currentUser,
+            thread: []
+        };
+
+        dbData.parts.unshift(newPart);
+        await saveDB();
+        alert('Reservdelen sparad i lagret!');
+        e.target.reset();
+        switchTab('parts');
+    }
+
+    async function addPartComment(partId) {
+        const input = document.getElementById(`comment-input-${partId}`);
+        const text = input ? input.value.trim() : '';
+        if (!text) return;
+
+        const part = dbData.parts.find(p => p.id === Number(partId));
+        if (part) {
+            if (!part.thread) part.thread = [];
+            part.thread.push({ sender: currentUser, text: text });
+            await saveDB();
+            renderParts();
+        }
+    }
+
+    function renderParts() {
+        const grid = document.getElementById('parts-grid');
+        const searchInput = document.getElementById('search-input');
+        const query = searchInput ? searchInput.value.toLowerCase() : '';
+        grid.innerHTML = '';
+
+        const parts = dbData.parts || [];
+        const filtered = parts.filter(p => 
+            p.name.toLowerCase().includes(query) || 
+            p.artno.toLowerCase().includes(query) || 
+            p.models.toLowerCase().includes(query) ||
+            (p.compat && p.compat.toLowerCase().includes(query)) ||
+            p.cat.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<p style="color: var(--subtext); grid-column: 1/-1;">Inga delar hittades i lagret.</p>';
+            return;
+        }
+
+        filtered.forEach(p => {
+            const threadHtml = (p.thread || []).map(t => `
+                <div class="comment-item">
+                    <strong>${escapeHTML(t.sender)}:</strong> ${escapeHTML(t.text)}
+                </div>
+            `).join('');
+
+            grid.innerHTML += `
+                <div class="item-card">
+                    <div>
+                        <div>
+                            <span class="badge badge-part">${escapeHTML(p.cat)}</span>
+                            ${p.artno !== 'Ej angivet' ? `<span class="badge badge-art">Art.nr: ${escapeHTML(p.artno)}</span>` : ''}
+                        </div>
+                        <h4 style="font-size: 1.1rem; margin-bottom: 4px;">${escapeHTML(p.name)}</h4>
+                        <p style="font-size:0.82rem; color: var(--subtext);">Skick: <strong>${escapeHTML(p.condition)}</strong></p>
+                        
+                        <div style="background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; margin: 8px 0; font-size: 0.83rem;">
+                            <div>🏎️ <strong>Passar:</strong> ${escapeHTML(p.models)}</div>
+                            ${p.compat ? `<div style="color: #00f2fe; margin-top:2px;">🔗 <strong>Kompatibel med:</strong> ${escapeHTML(p.compat)}</div>` : ''}
+                        </div>
+
+                        ${p.location || p.price ? `
+                            <div style="font-size: 0.8rem; color: #3cba92; margin-bottom: 6px;">
+                                ${p.location ? `📍 <strong>Plats:</strong> ${escapeHTML(p.location)} ` : ''}
+                                ${p.price ? `💰 <strong>Pris:</strong> ${escapeHTML(p.price)}` : ''}
+                            </div>
+                        ` : ''}
+
+                        ${p.comments ? `<p style="font-size:0.83rem; color: var(--subtext); font-style: italic;">💬 "${escapeHTML(p.comments)}"</p>` : ''}
+
+                        <!-- KOMMENTARSTRÅD -->
+                        <div class="comment-thread">
+                            <span style="font-size: 0.73rem; color: var(--subtext); font-weight: 600;">Frågor & Kommentarer:</span>
+                            <div style="margin-top: 4px;">${threadHtml || '<p style="font-size:0.72rem; color: var(--subtext);">Inga kommentarer än.</p>'}</div>
+                            <div style="display: flex; gap: 4px; margin-top: 6px;">
+                                <input type="text" id="comment-input-${p.id}" placeholder="Skriv kommentar..." style="padding: 4px 8px; font-size: 0.78rem;">
+                                <button onclick="addPartComment(${p.id})" class="btn btn-sm" style="margin:0; padding: 2px 8px;">Skicka</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.75rem; color: var(--subtext); border-top: 1px solid var(--border); padding-top: 6px;">Registrerad av: <em>${escapeHTML(p.user)}</em></div>
+                </div>
+            `;
+        });
+    }
+</script>
+</body>
+</html>
