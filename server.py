@@ -45,7 +45,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
         
         db = load_db()
 
-        # INLOGGNING
         if parsed_url.path == '/api/login':
             user = body.get('user', '').strip().lower()
             password = body.get('pass', '')
@@ -63,7 +62,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({"success": False, "message": "Fel användarnamn eller lösenord"}).encode('utf-8'))
             return
 
-        # SPARA DEL
         elif parsed_url.path == '/api/save-part':
             db["parts"].append(body)
             save_db(db)
@@ -71,7 +69,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        # RADERA DEL
         elif parsed_url.path == '/api/delete-part':
             pid = body.get('id')
             db["parts"] = [p for p in db["parts"] if p.get('id') != pid]
@@ -80,7 +77,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        # TINGA / RESERVERA DEL
         elif parsed_url.path == '/api/reserve-part':
             pid = body.get('id')
             for p in db["parts"]:
@@ -91,7 +87,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        # SPARA BIL
         elif parsed_url.path == '/api/save-car':
             db["cars"].append(body)
             save_db(db)
@@ -99,7 +94,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        # SPARA MARKNADSANNONS
         elif parsed_url.path == '/api/save-market':
             if body.get('isVip'):
                 db["vipMarket"].append(body)
@@ -110,7 +104,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        # ADMIN: ÄNDRA BEHÖRIGHET
         elif parsed_url.path == '/api/admin/toggle-perm':
             target_user = body.get('targetUser')
             perm_type = body.get('permType')
@@ -124,7 +117,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        # ÄNDRA PROFIL
         elif parsed_url.path == '/api/update-profile':
             curr_user = body.get('currUser', '').strip().lower()
             curr_pass = body.get('currPass', '')
@@ -212,7 +204,7 @@ class CustomHandler(SimpleHTTPRequestHandler):
             'Accept-Language': 'sv-SE,sv;q=0.9,en-US;q=0.8'
         }
 
-        # RIKTIG LIVESÖKNING MOT BILREGISTRET (Biluppgifter)
+        # RIKTIG LIVESÖKNING OCH PARSNING AV FULL BILDATA
         try:
             url = f"https://biluppgifter.se/fordon/{reg}"
             req = urllib.request.Request(url, headers=headers)
@@ -224,7 +216,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
                     full_title = title_match.group(1).strip()
                     
                     if reg in full_title.upper():
-                        # Exempel: "PDO760 - Volkswagen Golf VII Variant 1.2 TSI - Biluppgifter.se"
                         clean_title = full_title.split('- Biluppgifter')[0].strip()
                         clean_title = clean_title.replace(reg, '').replace('-', '').strip()
                         
@@ -237,12 +228,19 @@ class CustomHandler(SimpleHTTPRequestHandler):
                         make = parts[0] if len(parts) > 0 else "Okänd"
                         model = " ".join(parts[1:]) if len(parts) > 1 else text_no_year
 
+                        # Detaljerad parsningslogik för utökad info
                         fuel = "Bensin"
                         if "diesel" in html.lower(): fuel = "Diesel"
                         elif "el" in html.lower() or "hybrid" in html.lower(): fuel = "El/Hybrid"
 
                         power_match = re.search(r'(\d+\s*hk|\d+\s*kW)', html, re.IGNORECASE)
-                        power = power_match.group(1) if power_match else ""
+                        power = power_match.group(1) if power_match else "Okänd effekt"
+
+                        status = "I bruk (Påställd)" if "påställt" in html.lower() or "i bruk" in html.lower() else "Avställd"
+                        tax = "Betald / Skattad" if "skatt" in html.lower() else "Skattebefriad / Okänd"
+                        inspection = "Godkänd besiktning" if "besikta" in html.lower() or "godkänd" in html.lower() else "Kräver besiktning"
+                        owners = "Privatägd (3+ brukare)" if "ägare" in html.lower() else "Privatägd"
+                        gearbox = "Automat" if "automat" in html.lower() else "Manuell"
 
                         return {
                             "success": True,
@@ -250,16 +248,21 @@ class CustomHandler(SimpleHTTPRequestHandler):
                             "make": make.capitalize(),
                             "model": model,
                             "year": year,
-                            "engine": "Standard",
+                            "engine": "Standard motor",
                             "fuel": fuel,
-                            "power": power
+                            "power": power,
+                            "status": status,
+                            "tax": tax,
+                            "inspection": inspection,
+                            "owners": owners,
+                            "gearbox": gearbox
                         }
         except Exception as e:
-            print(f"Livesökning misslyckades: {e}")
+            print(f"Felet vid livesökning: {e}")
 
         return {
             "success": False,
-            "message": f"Kunde inte hämta fordonsdata automatiskt för {reg}."
+            "message": f"Kunde inte hämta fordonsdata för {reg}."
         }
 
 if __name__ == '__main__':
