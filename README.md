@@ -1,2 +1,2 @@
 # Garagehub
-Ett ställe där man kan lägga in sina projektbilar elller dylikt, sen ett lager för reservdelar så man har koll på vad man har till framtida projekT, OCH KÖPA BYTA SÄLJA OLIKA BILRELATERADE  delar och annat)
+Ett ställe där man kan lägga in sina projektbilar eller lägga till jobb och diitilasera sitt reservdelslager. så man snabbt kan slå in regnr och se fall några delar passar man har hemma, , och en köp&sälj flik där man kan köpa och sälja all
