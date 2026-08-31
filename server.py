@@ -73,14 +73,41 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
+        elif parsed_url.path == '/api/add-car-task':
+            car_id = body.get('carId')
+            task_type = body.get('type') # 'troubleshoot' eller 'jobs'
+            text = body.get('text')
+            for c in db["cars"]:
+                if c.get('id') == car_id:
+                    if task_type not in c: c[task_type] = []
+                    c[task_type].append({"text": text, "done": False})
+            save_db(db)
+            self.send_json_response()
+            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
+            return
+
+        elif parsed_url.path == '/api/toggle-car-task':
+            car_id = body.get('carId')
+            task_type = body.get('type')
+            idx = body.get('taskIdx')
+            for c in db["cars"]:
+                if c.get('id') == car_id and task_type in c and idx < len(c[task_type]):
+                    c[task_type][idx]["done"] = not c[task_type][idx].get("done", False)
+            save_db(db)
+            self.send_json_response()
+            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
+            return
+
         elif parsed_url.path == '/api/add-service-log':
             car_id = body.get('carId')
-            note = body.get('note')
+            desc = body.get('desc')
+            mil = body.get('mil')
+            cost = body.get('cost')
             date_str = body.get('date')
             for c in db["cars"]:
                 if c.get('id') == car_id:
-                    if "logs" not in c: c["logs"] = []
-                    c["logs"].append({"date": date_str, "note": note})
+                    if "serviceLogs" not in c: c["serviceLogs"] = []
+                    c["serviceLogs"].append({"date": date_str, "desc": desc, "mil": mil, "cost": cost})
             save_db(db)
             self.send_json_response()
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
@@ -179,7 +206,12 @@ class CustomHandler(SimpleHTTPRequestHandler):
                     year_match = re.search(r'\b(19\d\d|20\d\d)\b', clean_title)
                     year = year_match.group(1) if year_match else ""
                     parts = re.sub(r'\b(19\d\d|20\d\d)\b', '', clean_title).strip().split()
-                    return {"success": True, "reg": reg, "make": parts[0] if parts else "", "model": " ".join(parts[1:]) if len(parts) > 1 else "", "year": year}
+                    
+                    fuel = "Bensin"
+                    if "diesel" in html.lower(): fuel = "Diesel"
+                    elif "el" in html.lower() or "hybrid" in html.lower(): fuel = "El/Hybrid"
+
+                    return {"success": True, "reg": reg, "make": parts[0] if parts else "", "model": " ".join(parts[1:]) if len(parts) > 1 else "", "year": year, "fuel": fuel}
         except Exception: pass
         return {"success": False}
 
