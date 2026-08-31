@@ -23,106 +23,115 @@
       margin: 0; padding: 0; font-size: 13px; padding-bottom: 70px;
     }
 
-    /* OINLOGGAD LANDNINGSSIDA */
+    /* TAJT & KOMPAKT OINLOGGAD LANDNINGSSIDA */
     .landing-overlay {
       min-height: 100vh; display: flex; flex-direction: column;
-      justify-content: space-between; align-items: center; padding: 30px 15px;
-      box-sizing: border-box; position: relative;
-      background: radial-gradient(circle at center, #1e2029 0%, #121316 80%);
+      justify-content: center; align-items: center; padding: 15px;
+      box-sizing: border-box; background: radial-gradient(circle at center, #1e2029 0%, #121316 80%);
     }
     .landing-box {
-      background: rgba(28, 30, 36, 0.85); backdrop-filter: blur(12px);
-      border: 1px solid var(--border); border-radius: 12px; padding: 25px;
-      width: 100%; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      z-index: 2; text-align: center;
+      background: rgba(28, 30, 36, 0.95); backdrop-filter: blur(12px);
+      border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px;
+      width: 100%; max-width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center; box-sizing: border-box;
     }
-    .landing-box h1 { font-size: 2.5rem; margin: 0; color: #fff; letter-spacing: -1px; }
+    .landing-box h1 { font-size: 2.2rem; margin: 0 0 2px 0; color: #fff; letter-spacing: -1px; }
     .landing-box h1 span { color: var(--accent); }
+    .landing-box p.sub { color: var(--text-dim); font-size: 0.75rem; margin: 0 0 12px 0; }
+    .landing-box h2 { margin: 0 0 8px 0; color: var(--accent); font-size: 1rem; }
 
     /* HEADER & HAMBURGARMENY */
-    .container { max-width: 1050px; margin: 0 auto; padding: 15px; }
+    .container { max-width: 1050px; margin: 0 auto; padding: 10px 15px; }
     
     header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+      margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
       position: relative;
     }
-    header h1 { font-size: 1.6rem; margin: 0; color: #fff; display: flex; align-items: center; gap: 8px; }
+    header h1 { font-size: 1.4rem; margin: 0; color: #fff; display: flex; align-items: center; gap: 6px; }
     header h1 span { color: var(--accent); }
 
     .menu-btn {
       background: var(--card-bg); border: 1px solid var(--border); color: #fff;
-      font-size: 1.2rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;
+      font-size: 1.1rem; padding: 4px 10px; border-radius: 6px; cursor: pointer;
     }
 
     .dropdown-menu {
-      position: absolute; top: 50px; right: 0; background: var(--card-bg);
-      border: 1px solid var(--border); border-radius: 8px; width: 220px;
+      position: absolute; top: 42px; right: 0; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 8px; width: 200px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 100; overflow: hidden;
     }
     .dropdown-item {
-      padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text);
-      cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500;
+      padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text);
+      cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.8rem;
     }
     .dropdown-item:hover { background: var(--card-inner); color: var(--accent); }
     .dropdown-item:last-child { border-bottom: none; }
 
-    /* STATS BAR */
-    .stats-bar { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; }
+    /* MYCKET MINDRE STATS BAR */
+    .stats-bar { display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto; }
     .stat-card {
-      background: var(--card-bg); border: 1px solid var(--border); padding: 8px 12px;
-      border-radius: 6px; flex: 1; min-width: 90px; text-align: center;
+      background: var(--card-bg); border: 1px solid var(--border); padding: 4px 8px;
+      border-radius: 5px; flex: 1; min-width: 75px; text-align: center;
     }
-    .stat-card .val { font-size: 1rem; font-weight: bold; color: var(--accent); }
-    .stat-card .lbl { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; }
+    .stat-card .val { font-size: 0.85rem; font-weight: bold; color: var(--accent); }
+    .stat-card .lbl { font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; }
 
     /* PANELER OCH FORMULÄR */
-    .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 15px; }
-    .panel h2 { font-size: 1rem; margin-top: 0; margin-bottom: 10px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
+    .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+    .panel h2 { font-size: 0.95rem; margin-top: 0; margin-bottom: 8px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
 
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 10px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; margin-bottom: 8px; }
     input, select, textarea {
       width: 100%; background: var(--card-inner); border: 1px solid var(--border);
-      color: #fff; padding: 7px 10px; border-radius: 4px; font-size: 0.8rem; box-sizing: border-box;
+      color: #fff; padding: 6px 8px; border-radius: 4px; font-size: 0.78rem; box-sizing: border-box;
     }
     button.btn-primary {
       background: var(--accent); color: #0f1015; font-weight: bold; border: none;
-      padding: 7px 14px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; width: 100%;
+      padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.78rem; width: 100%;
     }
-    .btn-sm { padding: 4px 8px; font-size: 0.72rem; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
+    .btn-sm { padding: 3px 6px; font-size: 0.7rem; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
 
     /* KORT */
-    .parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+    .parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
     .part-card {
-      background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-size: 0.8rem;
+      background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-size: 0.78rem;
       display: flex; flex-direction: column; justify-content: space-between; position: relative;
     }
-    .part-card h3 { margin: 0 0 4px 0; font-size: 0.9rem; color: #fff; }
-    .part-card .meta { color: var(--text-dim); font-size: 0.72rem; margin-bottom: 3px; }
-    .part-card .price { color: var(--accent-green); font-weight: bold; font-size: 0.85rem; margin-top: 4px; }
+    .part-card h3 { margin: 0 0 3px 0; font-size: 0.85rem; color: #fff; }
+    .part-card .meta { color: var(--text-dim); font-size: 0.7rem; margin-bottom: 2px; }
+    .part-card .price { color: var(--accent-green); font-weight: bold; font-size: 0.8rem; margin-top: 3px; }
     
-    .badge { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
+    .badge { display: inline-block; padding: 2px 4px; border-radius: 3px; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; }
     .badge-mounted { background: #3b82f6; color: #fff; }
 
     /* FLYTANDE PLUSKNAPP (FAB) */
     .fab-btn {
-      position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px;
+      position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px;
       border-radius: 50%; background: var(--accent); color: #0f1015; border: none;
-      font-size: 1.8rem; font-weight: bold; box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+      font-size: 1.6rem; font-weight: bold; box-shadow: 0 6px 16px rgba(0,0,0,0.6);
       cursor: pointer; z-index: 90; display: flex; align-items: center; justify-content: center;
     }
     .fab-menu {
-      position: fixed; bottom: 80px; right: 20px; background: var(--card-bg);
+      position: fixed; bottom: 75px; right: 20px; background: var(--card-bg);
       border: 1px solid var(--border); border-radius: 8px; padding: 6px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 90; display: flex; flex-direction: column; gap: 6px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 90; display: flex; flex-direction: column; gap: 5px;
     }
 
     #toast {
       position: fixed; bottom: 20px; left: 20px; background: var(--accent-green); color: #000;
-      padding: 10px 18px; border-radius: 6px; font-weight: bold; font-size: 0.85rem;
+      padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 0.8rem;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 999; transition: all 0.3s ease; opacity: 0; transform: translateY(20px); pointer-events: none;
     }
     #toast.show { opacity: 1; transform: translateY(0); }
+
+    .site-footer {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      color: var(--text-dim); font-size: 0.72rem; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border);
+    }
+    .horse-footer-icon {
+      width: 16px; height: 16px; opacity: 0.3; fill: currentColor; /* 70% genomskinlig (30% synlig) */
+    }
 
     .hidden { display: none !important; }
   </style>
@@ -131,22 +140,24 @@
 
   <div id="toast">✓ Sparat!</div>
 
-  <!-- OINLOGGAD LANDNINGSSIDA -->
+  <!-- OINLOGGAD TAJT LANDNINGSSIDA -->
   <div id="view-landing" class="landing-overlay">
-    <div style="text-align:center; margin-top:30px; z-index:2;">
-      <h1 style="font-size:3rem; margin:0; color:#fff; font-weight:800;">Garage<span>Hub</span></h1>
-      <p style="color:var(--text-dim); margin-top:5px; font-size:0.9rem;">Slutet reservdelslager &amp; garageportal</p>
-    </div>
-
     <div class="landing-box" id="login-box">
-      <h2 style="margin-top:0; color:var(--accent); font-size:1.2rem;">🔐 Inloggning</h2>
-      <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:15px;">Privat reservdelsregister &amp; medlemsportal.</p>
+      <h1>Garage<span>Hub</span></h1>
+      <p class="sub">Slutet reservdelslager &amp; medlemsportal</p>
+
+      <h2>🔐 Inloggning</h2>
       
       <form onsubmit="doLogin(event)">
-        <div style="margin-bottom:10px;"><input type="text" id="login-user" placeholder="Användarnamn" required></div>
-        <div style="margin-bottom:12px;"><input type="password" id="login-pass" placeholder="Lösenord" required></div>
+        <div style="margin-bottom:8px;"><input type="text" id="login-user" placeholder="Användarnamn" required></div>
+        <div style="margin-bottom:10px;"><input type="password" id="login-pass" placeholder="Lösenord" required></div>
         <button type="submit" class="btn-primary">Logga in</button>
       </form>
+
+      <div class="site-footer">
+        <svg class="horse-footer-icon" viewBox="0 0 24 24"><path d="M19 3c-1.1 0-2 .9-2 2 0 .38.1.73.29 1.03L14.41 8.9c-.39.39-1.02.39-1.41 0L11.12 7.02c-.39-.39-1.02-.39-1.41 0L4.7 12.03C4.26 12.47 4 13.08 4 13.72V19c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+        <span>🔒 GarageHub | <b>2026</b></span>
+      </div>
     </div>
   </div>
 
@@ -155,7 +166,7 @@
   <div id="view-portal" class="container hidden">
     <header>
       <h1>⚙️ Garage<span>Hub</span></h1>
-      <div style="display:flex; align-items:center; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
         <span style="color:var(--text-dim); font-size:0.75rem;">🟢 <b id="user-display" style="color:#fff;">Admin</b></span>
         <button class="menu-btn" onclick="toggleMenu()">☰</button>
       </div>
@@ -173,6 +184,7 @@
       </div>
     </header>
 
+    <!-- KOMPAKTA STATS -->
     <div class="stats-bar">
       <div class="stat-card"><div class="val" id="stat-cars">0</div><div class="lbl">Bilar</div></div>
       <div class="stat-card"><div class="val" id="stat-parts">0</div><div class="lbl">Delar</div></div>
@@ -188,10 +200,9 @@
           <button class="btn-sm" onclick="exportPartsCSV()" style="background:#27272a; color:#fff;">📥 CSV</button>
         </h2>
 
-        <!-- Fällbart Formulär -->
-        <div id="form-add-part" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border);">
-          <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="part-reg-input" placeholder="Slå upp Reg-nr" style="max-width:140px; text-transform:uppercase;">
+        <div id="form-add-part" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
+          <div style="display:flex; gap:6px; margin-bottom:6px;">
+            <input type="text" id="part-reg-input" placeholder="Slå upp Reg-nr" style="max-width:130px; text-transform:uppercase;">
             <button class="btn-primary" onclick="lookupPartReg()" style="width:auto;">Sök</button>
           </div>
           <div class="form-grid">
@@ -205,7 +216,7 @@
           <button class="btn-primary" onclick="addPart()">Spara Del</button>
         </div>
 
-        <div style="display:flex; gap:8px; margin-bottom:10px;">
+        <div style="display:flex; gap:6px; margin-bottom:8px;">
           <input type="text" id="search-filter" placeholder="🔍 Sök delar..." onkeyup="renderParts()">
         </div>
         <div id="parts-list" class="parts-grid"></div>
@@ -216,13 +227,13 @@
     <div id="tab-market" class="tab-content hidden">
       <div class="panel">
         <h2>🛒 Medlemsmarknad</h2>
-        <div id="form-add-market" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border);">
+        <div id="form-add-market" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
           <div class="form-grid">
             <input type="text" id="market-title" placeholder="Rubrik...">
             <input type="number" id="market-price" placeholder="Pris (kr)">
             <input type="text" id="market-contact" placeholder="Kontakt">
           </div>
-          <div style="margin-bottom:8px;"><textarea id="market-desc" rows="2" placeholder="Beskrivning..."></textarea></div>
+          <div style="margin-bottom:6px;"><textarea id="market-desc" rows="2" placeholder="Beskrivning..."></textarea></div>
           <button class="btn-primary" onclick="addMarketItem(false)">Publicera Annons</button>
         </div>
         <div id="market-list" class="parts-grid"></div>
@@ -233,7 +244,7 @@
     <div id="tab-vip" class="tab-content hidden">
       <div class="panel" style="border-color:var(--accent-purple);">
         <h2 style="color:var(--accent-purple);">🔒 VIP-Marknad</h2>
-        <div id="form-add-vip" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border);">
+        <div id="form-add-vip" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
           <div class="form-grid">
             <input type="text" id="vip-title" placeholder="VIP Rubrik...">
             <input type="number" id="vip-price" placeholder="Pris (kr)">
@@ -249,9 +260,9 @@
     <div id="tab-cars" class="tab-content hidden">
       <div class="panel">
         <h2>🏎️ Mina Bilar &amp; Servicelogg</h2>
-        <div id="form-add-car" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border);">
-          <div style="display:flex; gap:6px; margin-bottom:8px;">
-            <input type="text" id="car-reg-input" placeholder="Reg-nr" style="max-width:140px; text-transform:uppercase;">
+        <div id="form-add-car" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
+          <div style="display:flex; gap:6px; margin-bottom:6px;">
+            <input type="text" id="car-reg-input" placeholder="Reg-nr" style="max-width:130px; text-transform:uppercase;">
             <button class="btn-primary" onclick="lookupCarReg()" style="width:auto;">Sök</button>
           </div>
           <div class="form-grid">
@@ -269,8 +280,8 @@
     <div id="tab-match" class="tab-content hidden">
       <div class="panel">
         <h2>⚡ Reg-nr Matchning</h2>
-        <div style="display:flex; gap:6px; margin-bottom:10px;">
-          <input type="text" id="match-reg-input" placeholder="Reg-nr" style="max-width:160px; text-transform:uppercase;">
+        <div style="display:flex; gap:6px; margin-bottom:8px;">
+          <input type="text" id="match-reg-input" placeholder="Reg-nr" style="max-width:150px; text-transform:uppercase;">
           <button class="btn-primary" onclick="matchRegWithInventory()" style="width:auto;">Sök Delar</button>
         </div>
         <div id="match-results-grid" class="parts-grid"></div>
@@ -286,7 +297,7 @@
             <input type="text" id="prof-new-user" placeholder="Nytt Användarnamn">
             <input type="password" id="prof-new-pass" placeholder="Nytt Lösenord">
           </div>
-          <div style="margin-bottom:10px;">
+          <div style="margin-bottom:8px;">
             <input type="password" id="prof-curr-pass" placeholder="Bekräfta med nuvarande lösenord *" required>
           </div>
           <button type="submit" class="btn-primary">Spara</button>
@@ -300,6 +311,11 @@
         <h2>👑 Admin: Medlemmar</h2>
         <div id="admin-user-list"></div>
       </div>
+    </div>
+
+    <div class="site-footer">
+      <svg class="horse-footer-icon" viewBox="0 0 24 24"><path d="M19 3c-1.1 0-2 .9-2 2 0 .38.1.73.29 1.03L14.41 8.9c-.39.39-1.02.39-1.41 0L11.12 7.02c-.39-.39-1.02-.39-1.41 0L4.7 12.03C4.26 12.47 4 13.08 4 13.72V19c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+      <span>🔒 GarageHub | <b>2026</b></span>
     </div>
   </div>
 
@@ -380,7 +396,6 @@
       updateStats();
     }
 
-    /* MONTERA DEL PÅ BIL */
     async function mountPart(partId) {
       if (cars.length === 0) return alert('Du måste ha minst en bil i garaget för att montera delen!');
       
@@ -409,7 +424,7 @@
           <div>
             <div style="display:flex; justify-content:space-between;">
               <h3>${p.name}</h3>
-              ${p.mountedTo ? `<span class="badge badge-mounted">MONTERAD ON ${p.mountedTo}</span>` : ''}
+              ${p.mountedTo ? `<span class="badge badge-mounted">MONTERAD PÅ ${p.mountedTo}</span>` : ''}
             </div>
             <div class="meta"><b>Passar:</b> ${p.make} ${p.model} (${p.year})</div>
             ${p.shelf && !p.mountedTo ? `<div class="meta" style="color:var(--accent-blue);"><b>Hylla:</b> ${p.shelf}</div>` : ''}
@@ -425,7 +440,6 @@
       `).join('');
     }
 
-    /* SERVICELOGG PÅ BILAR */
     async function addServiceLog(carId) {
       let note = prompt("Skriv servicenotering (t.ex. Oljebyte + filter 18000 mil):");
       if (!note) return;
@@ -451,12 +465,12 @@
             <div class="meta"><b>Reg:</b> ${c.reg || 'Ej angivet'}</div>
             <div class="meta" style="color:var(--accent-green);"><b>Monterade delar värde:</b> ${mountedCost} kr</div>
             
-            <div style="margin-top:8px; border-top:1px solid var(--border); padding-top:4px;">
+            <div style="margin-top:6px; border-top:1px solid var(--border); padding-top:4px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <b>🔧 Servicelogg:</b>
                 <button class="btn-sm" onclick="addServiceLog(${c.id})" style="background:#27272a; color:#fff;">+ Logg</button>
               </div>
-              <div style="font-size:0.7rem; color:var(--text-dim); margin-top:4px;">
+              <div style="font-size:0.68rem; color:var(--text-dim); margin-top:3px;">
                 ${(c.logs || []).map(l => `<div>• <i>${l.date}</i>: ${l.note}</div>`).join('') || 'Inga loggar ännu.'}
               </div>
             </div>
