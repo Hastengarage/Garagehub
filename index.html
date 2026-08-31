@@ -20,10 +20,9 @@
     body {
       font-family: system-ui, -apple-system, sans-serif;
       background: var(--bg); color: var(--text);
-      margin: 0; padding: 0; font-size: 13px; padding-bottom: 70px;
+      margin: 0; padding: 0; font-size: 13px; padding-bottom: 40px;
     }
 
-    /* TAJT & KOMPAKT OINLOGGAD LANDNINGSSIDA */
     .landing-overlay {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: center; align-items: center; padding: 15px;
@@ -31,7 +30,7 @@
     }
     .landing-box {
       background: rgba(28, 30, 36, 0.95); backdrop-filter: blur(12px);
-      border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px;
+      border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px;
       width: 100%; max-width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       text-align: center; box-sizing: border-box;
     }
@@ -40,7 +39,6 @@
     .landing-box p.sub { color: var(--text-dim); font-size: 0.75rem; margin: 0 0 12px 0; }
     .landing-box h2 { margin: 0 0 8px 0; color: var(--accent); font-size: 1rem; }
 
-    /* HEADER & HAMBURGARMENY */
     .container { max-width: 1050px; margin: 0 auto; padding: 10px 15px; }
     
     header {
@@ -68,7 +66,6 @@
     .dropdown-item:hover { background: var(--card-inner); color: var(--accent); }
     .dropdown-item:last-child { border-bottom: none; }
 
-    /* MYCKET MINDRE STATS BAR */
     .stats-bar { display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto; }
     .stat-card {
       background: var(--card-bg); border: 1px solid var(--border); padding: 4px 8px;
@@ -77,7 +74,6 @@
     .stat-card .val { font-size: 0.85rem; font-weight: bold; color: var(--accent); }
     .stat-card .lbl { font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; }
 
-    /* PANELER OCH FORMULÄR */
     .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
     .panel h2 { font-size: 0.95rem; margin-top: 0; margin-bottom: 8px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
 
@@ -90,33 +86,27 @@
       background: var(--accent); color: #0f1015; font-weight: bold; border: none;
       padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.78rem; width: 100%;
     }
-    .btn-sm { padding: 3px 6px; font-size: 0.7rem; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
+    .btn-sm { padding: 4px 8px; font-size: 0.7rem; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
 
-    /* KORT */
-    .parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+    .parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
     .part-card {
-      background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-size: 0.78rem;
+      background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-size: 0.78rem;
       display: flex; flex-direction: column; justify-content: space-between; position: relative;
     }
-    .part-card h3 { margin: 0 0 3px 0; font-size: 0.85rem; color: #fff; }
-    .part-card .meta { color: var(--text-dim); font-size: 0.7rem; margin-bottom: 2px; }
-    .part-card .price { color: var(--accent-green); font-weight: bold; font-size: 0.8rem; margin-top: 3px; }
+    .part-card h3 { margin: 0 0 4px 0; font-size: 0.88rem; color: #fff; font-weight: 700; }
+    .part-card .meta { color: var(--text-dim); font-size: 0.7rem; margin-bottom: 3px; line-height: 1.3; }
+    .part-card .price { color: var(--accent-green); font-weight: bold; font-size: 0.82rem; margin-top: 4px; }
     
-    .badge { display: inline-block; padding: 2px 4px; border-radius: 3px; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; }
+    .badge { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; }
+    .badge-oem { background: #27272a; color: var(--accent-blue); border: 1px solid var(--border); }
     .badge-mounted { background: #3b82f6; color: #fff; }
 
-    /* FLYTANDE PLUSKNAPP (FAB) */
-    .fab-btn {
-      position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px;
-      border-radius: 50%; background: var(--accent); color: #0f1015; border: none;
-      font-size: 1.6rem; font-weight: bold; box-shadow: 0 6px 16px rgba(0,0,0,0.6);
-      cursor: pointer; z-index: 90; display: flex; align-items: center; justify-content: center;
-    }
-    .fab-menu {
-      position: fixed; bottom: 75px; right: 20px; background: var(--card-bg);
-      border: 1px solid var(--border); border-radius: 8px; padding: 6px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 90; display: flex; flex-direction: column; gap: 5px;
-    }
+    .task-item { display: flex; align-items: center; justify-content: space-between; background: #1f2128; padding: 4px 6px; border-radius: 4px; margin-top: 3px; font-size: 0.72rem; }
+    .task-item.done { text-decoration: line-through; opacity: 0.5; }
+
+    .tags-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .tag { background: #27272a; color: var(--accent-blue); padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; display: flex; align-items: center; gap: 4px; }
+    .tag span { cursor: pointer; color: #f87171; font-weight: bold; }
 
     #toast {
       position: fixed; bottom: 20px; left: 20px; background: var(--accent-green); color: #000;
@@ -129,9 +119,7 @@
       display: flex; align-items: center; justify-content: center; gap: 6px;
       color: var(--text-dim); font-size: 0.72rem; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border);
     }
-    .horse-footer-icon {
-      width: 16px; height: 16px; opacity: 0.3; fill: currentColor; /* 70% genomskinlig (30% synlig) */
-    }
+    .horse-footer-icon { width: 16px; height: 16px; opacity: 0.3; fill: currentColor; }
 
     .hidden { display: none !important; }
   </style>
@@ -140,7 +128,7 @@
 
   <div id="toast">✓ Sparat!</div>
 
-  <!-- OINLOGGAD TAJT LANDNINGSSIDA -->
+  <!-- LANDNINGSSIDA -->
   <div id="view-landing" class="landing-overlay">
     <div class="landing-box" id="login-box">
       <h1>Garage<span>Hub</span></h1>
@@ -162,7 +150,7 @@
   </div>
 
 
-  <!-- INLOGGAD PORTAL -->
+  <!-- PORTAL -->
   <div id="view-portal" class="container hidden">
     <header>
       <h1>⚙️ Garage<span>Hub</span></h1>
@@ -171,20 +159,18 @@
         <button class="menu-btn" onclick="toggleMenu()">☰</button>
       </div>
 
-      <!-- HAMBURGARMENY DROPDOWN -->
       <div id="dropdown-menu" class="dropdown-menu hidden">
         <div class="dropdown-item" onclick="switchTab('parts')">📦 Reservdelslager</div>
+        <div class="dropdown-item" onclick="switchTab('cars')">🏎️ Mina Bilar &amp; Reparationer</div>
+        <div class="dropdown-item" onclick="switchTab('match')">⚡ Reg-nr Matchning</div>
         <div class="dropdown-item" onclick="switchTab('market')">🛒 Medlemsmarknad</div>
         <div class="dropdown-item hidden" id="menu-vip-btn" onclick="switchTab('vip')">🔒 VIP-Marknad</div>
-        <div class="dropdown-item" onclick="switchTab('cars')">🏎️ Mina Bilar &amp; Logg</div>
-        <div class="dropdown-item" onclick="switchTab('match')">⚡ Reg-nr Matchning</div>
         <div class="dropdown-item" onclick="switchTab('profile')">⚙️ Min Profil</div>
         <div class="dropdown-item hidden" id="menu-admin-btn" onclick="switchTab('admin')">👑 Adminpanel</div>
         <div class="dropdown-item" onclick="doLogout()" style="color:#f87171;">🚪 Logga ut</div>
       </div>
     </header>
 
-    <!-- KOMPAKTA STATS -->
     <div class="stats-bar">
       <div class="stat-card"><div class="val" id="stat-cars">0</div><div class="lbl">Bilar</div></div>
       <div class="stat-card"><div class="val" id="stat-parts">0</div><div class="lbl">Delar</div></div>
@@ -192,38 +178,105 @@
       <div class="stat-card"><div class="val" id="stat-value">0 kr</div><div class="lbl">Lagervärde</div></div>
     </div>
 
-    <!-- FLIK 1: Reservdelslager -->
+    <!-- FLIK 1: RESERVDELSLAGET -->
     <div id="tab-parts" class="tab-content">
       <div class="panel">
         <h2>
           <span>📦 Reservdelslager</span>
-          <button class="btn-sm" onclick="exportPartsCSV()" style="background:#27272a; color:#fff;">📥 CSV</button>
+          <div>
+            <button class="btn-sm" onclick="exportPartsCSV()" style="background:#27272a; color:#fff; margin-right:4px;">📥 CSV</button>
+            <button class="btn-sm" onclick="toggleForm('form-add-part')" style="background:var(--accent); color:#0f1015;">+ Lägg till del</button>
+          </div>
         </h2>
 
-        <div id="form-add-part" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
-          <div style="display:flex; gap:6px; margin-bottom:6px;">
-            <input type="text" id="part-reg-input" placeholder="Slå upp Reg-nr" style="max-width:130px; text-transform:uppercase;">
-            <button class="btn-primary" onclick="lookupPartReg()" style="width:auto;">Sök</button>
+        <div id="form-add-part" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
+          <div style="display:flex; gap:6px; margin-bottom:8px;">
+            <input type="text" id="part-reg-input" placeholder="Hämta info från Reg-nr" style="max-width:160px; text-transform:uppercase;">
+            <button class="btn-primary" onclick="lookupPartReg()" style="width:auto;">Sök Reg</button>
           </div>
+
           <div class="form-grid">
-            <input type="text" id="part-name" placeholder="Delens namn">
-            <input type="text" id="part-main-make" placeholder="Märke (t.ex. Volvo)">
+            <input type="text" id="part-name" placeholder="Delens namn *">
+            <input type="text" id="part-main-make" placeholder="Märke (t.ex. Volvo) *">
             <input type="text" id="part-main-model" placeholder="Modell (t.ex. V70)">
-            <input type="text" id="part-year" placeholder="Årsmodell">
+            <input type="text" id="part-year" placeholder="Årsmodell (t.ex. 2008-2012)">
+            <input type="text" id="part-oem" placeholder="Originalnr (OEM-nr)">
             <input type="number" id="part-price" placeholder="Pris (kr)">
-            <input type="text" id="part-shelf" placeholder="Lagerplats/Hylla">
+            <input type="text" id="part-shelf" placeholder="Lagerplats (Hylla/Låda)">
           </div>
-          <button class="btn-primary" onclick="addPart()">Spara Del</button>
+
+          <div style="margin-bottom:8px;">
+            <label style="font-size:0.7rem; color:var(--text-dim);">Passar även andra modeller (klicka lägg till):</label>
+            <div style="display:flex; gap:6px; margin-top:2px;">
+              <input type="text" id="compat-input" placeholder="t.ex. Saab 9-3 eller Ford Focus" style="max-width:240px;">
+              <button type="button" class="btn-primary" onclick="addCompatTag()" style="background:#27272a; color:#fff; width:auto;">+ Lägg till</button>
+            </div>
+            <div id="compat-tags" class="tags-container"></div>
+          </div>
+
+          <div style="margin-bottom:8px;">
+            <textarea id="part-comment" rows="2" placeholder="Kommentar / Skick / Noteringar..."></textarea>
+          </div>
+
+          <button class="btn-primary" onclick="addPart()">Spara del i lagret</button>
         </div>
 
         <div style="display:flex; gap:6px; margin-bottom:8px;">
-          <input type="text" id="search-filter" placeholder="🔍 Sök delar..." onkeyup="renderParts()">
+          <input type="text" id="search-filter" placeholder="🔍 Sök namn, modell eller OEM-nr..." onkeyup="renderParts()">
         </div>
+
         <div id="parts-list" class="parts-grid"></div>
       </div>
     </div>
 
-    <!-- FLIK 2: Marknad -->
+    <!-- FLIK 2: MINA BILAR, SERVICELOGG & FELSÖKNING -->
+    <div id="tab-cars" class="tab-content hidden">
+      <div class="panel">
+        <h2>
+          <span>🏎️ Garaget: Bilar, Reparationer &amp; Felsökning</span>
+          <button class="btn-sm" onclick="toggleForm('form-add-car')" style="background:var(--accent); color:#0f1015;">+ Lägg till bil</button>
+        </h2>
+
+        <div id="form-add-car" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
+          <div style="display:flex; gap:6px; margin-bottom:6px;">
+            <input type="text" id="car-reg-input" placeholder="Reg-nr" style="max-width:140px; text-transform:uppercase;">
+            <button class="btn-primary" onclick="lookupCarReg()" style="width:auto;">Sök bildata</button>
+          </div>
+          <div class="form-grid">
+            <input type="text" id="car-make" placeholder="Märke">
+            <input type="text" id="car-model" placeholder="Modell">
+            <input type="text" id="car-year" placeholder="Årsmodell">
+            <input type="text" id="car-engine" placeholder="Motor">
+          </div>
+          <button class="btn-primary" onclick="addCar()">Spara Bil i Garaget</button>
+        </div>
+
+        <div id="car-list" class="parts-grid"></div>
+      </div>
+    </div>
+
+    <!-- FLIK 3: REG-NR MATCHNING & DEL-KONTROLL -->
+    <div id="tab-match" class="tab-content hidden">
+      <div class="panel">
+        <h2>⚡ Slå upp Reg-nr &amp; Se Passande Lagervaror</h2>
+        <p style="color:var(--text-dim); font-size:0.75rem; margin-top:0;">Fyll i vilket reg-nummer som helst så hämtas fordonsdata och alla matchande delar ur lagret.</p>
+
+        <div style="display:flex; gap:6px; margin-bottom:10px;">
+          <input type="text" id="match-reg-input" placeholder="Skriv Reg-nr (t.ex. BKU848)" style="max-width:200px; text-transform:uppercase; font-size:0.9rem; font-weight:bold;">
+          <button class="btn-primary" onclick="matchRegWithInventory()" style="width:auto;">🔍 Sök &amp; Matcha</button>
+        </div>
+
+        <div id="match-car-header" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; border:1px solid var(--accent-blue); margin-bottom:10px;">
+          <div id="match-car-title" style="font-size:1.1rem; font-weight:bold; color:#fff;"></div>
+          <div id="match-car-sub" style="font-size:0.75rem; color:var(--text-dim);"></div>
+        </div>
+
+        <div id="match-results-title" style="font-weight:bold; margin-bottom:6px; color:var(--accent-green);"></div>
+        <div id="match-results-grid" class="parts-grid"></div>
+      </div>
+    </div>
+
+    <!-- FLIK 4: MARKNAD -->
     <div id="tab-market" class="tab-content hidden">
       <div class="panel">
         <h2>🛒 Medlemsmarknad</h2>
@@ -240,7 +293,7 @@
       </div>
     </div>
 
-    <!-- FLIK 3: VIP-Marknad -->
+    <!-- FLIK 5: VIP -->
     <div id="tab-vip" class="tab-content hidden">
       <div class="panel" style="border-color:var(--accent-purple);">
         <h2 style="color:var(--accent-purple);">🔒 VIP-Marknad</h2>
@@ -256,39 +309,7 @@
       </div>
     </div>
 
-    <!-- FLIK 4: Mina Bilar & Servicelogg -->
-    <div id="tab-cars" class="tab-content hidden">
-      <div class="panel">
-        <h2>🏎️ Mina Bilar &amp; Servicelogg</h2>
-        <div id="form-add-car" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
-          <div style="display:flex; gap:6px; margin-bottom:6px;">
-            <input type="text" id="car-reg-input" placeholder="Reg-nr" style="max-width:130px; text-transform:uppercase;">
-            <button class="btn-primary" onclick="lookupCarReg()" style="width:auto;">Sök</button>
-          </div>
-          <div class="form-grid">
-            <input type="text" id="car-make" placeholder="Märke">
-            <input type="text" id="car-model" placeholder="Modell">
-            <input type="text" id="car-year" placeholder="Årsmodell">
-          </div>
-          <button class="btn-primary" onclick="addCar()">Spara Bil</button>
-        </div>
-        <div id="car-list" class="parts-grid"></div>
-      </div>
-    </div>
-
-    <!-- FLIK 5: Reg-nr Matchning -->
-    <div id="tab-match" class="tab-content hidden">
-      <div class="panel">
-        <h2>⚡ Reg-nr Matchning</h2>
-        <div style="display:flex; gap:6px; margin-bottom:8px;">
-          <input type="text" id="match-reg-input" placeholder="Reg-nr" style="max-width:150px; text-transform:uppercase;">
-          <button class="btn-primary" onclick="matchRegWithInventory()" style="width:auto;">Sök Delar</button>
-        </div>
-        <div id="match-results-grid" class="parts-grid"></div>
-      </div>
-    </div>
-
-    <!-- FLIK 6: Min Profil -->
+    <!-- FLIK 6: PROFIL -->
     <div id="tab-profile" class="tab-content hidden">
       <div class="panel">
         <h2>⚙️ Min Profil</h2>
@@ -305,7 +326,7 @@
       </div>
     </div>
 
-    <!-- FLIK 7: Admin -->
+    <!-- FLIK 7: ADMIN -->
     <div id="tab-admin" class="tab-content hidden">
       <div class="panel" style="border-color:var(--accent-blue);">
         <h2>👑 Admin: Medlemmar</h2>
@@ -319,17 +340,10 @@
     </div>
   </div>
 
-  <!-- FLYTANDE PLUSKNAPP (FAB) -->
-  <button class="fab-btn" onclick="toggleFabMenu()">+</button>
-  <div id="fab-menu" class="fab-menu hidden">
-    <button class="btn-sm" onclick="openFabAction('form-add-part', 'parts')" style="background:var(--accent); color:#000;">📦 Ny Del</button>
-    <button class="btn-sm" onclick="openFabAction('form-add-car', 'cars')" style="background:var(--accent-blue); color:#000;">🏎️ Ny Bil</button>
-    <button class="btn-sm" onclick="openFabAction('form-add-market', 'market')" style="background:var(--accent-green); color:#000;">🛒 Ny Annons</button>
-  </div>
-
   <script>
     let currentUser = '', isAdmin = false, isVip = false;
     let cars = [], parts = [], marketItems = [], vipMarketItems = [], usersList = [];
+    let currentCompatTags = [];
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -338,14 +352,7 @@
     }
 
     function toggleMenu() { document.getElementById('dropdown-menu').classList.toggle('hidden'); }
-    function toggleFabMenu() { document.getElementById('fab-menu').classList.toggle('hidden'); }
     function toggleForm(id) { document.getElementById(id).classList.toggle('hidden'); }
-
-    function openFabAction(formId, tabName) {
-      switchTab(tabName);
-      document.getElementById(formId).classList.remove('hidden');
-      document.getElementById('fab-menu').classList.add('hidden');
-    }
 
     function switchTab(tab) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -396,87 +403,24 @@
       updateStats();
     }
 
-    async function mountPart(partId) {
-      if (cars.length === 0) return alert('Du måste ha minst en bil i garaget för att montera delen!');
-      
-      let options = cars.map((c, i) => `${i + 1}. ${c.make} ${c.model} (${c.reg})`).join('\n');
-      let choice = prompt(`Välj bil att montera delen på:\n${options}`);
-      let idx = parseInt(choice) - 1;
-
-      if (cars[idx]) {
-        const car = cars[idx];
-        await fetch('/api/mount-part', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ partId, carReg: car.reg, carTitle: `${car.make} ${car.model}` })
-        });
-        showToast(`✓ Delen monterad på ${car.make} ${car.model}`);
-        loadAllData();
+    function addCompatTag() {
+      const val = document.getElementById('compat-input').value.trim();
+      if (val && !currentCompatTags.includes(val)) {
+        currentCompatTags.push(val);
+        document.getElementById('compat-input').value = '';
+        renderTags();
       }
     }
 
-    function renderParts() {
-      const search = document.getElementById('search-filter').value.toLowerCase();
-      let filtered = parts.filter(p => p.name.toLowerCase().includes(search) || p.make.toLowerCase().includes(search));
-
-      document.getElementById('parts-list').innerHTML = filtered.map(p => `
-        <div class="part-card">
-          <div>
-            <div style="display:flex; justify-content:space-between;">
-              <h3>${p.name}</h3>
-              ${p.mountedTo ? `<span class="badge badge-mounted">MONTERAD PÅ ${p.mountedTo}</span>` : ''}
-            </div>
-            <div class="meta"><b>Passar:</b> ${p.make} ${p.model} (${p.year})</div>
-            ${p.shelf && !p.mountedTo ? `<div class="meta" style="color:var(--accent-blue);"><b>Hylla:</b> ${p.shelf}</div>` : ''}
-          </div>
-          <div>
-            <div class="price">${p.price ? p.price + ' kr' : ''}</div>
-            <div style="display:flex; gap:4px; margin-top:6px;">
-              ${!p.mountedTo ? `<button class="btn-sm" onclick="mountPart(${p.id})" style="background:var(--accent-blue); color:#000;">🔩 Montera</button>` : ''}
-              <button class="btn-sm" onclick="deletePart(${p.id})" style="background:#ef4444; color:#fff;">🗑️</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
+    function removeTag(tag) {
+      currentCompatTags = currentCompatTags.filter(t => t !== tag);
+      renderTags();
     }
 
-    async function addServiceLog(carId) {
-      let note = prompt("Skriv servicenotering (t.ex. Oljebyte + filter 18000 mil):");
-      if (!note) return;
-
-      await fetch('/api/add-service-log', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ carId, note, date: new Date().toLocaleDateString('sv-SE') })
-      });
-      showToast('✓ Servicelogg sparad!');
-      loadAllData();
-    }
-
-    function renderCars() {
-      document.getElementById('car-list').innerHTML = cars.map(c => {
-        const mountedParts = parts.filter(p => p.mountedToReg === c.reg);
-        const mountedCost = mountedParts.reduce((sum, p) => sum + (parseInt(p.price) || 0), 0);
-        
-        return `
-        <div class="part-card">
-          <div>
-            <h3>${c.make.toUpperCase()} ${c.model.toUpperCase()} (${c.year})</h3>
-            <div class="meta"><b>Reg:</b> ${c.reg || 'Ej angivet'}</div>
-            <div class="meta" style="color:var(--accent-green);"><b>Monterade delar värde:</b> ${mountedCost} kr</div>
-            
-            <div style="margin-top:6px; border-top:1px solid var(--border); padding-top:4px;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <b>🔧 Servicelogg:</b>
-                <button class="btn-sm" onclick="addServiceLog(${c.id})" style="background:#27272a; color:#fff;">+ Logg</button>
-              </div>
-              <div style="font-size:0.68rem; color:var(--text-dim); margin-top:3px;">
-                ${(c.logs || []).map(l => `<div>• <i>${l.date}</i>: ${l.note}</div>`).join('') || 'Inga loggar ännu.'}
-              </div>
-            </div>
-          </div>
-        </div>
-      `}).join('');
+    function renderTags() {
+      document.getElementById('compat-tags').innerHTML = currentCompatTags.map(t => 
+        `<div class="tag">${t} <span onclick="removeTag('${t}')">&times;</span></div>`
+      ).join('');
     }
 
     async function addPart() {
@@ -491,11 +435,67 @@
           id: Date.now(), user: currentUser, name, make,
           model: document.getElementById('part-main-model').value,
           year: document.getElementById('part-year').value,
+          oem: document.getElementById('part-oem').value,
           price: parseInt(document.getElementById('part-price').value) || 0,
-          shelf: document.getElementById('part-shelf').value
+          shelf: document.getElementById('part-shelf').value,
+          compat: [...currentCompatTags],
+          comment: document.getElementById('part-comment').value
         })
       });
-      toggleForm('form-add-part'); showToast('✓ Del sparad!'); loadAllData();
+
+      currentCompatTags = []; renderTags();
+      document.getElementById('part-comment').value = '';
+      toggleForm('form-add-part'); showToast('✓ Del sparad i lagret!'); loadAllData();
+    }
+
+    async function mountPart(partId) {
+      if (cars.length === 0) return alert('Du måste ha minst en bil i garaget!');
+      let options = cars.map((c, i) => `${i + 1}. ${c.make} ${c.model} (${c.reg})`).join('\n');
+      let choice = prompt(`Välj bil att montera delen på:\n${options}`);
+      let idx = parseInt(choice) - 1;
+
+      if (cars[idx]) {
+        const car = cars[idx];
+        await fetch('/api/mount-part', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ partId, carReg: car.reg, carTitle: `${car.make} ${car.model}` })
+        });
+        showToast(`✓ Monterad på ${car.make} ${car.model}`);
+        loadAllData();
+      }
+    }
+
+    function renderParts() {
+      const search = document.getElementById('search-filter').value.toLowerCase();
+      let filtered = parts.filter(p => 
+        p.name.toLowerCase().includes(search) || 
+        p.make.toLowerCase().includes(search) ||
+        (p.oem && p.oem.toLowerCase().includes(search))
+      );
+
+      document.getElementById('parts-list').innerHTML = filtered.map(p => `
+        <div class="part-card">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:4px;">
+              <h3>${p.name}</h3>
+              ${p.oem ? `<span class="badge badge-oem">OEM: ${p.oem}</span>` : ''}
+              ${p.mountedTo ? `<span class="badge badge-mounted">MONTERAD PÅ ${p.mountedTo}</span>` : ''}
+            </div>
+            <div class="meta"><b>Modell:</b> ${p.make} ${p.model} (${p.year || 'Alla år'})</div>
+            ${p.shelf && !p.mountedTo ? `<div class="meta" style="color:var(--accent-blue);"><b>Hylla:</b> ${p.shelf}</div>` : ''}
+            ${p.compat && p.compat.length ? `<div class="meta"><b>Passar även:</b> ${p.compat.join(', ')}</div>` : ''}
+            ${p.comment ? `<div class="meta" style="font-style:italic; color:#d1d5db; margin-top:3px;">"${p.comment}"</div>` : ''}
+          </div>
+          <div>
+            <div class="price">${p.price ? p.price + ' kr' : 'Pris saknas'}</div>
+            <div style="display:flex; gap:4px; margin-top:6px;">
+              ${!p.mountedTo ? `<button class="btn-sm" onclick="mountPart(${p.id})" style="background:var(--accent-blue); color:#000;">🔩 Montera</button>` : ''}
+              <button class="btn-sm" onclick="deletePart(${p.id})" style="background:#ef4444; color:#fff;">🗑️</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
     async function deletePart(id) {
@@ -504,6 +504,7 @@
       showToast('✓ Del raderad'); loadAllData();
     }
 
+    /* BILAR, FELSÖKNING & JOBB */
     async function addCar() {
       const make = document.getElementById('car-make').value;
       const model = document.getElementById('car-model').value;
@@ -515,10 +516,154 @@
         body: JSON.stringify({
           id: Date.now(), user: currentUser,
           reg: document.getElementById('car-reg-input').value.toUpperCase(),
-          make, model, year: document.getElementById('car-year').value, logs: []
+          make, model, year: document.getElementById('car-year').value,
+          troubleshoot: [], jobs: [], serviceLogs: []
         })
       });
-      toggleForm('form-add-car'); showToast('✓ Bil sparad!'); loadAllData();
+      toggleForm('form-add-car'); showToast('✓ Bil sparad i garaget!'); loadAllData();
+    }
+
+    async function addCarTask(carId, type) {
+      let label = type === 'troubleshoot' ? 'Vad ska felsökas?' : 'Vad för jobb ska göras?';
+      let text = prompt(label);
+      if (!text) return;
+
+      await fetch('/api/add-car-task', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ carId, type, text })
+      });
+      showToast('✓ Tillagt!'); loadAllData();
+    }
+
+    async function toggleCarTask(carId, type, taskIdx) {
+      await fetch('/api/toggle-car-task', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ carId, type, taskIdx })
+      });
+      loadAllData();
+    }
+
+    async function addServiceLog(carId) {
+      let desc = prompt("Beskriv reparation/service (t.ex. Bytt kamrem & vattenpump):");
+      if (!desc) return;
+      let mil = prompt("Mätarställning (t.ex. 18 500 mil):") || "";
+      let cost = prompt("Kostnad (kr):") || "0";
+
+      await fetch('/api/add-service-log', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ carId, desc, mil, cost, date: new Date().toLocaleDateString('sv-SE') })
+      });
+      showToast('✓ Servicelogg sparad!'); loadAllData();
+    }
+
+    function renderCars() {
+      document.getElementById('car-list').innerHTML = cars.map(c => {
+        // Hitta matchande delar i lagret
+        const matchingParts = parts.filter(p => {
+          const makeMatch = p.make.toLowerCase() === c.make.toLowerCase();
+          const compatMatch = p.compat && p.compat.some(tag => tag.toLowerCase().includes(c.make.toLowerCase()));
+          return makeMatch || compatMatch;
+        });
+
+        return `
+        <div class="part-card">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+              <h3>${c.make.toUpperCase()} ${c.model.toUpperCase()} (${c.year || 'Okänt år'})</h3>
+              <span class="badge badge-oem">${c.reg || 'UTAN REG'}</span>
+            </div>
+            
+            <div class="meta" style="color:var(--accent-green); margin-bottom:6px;">
+              ⚡ <b>${matchingParts.length} passande delar</b> i lagret
+            </div>
+
+            <!-- SEKTION: FELSÖKNING -->
+            <div style="margin-top:6px; background:#16171c; padding:6px; border-radius:4px; border:1px solid var(--border);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <b style="color:var(--accent-purple);">🔍 Ska Felsökas:</b>
+                <button class="btn-sm" onclick="addCarTask(${c.id}, 'troubleshoot')" style="background:#27272a; color:#fff;">+ Felsök</button>
+              </div>
+              <div>
+                ${(c.troubleshoot || []).map((t, idx) => `
+                  <div class="task-item ${t.done ? 'done' : ''}" onclick="toggleCarTask(${c.id}, 'troubleshoot', ${idx})">
+                    <span>${t.done ? '✓' : '◦'} ${t.text}</span>
+                  </div>
+                `).join('') || '<div style="font-size:0.68rem; color:var(--text-dim);">Inga punkter att felsöka.</div>'}
+              </div>
+            </div>
+
+            <!-- SEKTION: JOBB ATT GÖRA -->
+            <div style="margin-top:6px; background:#16171c; padding:6px; border-radius:4px; border:1px solid var(--border);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <b style="color:var(--accent-blue);">📋 Jobb som ska göras:</b>
+                <button class="btn-sm" onclick="addCarTask(${c.id}, 'jobs')" style="background:#27272a; color:#fff;">+ Jobb</button>
+              </div>
+              <div>
+                ${(c.jobs || []).map((j, idx) => `
+                  <div class="task-item ${j.done ? 'done' : ''}" onclick="toggleCarTask(${c.id}, 'jobs', ${idx})">
+                    <span>${j.done ? '✓' : '◦'} ${j.text}</span>
+                  </div>
+                `).join('') || '<div style="font-size:0.68rem; color:var(--text-dim);">Inga jobb inlagda.</div>'}
+              </div>
+            </div>
+
+            <!-- SEKTION: REPARATION & SERVICELOGG -->
+            <div style="margin-top:6px; background:#16171c; padding:6px; border-radius:4px; border:1px solid var(--border);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <b style="color:var(--accent-green);">🔧 Service &amp; Reparationshistorik:</b>
+                <button class="btn-sm" onclick="addServiceLog(${c.id})" style="background:#27272a; color:#fff;">+ Logg</button>
+              </div>
+              <div style="font-size:0.68rem; margin-top:4px;">
+                ${(c.serviceLogs || []).map(l => `
+                  <div style="border-bottom:1px dashed var(--border); padding:2px 0;">
+                    <b>${l.date}</b> (${l.mil || 'Mätare saknas'}): ${l.desc} - <span style="color:var(--accent-green);">${l.cost ? l.cost + ' kr' : ''}</span>
+                  </div>
+                `).join('') || '<div style="color:var(--text-dim);">Inga loggar ännu.</div>'}
+              </div>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+    }
+
+    /* REG-NR MATCHNING SÖKNING */
+    async function matchRegWithInventory() {
+      const reg = document.getElementById('match-reg-input').value.trim();
+      if (!reg) return alert('Ange ett registreringsnummer!');
+      
+      showToast('🔍 Hämtar bil & letar delar...');
+      const res = await fetch('/api/car-info?reg=' + reg);
+      const car = await res.json();
+      
+      if (!car.success) return alert('Kunde inte slå upp reg-nummer ' + reg);
+
+      document.getElementById('match-car-header').classList.remove('hidden');
+      document.getElementById('match-car-title').innerText = `${car.make.toUpperCase()} ${car.model.toUpperCase()} (${car.year || 'Okänt år'})`;
+      document.getElementById('match-car-sub').innerText = `Drivmedel: ${car.fuel || 'Okänt'} | Reg: ${reg.toUpperCase()}`;
+
+      const matches = parts.filter(p => {
+        const makeMatch = p.make.toLowerCase() === car.make.toLowerCase();
+        const modelMatch = p.model && p.model.toLowerCase() === car.model.toLowerCase();
+        const compatMatch = p.compat && p.compat.some(c => c.toLowerCase().includes(car.make.toLowerCase()));
+        return (makeMatch || compatMatch);
+      });
+
+      document.getElementById('match-results-title').innerText = `⚡ ${matches.length} Delar i lagret passar till ${car.make} ${car.model}:`;
+
+      document.getElementById('match-results-grid').innerHTML = matches.length ? matches.map(p => `
+        <div class="part-card" style="border-color:var(--accent-green);">
+          <div>
+            <h3>${p.name}</h3>
+            <div class="meta"><b>Originalmodell:</b> ${p.make} ${p.model}</div>
+            ${p.shelf ? `<div class="meta" style="color:var(--accent-blue);"><b>Lagerplats:</b> ${p.shelf}</div>` : ''}
+            ${p.oem ? `<div class="meta"><b>OEM:</b> ${p.oem}</div>` : ''}
+          </div>
+          <div class="price">${p.price ? p.price + ' kr' : 'Pris saknas'}</div>
+        </div>
+      `).join('') : '<p style="color:var(--text-dim);">Inga delar i lagret matchade denna bil.</p>';
     }
 
     async function addMarketItem(isVip) {
@@ -603,8 +748,8 @@
     }
 
     function exportPartsCSV() {
-      let csv = 'Namn,Märke,Modell,Årsmodell,Pris,Lagerplats\n';
-      parts.forEach(p => { csv += `"${p.name}","${p.make}","${p.model}","${p.year}","${p.price}","${p.shelf}"\n`; });
+      let csv = 'Namn,Märke,Modell,Årsmodell,OEM,Pris,Lagerplats,Kommentar\n';
+      parts.forEach(p => { csv += `"${p.name}","${p.make}","${p.model}","${p.year}","${p.oem || ''}","${p.price}","${p.shelf}","${p.comment || ''}"\n`; });
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'lager.csv'; a.click();
     }
