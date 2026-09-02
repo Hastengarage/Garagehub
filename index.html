@@ -23,6 +23,7 @@
       margin: 0; padding: 0; font-size: 13px; padding-bottom: 40px;
     }
 
+    /* LANDNINGSSIDA */
     .landing-overlay {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: center; align-items: center; padding: 15px;
@@ -77,7 +78,7 @@
     .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
     .panel h2 { font-size: 0.95rem; margin-top: 0; margin-bottom: 8px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
 
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; margin-bottom: 8px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 8px; }
     input, select, textarea {
       width: 100%; background: var(--card-inner); border: 1px solid var(--border);
       color: #fff; padding: 6px 8px; border-radius: 4px; font-size: 0.78rem; box-sizing: border-box;
@@ -88,21 +89,30 @@
     }
     .btn-sm { padding: 4px 8px; font-size: 0.7rem; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
 
-    .parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
-    .part-card {
-      background: var(--card-inner); border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-size: 0.78rem;
-      display: flex; flex-direction: column; justify-content: space-between; position: relative;
+    /* KATEGORI-KNAPPAR */
+    .cat-bar { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; padding-bottom: 2px; }
+    .cat-btn {
+      background: var(--card-inner); border: 1px solid var(--border); color: var(--text-dim);
+      padding: 3px 8px; border-radius: 4px; font-size: 0.68rem; cursor: pointer; white-space: nowrap; font-weight: 600;
     }
-    .part-card h3 { margin: 0 0 4px 0; font-size: 0.88rem; color: #fff; font-weight: 700; }
-    .part-card .meta { color: var(--text-dim); font-size: 0.7rem; margin-bottom: 3px; line-height: 1.3; }
-    .part-card .price { color: var(--accent-green); font-weight: bold; font-size: 0.82rem; margin-top: 4px; }
-    
-    .badge { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; }
+    .cat-btn.active { background: var(--accent); color: #0f1015; border-color: var(--accent); }
+
+    /* ULTRA-KOMPAKTA KORT */
+    .parts-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
+    @media (min-width: 600px) { .parts-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); } }
+
+    .part-card-compact {
+      background: var(--card-inner); border: 1px solid var(--border); border-radius: 5px;
+      padding: 6px 10px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+    .part-card-compact .info-main { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .part-card-compact h3 { margin: 0; font-size: 0.82rem; color: #fff; font-weight: 700; display: inline; }
+    .part-card-compact .sub-info { color: var(--text-dim); font-size: 0.68rem; margin-top: 2px; }
+    .part-card-compact .price-tag { color: var(--accent-green); font-weight: bold; font-size: 0.8rem; white-space: nowrap; }
+
+    .badge { display: inline-block; padding: 1px 4px; border-radius: 3px; font-size: 0.58rem; font-weight: bold; text-transform: uppercase; margin-left: 4px; }
     .badge-oem { background: #27272a; color: var(--accent-blue); border: 1px solid var(--border); }
     .badge-mounted { background: #3b82f6; color: #fff; }
-
-    .task-item { display: flex; align-items: center; justify-content: space-between; background: #1f2128; padding: 4px 6px; border-radius: 4px; margin-top: 3px; font-size: 0.72rem; }
-    .task-item.done { text-decoration: line-through; opacity: 0.5; }
 
     .tags-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
     .tag { background: #27272a; color: var(--accent-blue); padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; display: flex; align-items: center; gap: 4px; }
@@ -116,10 +126,10 @@
     #toast.show { opacity: 1; transform: translateY(0); }
 
     .site-footer {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      color: var(--text-dim); font-size: 0.72rem; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      color: var(--text-dim); font-size: 0.72rem; margin-top: 20px; padding-top: 10px; border-top: 1px solid var(--border);
     }
-    .horse-footer-icon { width: 16px; height: 16px; opacity: 0.3; fill: currentColor; }
+    .horse-footer-icon { width: 18px; height: 18px; fill: var(--accent); opacity: 0.55; }
 
     .hidden { display: none !important; }
   </style>
@@ -161,7 +171,7 @@
 
       <div id="dropdown-menu" class="dropdown-menu hidden">
         <div class="dropdown-item" onclick="switchTab('parts')">📦 Reservdelslager</div>
-        <div class="dropdown-item" onclick="switchTab('cars')">🏎️ Mina Bilar &amp; Reparationer</div>
+        <div class="dropdown-item" onclick="switchTab('cars')">🏎️ Mina Bilar &amp; Logg</div>
         <div class="dropdown-item" onclick="switchTab('match')">⚡ Reg-nr Matchning</div>
         <div class="dropdown-item" onclick="switchTab('market')">🛒 Medlemsmarknad</div>
         <div class="dropdown-item hidden" id="menu-vip-btn" onclick="switchTab('vip')">🔒 VIP-Marknad</div>
@@ -183,13 +193,17 @@
       <div class="panel">
         <h2>
           <span>📦 Reservdelslager</span>
-          <div>
-            <button class="btn-sm" onclick="exportPartsCSV()" style="background:#27272a; color:#fff; margin-right:4px;">📥 CSV</button>
-            <button class="btn-sm" onclick="toggleForm('form-add-part')" style="background:var(--accent); color:#0f1015;">+ Lägg till del</button>
+          <div style="display:flex; gap:4px;">
+            <input type="file" id="csv-file-input" accept=".csv" onchange="importCSV(event)" class="hidden">
+            <button class="btn-sm" onclick="document.getElementById('csv-file-input').click()" style="background:var(--accent-blue); color:#000;">📤 Importera CSV</button>
+            <button class="btn-sm" onclick="exportPartsCSV()" style="background:#27272a; color:#fff;">📥 CSV</button>
+            <button class="btn-sm" onclick="openNewPartForm()" style="background:var(--accent); color:#0f1015;">+ Ny Del</button>
           </div>
         </h2>
 
+        <!-- STÄDAT & FLEXIBELT FORMULÄR -->
         <div id="form-add-part" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
+          <input type="hidden" id="edit-part-id" value="">
           <div style="display:flex; gap:6px; margin-bottom:8px;">
             <input type="text" id="part-reg-input" placeholder="Hämta info från Reg-nr" style="max-width:160px; text-transform:uppercase;">
             <button class="btn-primary" onclick="lookupPartReg()" style="width:auto;">Sök Reg</button>
@@ -200,15 +214,23 @@
             <input type="text" id="part-main-make" placeholder="Märke (t.ex. Volvo) *">
             <input type="text" id="part-main-model" placeholder="Modell (t.ex. V70)">
             <input type="text" id="part-year" placeholder="Årsmodell (t.ex. 2008-2012)">
+            <select id="part-category">
+              <option value="all">Välj Kategori...</option>
+              <option value="motor">Motor</option>
+              <option value="chassi">Chassi / Bromsar</option>
+              <option value="kaross">Kaross</option>
+              <option value="el">El / Belysning</option>
+              <option value="inredning">Inredning</option>
+            </select>
             <input type="text" id="part-oem" placeholder="Originalnr (OEM-nr)">
             <input type="number" id="part-price" placeholder="Pris (kr)">
             <input type="text" id="part-shelf" placeholder="Lagerplats (Hylla/Låda)">
           </div>
 
           <div style="margin-bottom:8px;">
-            <label style="font-size:0.7rem; color:var(--text-dim);">Passar även andra modeller (klicka lägg till):</label>
+            <label style="font-size:0.7rem; color:var(--text-dim);">Passar även andra modeller:</label>
             <div style="display:flex; gap:6px; margin-top:2px;">
-              <input type="text" id="compat-input" placeholder="t.ex. Saab 9-3 eller Ford Focus" style="max-width:240px;">
+              <input type="text" id="compat-input" placeholder="t.ex. Saab 9-3" style="max-width:200px;">
               <button type="button" class="btn-primary" onclick="addCompatTag()" style="background:#27272a; color:#fff; width:auto;">+ Lägg till</button>
             </div>
             <div id="compat-tags" class="tags-container"></div>
@@ -218,7 +240,17 @@
             <textarea id="part-comment" rows="2" placeholder="Kommentar / Skick / Noteringar..."></textarea>
           </div>
 
-          <button class="btn-primary" onclick="addPart()">Spara del i lagret</button>
+          <button class="btn-primary" id="btn-save-part" onclick="addOrUpdatePart()">Spara del i lagret</button>
+        </div>
+
+        <!-- KATEGORI-KNAPPAR -->
+        <div class="cat-bar">
+          <button class="cat-btn active" onclick="setCatFilter('all', this)">Alla</button>
+          <button class="cat-btn" onclick="setCatFilter('motor', this)">Motor</button>
+          <button class="cat-btn" onclick="setCatFilter('chassi', this)">Chassi/Broms</button>
+          <button class="cat-btn" onclick="setCatFilter('kaross', this)">Kaross</button>
+          <button class="cat-btn" onclick="setCatFilter('el', this)">El/Belysning</button>
+          <button class="cat-btn" onclick="setCatFilter('inredning', this)">Inredning</button>
         </div>
 
         <div style="display:flex; gap:6px; margin-bottom:8px;">
@@ -229,11 +261,11 @@
       </div>
     </div>
 
-    <!-- FLIK 2: MINA BILAR, SERVICELOGG & FELSÖKNING -->
+    <!-- FLIK 2: MINA BILAR -->
     <div id="tab-cars" class="tab-content hidden">
       <div class="panel">
         <h2>
-          <span>🏎️ Garaget: Bilar, Reparationer &amp; Felsökning</span>
+          <span>🏎️ Garaget &amp; Reparationer</span>
           <button class="btn-sm" onclick="toggleForm('form-add-car')" style="background:var(--accent); color:#0f1015;">+ Lägg till bil</button>
         </h2>
 
@@ -246,31 +278,25 @@
             <input type="text" id="car-make" placeholder="Märke">
             <input type="text" id="car-model" placeholder="Modell">
             <input type="text" id="car-year" placeholder="Årsmodell">
-            <input type="text" id="car-engine" placeholder="Motor">
           </div>
-          <button class="btn-primary" onclick="addCar()">Spara Bil i Garaget</button>
+          <button class="btn-primary" onclick="addCar()">Spara Bil</button>
         </div>
 
         <div id="car-list" class="parts-grid"></div>
       </div>
     </div>
 
-    <!-- FLIK 3: REG-NR MATCHNING & DEL-KONTROLL -->
+    <!-- FLIK 3: REG-NR MATCHNING -->
     <div id="tab-match" class="tab-content hidden">
       <div class="panel">
-        <h2>⚡ Slå upp Reg-nr &amp; Se Passande Lagervaror</h2>
-        <p style="color:var(--text-dim); font-size:0.75rem; margin-top:0;">Fyll i vilket reg-nummer som helst så hämtas fordonsdata och alla matchande delar ur lagret.</p>
-
+        <h2>⚡ Slå upp Reg-nr &amp; Se Passande Delar</h2>
         <div style="display:flex; gap:6px; margin-bottom:10px;">
-          <input type="text" id="match-reg-input" placeholder="Skriv Reg-nr (t.ex. BKU848)" style="max-width:200px; text-transform:uppercase; font-size:0.9rem; font-weight:bold;">
-          <button class="btn-primary" onclick="matchRegWithInventory()" style="width:auto;">🔍 Sök &amp; Matcha</button>
+          <input type="text" id="match-reg-input" placeholder="Reg-nr" style="max-width:200px; text-transform:uppercase; font-size:0.9rem; font-weight:bold;">
+          <button class="btn-primary" onclick="matchRegWithInventory()" style="width:auto;">🔍 Matcha</button>
         </div>
-
-        <div id="match-car-header" class="hidden" style="background:var(--card-inner); padding:10px; border-radius:6px; border:1px solid var(--accent-blue); margin-bottom:10px;">
-          <div id="match-car-title" style="font-size:1.1rem; font-weight:bold; color:#fff;"></div>
-          <div id="match-car-sub" style="font-size:0.75rem; color:var(--text-dim);"></div>
+        <div id="match-car-header" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; border:1px solid var(--accent-blue); margin-bottom:10px;">
+          <div id="match-car-title" style="font-size:1rem; font-weight:bold; color:#fff;"></div>
         </div>
-
         <div id="match-results-title" style="font-weight:bold; margin-bottom:6px; color:var(--accent-green);"></div>
         <div id="match-results-grid" class="parts-grid"></div>
       </div>
@@ -280,15 +306,6 @@
     <div id="tab-market" class="tab-content hidden">
       <div class="panel">
         <h2>🛒 Medlemsmarknad</h2>
-        <div id="form-add-market" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
-          <div class="form-grid">
-            <input type="text" id="market-title" placeholder="Rubrik...">
-            <input type="number" id="market-price" placeholder="Pris (kr)">
-            <input type="text" id="market-contact" placeholder="Kontakt">
-          </div>
-          <div style="margin-bottom:6px;"><textarea id="market-desc" rows="2" placeholder="Beskrivning..."></textarea></div>
-          <button class="btn-primary" onclick="addMarketItem(false)">Publicera Annons</button>
-        </div>
         <div id="market-list" class="parts-grid"></div>
       </div>
     </div>
@@ -297,14 +314,6 @@
     <div id="tab-vip" class="tab-content hidden">
       <div class="panel" style="border-color:var(--accent-purple);">
         <h2 style="color:var(--accent-purple);">🔒 VIP-Marknad</h2>
-        <div id="form-add-vip" class="hidden" style="background:var(--card-inner); padding:8px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);">
-          <div class="form-grid">
-            <input type="text" id="vip-title" placeholder="VIP Rubrik...">
-            <input type="number" id="vip-price" placeholder="Pris (kr)">
-            <input type="text" id="vip-contact" placeholder="Kontakt">
-          </div>
-          <button class="btn-primary" onclick="addMarketItem(true)" style="background:var(--accent-purple); color:#fff;">Publicera VIP</button>
-        </div>
         <div id="vip-market-list" class="parts-grid"></div>
       </div>
     </div>
@@ -334,9 +343,12 @@
       </div>
     </div>
 
+    <!-- SYNLIGT OCH SNYGGT HÄSTHUVUD I SIDFOTEN -->
     <div class="site-footer">
-      <svg class="horse-footer-icon" viewBox="0 0 24 24"><path d="M19 3c-1.1 0-2 .9-2 2 0 .38.1.73.29 1.03L14.41 8.9c-.39.39-1.02.39-1.41 0L11.12 7.02c-.39-.39-1.02-.39-1.41 0L4.7 12.03C4.26 12.47 4 13.08 4 13.72V19c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
-      <span>🔒 GarageHub | <b>2026</b></span>
+      <svg class="horse-footer-icon" viewBox="0 0 512 512">
+        <path d="M437.3 192c-11.8-35.3-39.6-70.6-80.5-94.1C305 67.2 240 64 208 64c-28.8 0-64 16-80 32s-28.8 48-16 96c0 0-48 16-64 64s0 112 32 144c20 20 48 24 80 16 16-4 48-16 80-16s64 16 80 16c21.3 0 42.7-8 64-32 32-36 48-112 48-112s-32-16-64-16c0 0 16-32 21.3-64z"/>
+      </svg>
+      <span>🔒 GarageHub Portal | <b>2026</b></span>
     </div>
   </div>
 
@@ -344,6 +356,7 @@
     let currentUser = '', isAdmin = false, isVip = false;
     let cars = [], parts = [], marketItems = [], vipMarketItems = [], usersList = [];
     let currentCompatTags = [];
+    let activeCategory = 'all';
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -403,6 +416,75 @@
       updateStats();
     }
 
+    function setCatFilter(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderParts();
+    }
+
+    function openNewPartForm() {
+      document.getElementById('edit-part-id').value = '';
+      document.getElementById('part-name').value = '';
+      document.getElementById('part-main-make').value = '';
+      document.getElementById('part-main-model').value = '';
+      document.getElementById('part-year').value = '';
+      document.getElementById('part-oem').value = '';
+      document.getElementById('part-price').value = '';
+      document.getElementById('part-shelf').value = '';
+      document.getElementById('part-comment').value = '';
+      currentCompatTags = []; renderTags();
+      document.getElementById('btn-save-part').innerText = 'Spara del i lagret';
+      document.getElementById('form-add-part').classList.remove('hidden');
+    }
+
+    function editPart(id) {
+      const p = parts.find(item => item.id === id);
+      if (!p) return;
+      document.getElementById('edit-part-id').value = p.id;
+      document.getElementById('part-name').value = p.name || '';
+      document.getElementById('part-main-make').value = p.make || '';
+      document.getElementById('part-main-model').value = p.model || '';
+      document.getElementById('part-year').value = p.year || '';
+      document.getElementById('part-category').value = p.category || 'all';
+      document.getElementById('part-oem').value = p.oem || '';
+      document.getElementById('part-price').value = p.price || '';
+      document.getElementById('part-shelf').value = p.shelf || '';
+      document.getElementById('part-comment').value = p.comment || '';
+      currentCompatTags = p.compat || []; renderTags();
+      document.getElementById('btn-save-part').innerText = 'Spara Ändringar';
+      document.getElementById('form-add-part').classList.remove('hidden');
+    }
+
+    async function addOrUpdatePart() {
+      const editId = document.getElementById('edit-part-id').value;
+      const name = document.getElementById('part-name').value;
+      const make = document.getElementById('part-main-make').value;
+      if (!name || !make) return alert('Fyll i delens namn och märke!');
+
+      const payload = {
+        id: editId ? parseInt(editId) : Date.now(),
+        user: currentUser, name, make,
+        model: document.getElementById('part-main-model').value,
+        year: document.getElementById('part-year').value,
+        category: document.getElementById('part-category').value,
+        oem: document.getElementById('part-oem').value,
+        price: parseInt(document.getElementById('part-price').value) || 0,
+        shelf: document.getElementById('part-shelf').value,
+        compat: [...currentCompatTags],
+        comment: document.getElementById('part-comment').value
+      };
+
+      await fetch(editId ? '/api/edit-part' : '/api/save-part', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      document.getElementById('form-add-part').classList.add('hidden');
+      showToast('✓ Del sparad!'); loadAllData();
+    }
+
     function addCompatTag() {
       const val = document.getElementById('compat-input').value.trim();
       if (val && !currentCompatTags.includes(val)) {
@@ -411,91 +493,78 @@
         renderTags();
       }
     }
-
-    function removeTag(tag) {
-      currentCompatTags = currentCompatTags.filter(t => t !== tag);
-      renderTags();
-    }
-
+    function removeTag(tag) { currentCompatTags = currentCompatTags.filter(t => t !== tag); renderTags(); }
     function renderTags() {
-      document.getElementById('compat-tags').innerHTML = currentCompatTags.map(t => 
-        `<div class="tag">${t} <span onclick="removeTag('${t}')">&times;</span></div>`
-      ).join('');
+      document.getElementById('compat-tags').innerHTML = currentCompatTags.map(t => `<div class="tag">${t} <span onclick="removeTag('${t}')">&times;</span></div>`).join('');
     }
 
-    async function addPart() {
-      const name = document.getElementById('part-name').value;
-      const make = document.getElementById('part-main-make').value;
-      if (!name || !make) return alert('Fyll i delens namn och märke!');
-
-      await fetch('/api/save-part', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          id: Date.now(), user: currentUser, name, make,
-          model: document.getElementById('part-main-model').value,
-          year: document.getElementById('part-year').value,
-          oem: document.getElementById('part-oem').value,
-          price: parseInt(document.getElementById('part-price').value) || 0,
-          shelf: document.getElementById('part-shelf').value,
-          compat: [...currentCompatTags],
-          comment: document.getElementById('part-comment').value
-        })
-      });
-
-      currentCompatTags = []; renderTags();
-      document.getElementById('part-comment').value = '';
-      toggleForm('form-add-part'); showToast('✓ Del sparad i lagret!'); loadAllData();
-    }
-
-    async function mountPart(partId) {
-      if (cars.length === 0) return alert('Du måste ha minst en bil i garaget!');
-      let options = cars.map((c, i) => `${i + 1}. ${c.make} ${c.model} (${c.reg})`).join('\n');
-      let choice = prompt(`Välj bil att montera delen på:\n${options}`);
-      let idx = parseInt(choice) - 1;
-
-      if (cars[idx]) {
-        const car = cars[idx];
-        await fetch('/api/mount-part', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ partId, carReg: car.reg, carTitle: `${car.make} ${car.model}` })
-        });
-        showToast(`✓ Monterad på ${car.make} ${car.model}`);
-        loadAllData();
-      }
-    }
-
+    /* SUPERKOMPAKTA DEL-KORT */
     function renderParts() {
       const search = document.getElementById('search-filter').value.toLowerCase();
-      let filtered = parts.filter(p => 
-        p.name.toLowerCase().includes(search) || 
-        p.make.toLowerCase().includes(search) ||
-        (p.oem && p.oem.toLowerCase().includes(search))
-      );
+      let filtered = parts.filter(p => {
+        const matchCat = activeCategory === 'all' || p.category === activeCategory;
+        const matchSearch = p.name.toLowerCase().includes(search) || p.make.toLowerCase().includes(search) || (p.oem && p.oem.toLowerCase().includes(search));
+        return matchCat && matchSearch;
+      });
 
       document.getElementById('parts-list').innerHTML = filtered.map(p => `
-        <div class="part-card">
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:4px;">
-              <h3>${p.name}</h3>
-              ${p.oem ? `<span class="badge badge-oem">OEM: ${p.oem}</span>` : ''}
-              ${p.mountedTo ? `<span class="badge badge-mounted">MONTERAD PÅ ${p.mountedTo}</span>` : ''}
+        <div class="part-card-compact">
+          <div class="info-main">
+            <h3>${p.name}</h3>
+            ${p.oem ? `<span class="badge badge-oem">OEM</span>` : ''}
+            <div class="sub-info">
+              <b>Passar:</b> ${p.make} ${p.model} ${p.shelf ? `| <b>Hylla:</b> ${p.shelf}` : ''}
             </div>
-            <div class="meta"><b>Modell:</b> ${p.make} ${p.model} (${p.year || 'Alla år'})</div>
-            ${p.shelf && !p.mountedTo ? `<div class="meta" style="color:var(--accent-blue);"><b>Hylla:</b> ${p.shelf}</div>` : ''}
-            ${p.compat && p.compat.length ? `<div class="meta"><b>Passar även:</b> ${p.compat.join(', ')}</div>` : ''}
-            ${p.comment ? `<div class="meta" style="font-style:italic; color:#d1d5db; margin-top:3px;">"${p.comment}"</div>` : ''}
           </div>
-          <div>
-            <div class="price">${p.price ? p.price + ' kr' : 'Pris saknas'}</div>
-            <div style="display:flex; gap:4px; margin-top:6px;">
-              ${!p.mountedTo ? `<button class="btn-sm" onclick="mountPart(${p.id})" style="background:var(--accent-blue); color:#000;">🔩 Montera</button>` : ''}
-              <button class="btn-sm" onclick="deletePart(${p.id})" style="background:#ef4444; color:#fff;">🗑️</button>
-            </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div class="price-tag">${p.price ? p.price + ' kr' : '-'}</div>
+            <button class="btn-sm" onclick="editPart(${p.id})" style="background:#374151; color:#fff;">✏️</button>
+            <button class="btn-sm" onclick="deletePart(${p.id})" style="background:#ef4444; color:#fff;">🗑️</button>
           </div>
         </div>
       `).join('');
+    }
+
+    /* IMPORTERA CSV OCH ÅTERSTÄLL ALLA 20 DELAR */
+    async function importCSV(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const text = e.target.result;
+        const lines = text.split('\n');
+        let importedCount = 0;
+
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+          
+          // Hantera CSV-kolumner
+          const cols = line.replace(/"/g, '').split(',');
+          if (cols.length >= 2) {
+            await fetch('/api/save-part', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                id: Date.now() + i, user: currentUser,
+                name: cols[0] || 'Okänd Del',
+                make: cols[1] || '',
+                model: cols[2] || '',
+                year: cols[3] || '',
+                oem: cols[4] || '',
+                price: parseInt(cols[5]) || 0,
+                shelf: cols[6] || '',
+                comment: cols[7] || ''
+              })
+            });
+            importedCount++;
+          }
+        }
+        showToast(`✓ Importerade ${importedCount} delar!`);
+        loadAllData();
+      };
+      reader.readAsText(file);
     }
 
     async function deletePart(id) {
@@ -504,215 +573,39 @@
       showToast('✓ Del raderad'); loadAllData();
     }
 
-    /* BILAR, FELSÖKNING & JOBB */
-    async function addCar() {
-      const make = document.getElementById('car-make').value;
-      const model = document.getElementById('car-model').value;
-      if (!make || !model) return alert('Fyll i märke och modell!');
-
-      await fetch('/api/save-car', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          id: Date.now(), user: currentUser,
-          reg: document.getElementById('car-reg-input').value.toUpperCase(),
-          make, model, year: document.getElementById('car-year').value,
-          troubleshoot: [], jobs: [], serviceLogs: []
-        })
-      });
-      toggleForm('form-add-car'); showToast('✓ Bil sparad i garaget!'); loadAllData();
-    }
-
-    async function addCarTask(carId, type) {
-      let label = type === 'troubleshoot' ? 'Vad ska felsökas?' : 'Vad för jobb ska göras?';
-      let text = prompt(label);
-      if (!text) return;
-
-      await fetch('/api/add-car-task', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ carId, type, text })
-      });
-      showToast('✓ Tillagt!'); loadAllData();
-    }
-
-    async function toggleCarTask(carId, type, taskIdx) {
-      await fetch('/api/toggle-car-task', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ carId, type, taskIdx })
-      });
-      loadAllData();
-    }
-
-    async function addServiceLog(carId) {
-      let desc = prompt("Beskriv reparation/service (t.ex. Bytt kamrem & vattenpump):");
-      if (!desc) return;
-      let mil = prompt("Mätarställning (t.ex. 18 500 mil):") || "";
-      let cost = prompt("Kostnad (kr):") || "0";
-
-      await fetch('/api/add-service-log', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ carId, desc, mil, cost, date: new Date().toLocaleDateString('sv-SE') })
-      });
-      showToast('✓ Servicelogg sparad!'); loadAllData();
-    }
-
     function renderCars() {
-      document.getElementById('car-list').innerHTML = cars.map(c => {
-        // Hitta matchande delar i lagret
-        const matchingParts = parts.filter(p => {
-          const makeMatch = p.make.toLowerCase() === c.make.toLowerCase();
-          const compatMatch = p.compat && p.compat.some(tag => tag.toLowerCase().includes(c.make.toLowerCase()));
-          return makeMatch || compatMatch;
-        });
-
-        return `
-        <div class="part-card">
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:start;">
-              <h3>${c.make.toUpperCase()} ${c.model.toUpperCase()} (${c.year || 'Okänt år'})</h3>
-              <span class="badge badge-oem">${c.reg || 'UTAN REG'}</span>
-            </div>
-            
-            <div class="meta" style="color:var(--accent-green); margin-bottom:6px;">
-              ⚡ <b>${matchingParts.length} passande delar</b> i lagret
-            </div>
-
-            <!-- SEKTION: FELSÖKNING -->
-            <div style="margin-top:6px; background:#16171c; padding:6px; border-radius:4px; border:1px solid var(--border);">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <b style="color:var(--accent-purple);">🔍 Ska Felsökas:</b>
-                <button class="btn-sm" onclick="addCarTask(${c.id}, 'troubleshoot')" style="background:#27272a; color:#fff;">+ Felsök</button>
-              </div>
-              <div>
-                ${(c.troubleshoot || []).map((t, idx) => `
-                  <div class="task-item ${t.done ? 'done' : ''}" onclick="toggleCarTask(${c.id}, 'troubleshoot', ${idx})">
-                    <span>${t.done ? '✓' : '◦'} ${t.text}</span>
-                  </div>
-                `).join('') || '<div style="font-size:0.68rem; color:var(--text-dim);">Inga punkter att felsöka.</div>'}
-              </div>
-            </div>
-
-            <!-- SEKTION: JOBB ATT GÖRA -->
-            <div style="margin-top:6px; background:#16171c; padding:6px; border-radius:4px; border:1px solid var(--border);">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <b style="color:var(--accent-blue);">📋 Jobb som ska göras:</b>
-                <button class="btn-sm" onclick="addCarTask(${c.id}, 'jobs')" style="background:#27272a; color:#fff;">+ Jobb</button>
-              </div>
-              <div>
-                ${(c.jobs || []).map((j, idx) => `
-                  <div class="task-item ${j.done ? 'done' : ''}" onclick="toggleCarTask(${c.id}, 'jobs', ${idx})">
-                    <span>${j.done ? '✓' : '◦'} ${j.text}</span>
-                  </div>
-                `).join('') || '<div style="font-size:0.68rem; color:var(--text-dim);">Inga jobb inlagda.</div>'}
-              </div>
-            </div>
-
-            <!-- SEKTION: REPARATION & SERVICELOGG -->
-            <div style="margin-top:6px; background:#16171c; padding:6px; border-radius:4px; border:1px solid var(--border);">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <b style="color:var(--accent-green);">🔧 Service &amp; Reparationshistorik:</b>
-                <button class="btn-sm" onclick="addServiceLog(${c.id})" style="background:#27272a; color:#fff;">+ Logg</button>
-              </div>
-              <div style="font-size:0.68rem; margin-top:4px;">
-                ${(c.serviceLogs || []).map(l => `
-                  <div style="border-bottom:1px dashed var(--border); padding:2px 0;">
-                    <b>${l.date}</b> (${l.mil || 'Mätare saknas'}): ${l.desc} - <span style="color:var(--accent-green);">${l.cost ? l.cost + ' kr' : ''}</span>
-                  </div>
-                `).join('') || '<div style="color:var(--text-dim);">Inga loggar ännu.</div>'}
-              </div>
-            </div>
+      document.getElementById('car-list').innerHTML = cars.map(c => `
+        <div class="part-card-compact">
+          <div class="info-main">
+            <h3>${c.make.toUpperCase()} ${c.model.toUpperCase()} (${c.year || 'Okänt år'})</h3>
+            <div class="sub-info">Reg: ${c.reg || 'Ej angivet'}</div>
           </div>
         </div>
-      `}).join('');
-    }
-
-    /* REG-NR MATCHNING SÖKNING */
-    async function matchRegWithInventory() {
-      const reg = document.getElementById('match-reg-input').value.trim();
-      if (!reg) return alert('Ange ett registreringsnummer!');
-      
-      showToast('🔍 Hämtar bil & letar delar...');
-      const res = await fetch('/api/car-info?reg=' + reg);
-      const car = await res.json();
-      
-      if (!car.success) return alert('Kunde inte slå upp reg-nummer ' + reg);
-
-      document.getElementById('match-car-header').classList.remove('hidden');
-      document.getElementById('match-car-title').innerText = `${car.make.toUpperCase()} ${car.model.toUpperCase()} (${car.year || 'Okänt år'})`;
-      document.getElementById('match-car-sub').innerText = `Drivmedel: ${car.fuel || 'Okänt'} | Reg: ${reg.toUpperCase()}`;
-
-      const matches = parts.filter(p => {
-        const makeMatch = p.make.toLowerCase() === car.make.toLowerCase();
-        const modelMatch = p.model && p.model.toLowerCase() === car.model.toLowerCase();
-        const compatMatch = p.compat && p.compat.some(c => c.toLowerCase().includes(car.make.toLowerCase()));
-        return (makeMatch || compatMatch);
-      });
-
-      document.getElementById('match-results-title').innerText = `⚡ ${matches.length} Delar i lagret passar till ${car.make} ${car.model}:`;
-
-      document.getElementById('match-results-grid').innerHTML = matches.length ? matches.map(p => `
-        <div class="part-card" style="border-color:var(--accent-green);">
-          <div>
-            <h3>${p.name}</h3>
-            <div class="meta"><b>Originalmodell:</b> ${p.make} ${p.model}</div>
-            ${p.shelf ? `<div class="meta" style="color:var(--accent-blue);"><b>Lagerplats:</b> ${p.shelf}</div>` : ''}
-            ${p.oem ? `<div class="meta"><b>OEM:</b> ${p.oem}</div>` : ''}
-          </div>
-          <div class="price">${p.price ? p.price + ' kr' : 'Pris saknas'}</div>
-        </div>
-      `).join('') : '<p style="color:var(--text-dim);">Inga delar i lagret matchade denna bil.</p>';
-    }
-
-    async function addMarketItem(isVip) {
-      const title = document.getElementById(isVip ? 'vip-title' : 'market-title').value;
-      const price = document.getElementById(isVip ? 'vip-price' : 'market-price').value;
-      const contact = document.getElementById(isVip ? 'vip-contact' : 'market-contact').value;
-      if (!title) return alert('Fyll i rubrik!');
-
-      await fetch('/api/save-market', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ id: Date.now(), user: currentUser, title, price, contact, isVip })
-      });
-      toggleForm(isVip ? 'form-add-vip' : 'form-add-market'); showToast('✓ Annons publicerad!'); loadAllData();
+      `).join('');
     }
 
     function renderMarket() {
       document.getElementById('market-list').innerHTML = marketItems.map(m => `
-        <div class="part-card">
-          <h3>${m.title}</h3><div class="price">${m.price ? m.price + ' kr' : ''}</div>
-          <div class="meta"><b>Kontakt:</b> ${m.contact}</div>
+        <div class="part-card-compact">
+          <div class="info-main">
+            <h3>${m.title}</h3>
+            <div class="sub-info">Kontakt: ${m.contact}</div>
+          </div>
+          <div class="price-tag">${m.price ? m.price + ' kr' : ''}</div>
         </div>
       `).join('');
     }
 
     function renderVipMarket() {
       document.getElementById('vip-market-list').innerHTML = vipMarketItems.map(m => `
-        <div class="part-card" style="border-color:var(--accent-purple);">
-          <h3 style="color:var(--accent-purple);">${m.title}</h3><div class="price">${m.price ? m.price + ' kr' : ''}</div>
-          <div class="meta"><b>VIP-Kontakt:</b> ${m.contact}</div>
+        <div class="part-card-compact" style="border-color:var(--accent-purple);">
+          <div class="info-main">
+            <h3 style="color:var(--accent-purple);">${m.title}</h3>
+            <div class="sub-info">VIP Kontakt: ${m.contact}</div>
+          </div>
+          <div class="price-tag">${m.price ? m.price + ' kr' : ''}</div>
         </div>
       `).join('');
-    }
-
-    function renderAdminUsers() {
-      document.getElementById('admin-user-list').innerHTML = usersList.map(u => `
-        <div style="display:flex; justify-content:space-between; padding:6px; border-bottom:1px solid var(--border);">
-          <div><b>${u.user}</b></div>
-          <div><label><input type="checkbox" ${u.isVip ? 'checked' : ''} onchange="toggleUserPerm('${u.user}', 'vip')"> VIP</label></div>
-        </div>
-      `).join('');
-    }
-
-    async function toggleUserPerm(targetUser, permType) {
-      await fetch('/api/admin/toggle-perm', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ adminUser: currentUser, targetUser, permType })
-      });
-      showToast('✓ Behörighet uppdaterades'); loadAllData();
     }
 
     function updateStats() {
@@ -721,30 +614,6 @@
       document.getElementById('stat-market').innerText = marketItems.length + vipMarketItems.length;
       const totalVal = parts.reduce((sum, p) => sum + (parseInt(p.price) || 0), 0);
       document.getElementById('stat-value').innerText = totalVal.toLocaleString() + ' kr';
-    }
-
-    async function lookupCarReg() {
-      const reg = document.getElementById('car-reg-input').value.trim();
-      if (!reg) return;
-      const res = await fetch('/api/car-info?reg=' + reg);
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('car-make').value = data.make || '';
-        document.getElementById('car-model').value = data.model || '';
-        document.getElementById('car-year').value = data.year || '';
-      }
-    }
-
-    async function lookupPartReg() {
-      const reg = document.getElementById('part-reg-input').value.trim();
-      if (!reg) return;
-      const res = await fetch('/api/car-info?reg=' + reg);
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('part-main-make').value = data.make || '';
-        document.getElementById('part-main-model').value = data.model || '';
-        document.getElementById('part-year').value = data.year || '';
-      }
     }
 
     function exportPartsCSV() {
