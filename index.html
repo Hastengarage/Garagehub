@@ -592,8 +592,8 @@
 
     function toggleAddPartModal() {
       const box = document.getElementById('add-part-box');
-      box.style.display = box.style.display === 'none' ? 'block' : 'none';
-      if(box.style.display === 'none') {
+      if (box.style.display === 'none' || box.style.display === '') {
+        document.getElementById('add-part-title').innerText = "Lägg till reservdel";
         document.getElementById('p-id').value = "";
         document.getElementById('p-name').value = "";
         document.getElementById('p-brand').value = "";
@@ -603,12 +603,15 @@
         document.getElementById('p-cat').value = "";
         document.getElementById('p-shelf').value = "";
         document.getElementById('p-comment').value = "";
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
       }
     }
 
     function editPartModal(p) {
       const box = document.getElementById('add-part-box');
-      box.style.display = 'block';
+      document.getElementById('add-part-title').innerText = "✏️ Ändra " + (p.name || "del");
       document.getElementById('p-id').value = p.id;
       document.getElementById('p-name').value = p.name || "";
       document.getElementById('p-brand').value = p.brand || "";
@@ -618,6 +621,8 @@
       document.getElementById('p-cat').value = p.cat || "";
       document.getElementById('p-shelf').value = p.shelf || "";
       document.getElementById('p-comment').value = p.comment || "";
+      box.style.display = 'block';
+      box.scrollIntoView({ behavior: 'smooth' });
     }
 
     async function saveNewPart() {
@@ -637,9 +642,14 @@
         user: currentUser
       };
 
-      await fetch('/api/save-part', { method: 'POST', body: JSON.stringify(partObj) });
-      document.getElementById('add-part-box').style.display = 'none';
-      loadAllData();
+      const res = await fetch('/api/save-part', { method: 'POST', body: JSON.stringify(partObj) });
+      const data = await res.json();
+      if(data.success) {
+        document.getElementById('add-part-box').style.display = 'none';
+        loadAllData();
+      } else {
+        alert('Kunde inte spara delen. Försök igen.');
+      }
     }
 
     async function deletePart(id) {
