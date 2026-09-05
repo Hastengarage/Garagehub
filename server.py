@@ -36,6 +36,7 @@ def load_db():
             workshop_logs = list(mongo_db.workshopLogs.find({}, {'_id': 0})) if 'workshopLogs' in mongo_db.list_collection_names() else []
             tool_lends = list(mongo_db.toolLends.find({}, {'_id': 0})) if 'toolLends' in mongo_db.list_collection_names() else []
             job_bookings = list(mongo_db.jobBookings.find({}, {'_id': 0})) if 'jobBookings' in mongo_db.list_collection_names() else []
+            public_bookings = list(mongo_db.publicBookings.find({}, {'_id': 0})) if 'publicBookings' in mongo_db.list_collection_names() else []
 
             if 'admin' not in users_doc:
                 admin_data = {
@@ -55,7 +56,8 @@ def load_db():
                 "vipMarket": vip_market_list,
                 "workshopLogs": workshop_logs,
                 "toolLends": tool_lends,
-                "jobBookings": job_bookings
+                "jobBookings": job_bookings,
+                "publicBookings": public_bookings
             }
         except Exception as e:
             print(f"Fel vid hämtning från MongoDB: {e}")
@@ -70,7 +72,7 @@ def load_db():
                 }
             },
             "parts": [], "cars": [], "market": [], "vipMarket": [],
-            "workshopLogs": [], "toolLends": [], "jobBookings": []
+            "workshopLogs": [], "toolLends": [], "jobBookings": [], "publicBookings": []
         }
         save_db(default_db)
         return default_db
@@ -80,9 +82,10 @@ def load_db():
             d.setdefault("workshopLogs", [])
             d.setdefault("toolLends", [])
             d.setdefault("jobBookings", [])
+            d.setdefault("publicBookings", [])
             return d
     except Exception:
-        return {"users": {}, "parts": [], "cars": [], "market": [], "vipMarket": [], "workshopLogs": [], "toolLends": [], "jobBookings": []}
+        return {"users": {}, "parts": [], "cars": [], "market": [], "vipMarket": [], "workshopLogs": [], "toolLends": [], "jobBookings": [], "publicBookings": []}
 
 def save_db(db):
     if use_mongo:
@@ -112,6 +115,9 @@ def save_db(db):
 
             mongo_db.jobBookings.delete_many({})
             if db.get("jobBookings"): mongo_db.jobBookings.insert_many(db["jobBookings"])
+
+            mongo_db.publicBookings.delete_many({})
+            if db.get("publicBookings"): mongo_db.publicBookings.insert_many(db["publicBookings"])
             return
         except Exception as e:
             print(f"Fel vid sparning till MongoDB: {e}")
@@ -138,6 +144,30 @@ class CustomHandler(SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({"success": True, "isAdmin": u_info.get("is_admin", False), "isVip": u_info.get("is_vip", False)}).encode('utf-8'))
             else:
                 self.wfile.write(json.dumps({"success": False}).encode('utf-8'))
+            return
+
+        elif parsed_url.path == '/api/public-booking':
+            booking_entry = {
+                "id": "pb_" + str(int(os.times().system * 1000000000) if hasattr(os, 'times') else "123"),
+                "date_created": body.get("date_created", ""),
+                "type": body.get("type", "verkstad"),
+                "customer_name": body.get("customer_name", ""),
+                "phone": body.get("phone", ""),
+                "email": body.get("email", ""),
+                "reg": body.get("reg", "").upper().replace(" ", ""),
+                "car_info": body.get("car_info", ""),
+                "category": body.get("category", "Felsökning"),
+                "parts_option": body.get("parts_option", "Verkstaden beställer"),
+                "parts_details": body.get("parts_details", ""),
+                "desired_date": body.get("desired_date", ""),
+                "description": body.get("description", ""),
+                "equip_needed": body.get("equip_needed", []),
+                "status": "Inkommen"
+            }
+            db["publicBookings"].append(booking_entry)
+            save_db(db)
+            self.send_json_response()
+            self.wfile.write(json.dumps({"success": True, "message": "Bokning mottagen!"}).encode('utf-8'))
             return
 
         elif parsed_url.path == '/api/save-part':
@@ -174,19 +204,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True, "count": len(parts_to_add)}).encode('utf-8'))
             return
 
-        elif parsed_url.path == '/api/mount-part':
-            part_id = body.get('partId')
-            car_reg = body.get('carReg')
-            car_title = body.get('carTitle')
-            for p in db["parts"]:
-                if p.get('id') == part_id:
-                    p["mountedTo"] = car_title
-                    p["mountedToReg"] = car_reg
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
-
         elif parsed_url.path == '/api/save-car':
             db["cars"].append(body)
             save_db(db)
@@ -202,26 +219,27 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        elif parsed_url.path == '/api/add-car-task':
+        elif parsed_url.path == '/api/add-car-log':
             car_id = body.get('carId')
-            task_type = body.get('type')
-            text = body.get('text')
+            log_text = body.get('text')
+            log_date = body.get('date')
+            hours = body.get('hours', 0)
+            parts_used = body.get('parts_used', '')
             for c in db["cars"]:
                 if c.get('id') == car_id:
-                    if task_type not in c: c[task_type] = []
-                    c[task_type].append({"text": text, "done": False})
+                    if "logs" not in c: c["logs"] = []
+                    c["logs"].append({"date": log_date, "text": log_text, "hours": hours, "parts_used": parts_used})
             save_db(db)
             self.send_json_response()
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        elif parsed_url.path == '/api/toggle-car-task':
+        elif parsed_url.path == '/api/update-car-status':
             car_id = body.get('carId')
-            task_type = body.get('type')
-            idx = body.get('taskIdx')
+            new_status = body.get('status')
             for c in db["cars"]:
-                if c.get('id') == car_id and task_type in c and idx < len(c[task_type]):
-                    c[task_type][idx]["done"] = not c[task_type][idx].get("done", False)
+                if c.get('id') == car_id:
+                    c["status"] = new_status
             save_db(db)
             self.send_json_response()
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
@@ -258,23 +276,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
             return
 
-        elif parsed_url.path == '/api/save-market':
-            if body.get('isVip'): db["vipMarket"].append(body)
-            else: db["market"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
-
-        elif parsed_url.path == '/api/admin/toggle-perm':
-            target_user = body.get('targetUser')
-            if target_user in db["users"]:
-                db["users"][target_user]["is_vip"] = not db["users"][target_user].get("is_vip", False)
-                save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
-
     def do_GET(self):
         parsed_url = urllib.parse.urlparse(self.path)
 
@@ -289,21 +290,14 @@ class CustomHandler(SimpleHTTPRequestHandler):
             visible_parts = [p for p in db["parts"] if is_admin or p.get('user', '').lower() == req_user]
             visible_cars = [c for c in db["cars"] if is_admin or c.get('user', '').lower() == req_user]
 
-            users_list = []
-            if is_admin:
-                for uname, udata in db["users"].items():
-                    users_list.append({"user": uname, "isAdmin": udata.get("is_admin", False), "isVip": udata.get("is_vip", False)})
-
             self.send_json_response()
             self.wfile.write(json.dumps({
                 "parts": visible_parts,
                 "cars": visible_cars,
-                "market": db.get("market", []),
-                "vipMarket": db.get("vipMarket", []) if (is_admin or u_info.get("is_vip")) else [],
                 "workshopLogs": db.get("workshopLogs", []),
                 "toolLends": db.get("toolLends", []),
                 "jobBookings": db.get("jobBookings", []),
-                "users": users_list
+                "publicBookings": db.get("publicBookings", [])
             }).encode('utf-8'))
             return
 
