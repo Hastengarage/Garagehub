@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GarageHub Portal | 2026</title>
+  <title>GARAGEHUB</title>
   <style>
     :root {
       --bg: #0a0c10;
@@ -28,12 +28,12 @@
 
     /* Header Bar */
     .header-bar { background: var(--card-bg); border-bottom: 1px solid var(--card-border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-    .brand-title { font-size: 1.2rem; font-weight: 800; color: #fff; cursor: pointer; }
+    .brand-title { font-size: 1.2rem; font-weight: 900; letter-spacing: 1px; color: #fff; cursor: pointer; text-transform: uppercase; }
     .header-nav { display: flex; align-items: center; gap: 12px; }
 
     /* Grand Centered Hero Section */
     .grand-hero { text-align: center; padding: 40px 16px 20px 16px; max-width: 700px; margin: 0 auto; }
-    .grand-title { font-size: 3rem; font-weight: 900; letter-spacing: 2px; color: #fff; text-transform: uppercase; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    .grand-title { font-size: 3.2rem; font-weight: 900; letter-spacing: 3px; color: #fff; text-transform: uppercase; margin-bottom: 8px; }
     .grand-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 16px; }
     .grand-slogan { display: inline-block; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--accent); color: #a5b4fc; font-weight: 700; padding: 6px 16px; border-radius: 20px; font-size: 0.95rem; margin-bottom: 24px; }
 
@@ -79,7 +79,6 @@
 
     /* Footer */
     .site-footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: auto; background: var(--card-bg); display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .site-footer svg { opacity: 0.5; width: 28px; height: 28px; fill: var(--text-muted); }
 
     @media print {
       body { background: #fff !important; color: #000 !important; }
@@ -105,7 +104,7 @@
 
   <!-- Header Bar -->
   <div class="header-bar">
-    <div class="brand-title" onclick="showPublicView('home')">⚙️ GARAGEHUB</div>
+    <div class="brand-title" onclick="showPublicView('home')">GARAGEHUB</div>
     <div class="header-nav">
       <button class="btn btn-secondary" style="min-height:36px; padding:6px 14px; font-size:0.85rem; width:auto;" id="mech-login-btn" onclick="openLoginModal()">🔑 Mekaniker</button>
     </div>
@@ -130,7 +129,7 @@
       
       <!-- ABOUT POPUP / COLLAPSIBLE -->
       <div id="pub-sec-about" style="display:none;" class="card">
-        <h3>🔧 Om GarageHub Verkstad</h3>
+        <h3>Om GarageHub Verkstad</h3>
         <p style="color:var(--text-muted); line-height:1.6; margin:10px 0;">
           Många års erfarenhet av att skruva, svetsa och felsöka alla sorters fordon. Vi välkomnar alla bilmärken, transportbilar, släpvagnar, ATV och gräsklippare. Har du köpt egna delar på Autodoc eller Trodo? Inga problem – vi monterar dem åt dig!
         </p>
@@ -220,7 +219,7 @@
       <div id="tab-lager" class="tab-content">
         <div class="card">
           <div style="position:relative; margin-bottom:12px; display:flex; gap:8px;">
-            <input type="text" id="search-parts" placeholder="🔍 Sök delar (A–Ö, EAN, Modell)..." oninput="renderParts()" style="margin:0;">
+            <input type="text" id="search-parts" placeholder="🔍 Sök delar (A–Ö, EAN, Kommentar)..." oninput="renderParts()" style="margin:0;">
             <button class="btn btn-secondary" style="width:auto; min-width:120px;" onclick="triggerEanScanner()">📷 Skanna EAN</button>
             <input type="file" id="ean-file-input" accept="image/*" capture="environment" style="display:none;" onchange="handleEanScan(event)">
           </div>
@@ -232,7 +231,7 @@
             <button class="btn" onclick="toggleAddPartModal()">+ Ny / Redigera Del</button>
           </div>
 
-          <!-- Add / Edit Part Form -->
+          <!-- Add / Edit Part Form WITH COMMENT FIELD -->
           <div id="add-part-box" style="display:none; background:#0f121a; padding:16px; border-radius:10px; margin-bottom:14px; border:1px solid var(--card-border);">
             <h4 style="margin-bottom:12px; color:var(--accent);" id="add-part-title">Lägg till reservdel</h4>
             <input type="hidden" id="p-id">
@@ -253,6 +252,9 @@
               <input type="text" id="p-shelf" placeholder="Lagerplats / Hylla (t.ex. B2)">
             </div>
 
+            <!-- KOMMENTARSFÄLT FÖR SPECIFIK DEL -->
+            <input type="text" id="p-comment" placeholder="💬 Kommentar / Anteckning (t.ex. Höger bak, Begagnad, Nyskick)">
+
             <div style="display:flex; gap:10px;">
               <button class="btn btn-success" onclick="saveNewPart()">💾 Spara Del i Lagret</button>
               <button class="btn btn-secondary" onclick="toggleAddPartModal()">Avbryt</button>
@@ -263,7 +265,7 @@
         </div>
       </div>
 
-      <!-- TAB 2: BILAR & LÖPANDE DAGBOK WITH PHOTO LOG -->
+      <!-- TAB 2: BILAR & LÖPANDE DAGBOK -->
       <div id="tab-bilar" class="tab-content" style="display:none;">
         <div class="card">
           <h3 style="margin-bottom:12px;">🚘 Mina Bilar & Löpande Mek-Dagbok</h3>
@@ -399,9 +401,6 @@
 
   <!-- Footer -->
   <div class="site-footer">
-    <svg viewBox="0 0 24 24">
-      <path d="M20 4c0 0-2-2-6-2-4 0-7 2-8 5-1 3-1 6-3 7-2 1-3 3-3 3s3 1 5 0c2-1 3-3 4-4 1-1 2-3 3-3 0 0-1 3-2 5-1 2-2 4-2 6 0 1 2 1 3 0 1-1 2-3 3-5 1-1 3-3 3-5 0-2 0-2 0-2z"/>
-    </svg>
     <span>🔒 GarageHub Portal | <b>2026</b></span>
   </div>
 
@@ -503,7 +502,6 @@
       }
     }
 
-    /* CONVERT PUBLIC BOOKING TO CAR JOB */
     async function convertBooking(pbid) {
       const res = await fetch('/api/convert-booking-to-car', { method: 'POST', body: JSON.stringify({ id: pbid }) });
       const data = await res.json();
@@ -514,7 +512,6 @@
       }
     }
 
-    /* GENERATE SMS TEMPLATE FOR CUSTOMER */
     function generateSms(carId) {
       const car = (appData.cars||[]).find(c => c.id === carId);
       if(!car) return;
@@ -523,16 +520,9 @@
       alert('📱 SMS-text kopierad till urklipp:\n\n' + msg);
     }
 
-    /* BARCODE / EAN SCANNER TRIGGER */
-    function triggerEanScanner() {
-      document.getElementById('ean-file-input').click();
-    }
+    function triggerEanScanner() { document.getElementById('ean-file-input').click(); }
+    function handleEanScan(e) { alert('📷 Streckkodsläsare aktiverad!'); }
 
-    function handleEanScan(e) {
-      alert('📷 Streckkodsläsare aktiverad! Välj eller ta bild på koden.');
-    }
-
-    /* TOGGLE CALENDAR VIEW */
     function toggleCalendarView() {
       const box = document.getElementById('calendar-box');
       box.style.display = box.style.display === 'none' ? 'block' : 'none';
@@ -544,7 +534,7 @@
       }
     }
 
-    /* RENDER PARTS */
+    /* RENDER PARTS WITH COMMENT DISPLAY */
     function renderParts() {
       const container = document.getElementById('parts-tree');
       container.innerHTML = "";
@@ -557,7 +547,8 @@
           const matchBrand = (p.brand||'').toLowerCase().includes(search);
           const matchModels = (p.models||'').toLowerCase().includes(search);
           const matchEan = (p.ean||'').toLowerCase().includes(search);
-          if(!matchName && !matchBrand && !matchModels && !matchEan) return;
+          const matchComment = (p.comment||'').toLowerCase().includes(search);
+          if(!matchName && !matchBrand && !matchModels && !matchEan && !matchComment) return;
         }
 
         let brand = (p.brand || 'UNIVERSELLT').toUpperCase();
@@ -582,14 +573,17 @@
           row.innerHTML = `
             <div style="flex:1;">
               <div style="font-size:1rem; font-weight:700; color:#fff;">${p.name}</div>
-              <div style="font-size:0.85rem; color:var(--text-muted);">
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-top:3px;">
                 ${p.models ? `Modeller: ${p.models} | ` : ''}
                 ${p.ean ? `EAN: ${p.ean} | ` : ''}
                 📍 Hylla: ${p.shelf || 'A1'}
               </div>
+              ${p.comment ? `<div style="font-size:0.85rem; color:#a5b4fc; font-weight:600; margin-top:4px;">💬 Kommentar: ${p.comment}</div>` : ''}
             </div>
-            <button class="btn btn-secondary" style="width:auto; padding:4px 10px; min-height:32px; font-size:0.8rem;" onclick='editPartModal(${JSON.stringify(p).replace(/'/g, "&apos;")})'>✏️ Ändra</button>
-            <button class="btn btn-danger" style="width:auto; padding:4px 10px; min-height:32px; font-size:0.8rem;" onclick="deletePart('${p.id}')">Radera</button>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-secondary" style="width:auto; padding:4px 10px; min-height:32px; font-size:0.8rem;" onclick='editPartModal(${JSON.stringify(p).replace(/'/g, "&apos;")})'>✏️ Ändra</button>
+              <button class="btn btn-danger" style="width:auto; padding:4px 10px; min-height:32px; font-size:0.8rem;" onclick="deletePart('${p.id}')">Radera</button>
+            </div>
           `;
           folderContent.appendChild(row);
         });
@@ -602,10 +596,22 @@
     function toggleAddPartModal() {
       const box = document.getElementById('add-part-box');
       box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      if(box.style.display === 'none') {
+        document.getElementById('p-id').value = "";
+        document.getElementById('p-name').value = "";
+        document.getElementById('p-brand').value = "";
+        document.getElementById('p-models').value = "";
+        document.getElementById('p-ean').value = "";
+        document.getElementById('p-year').value = "";
+        document.getElementById('p-cat').value = "";
+        document.getElementById('p-shelf').value = "";
+        document.getElementById('p-comment').value = "";
+      }
     }
 
     function editPartModal(p) {
-      toggleAddPartModal();
+      const box = document.getElementById('add-part-box');
+      box.style.display = 'block';
       document.getElementById('p-id').value = p.id;
       document.getElementById('p-name').value = p.name || "";
       document.getElementById('p-brand').value = p.brand || "";
@@ -614,20 +620,26 @@
       document.getElementById('p-year').value = p.year || "";
       document.getElementById('p-cat').value = p.cat || "";
       document.getElementById('p-shelf').value = p.shelf || "";
+      document.getElementById('p-comment').value = p.comment || "";
     }
 
     async function saveNewPart() {
+      const name = document.getElementById('p-name').value;
+      if(!name) return alert('Ange delens namn!');
+
       const partObj = {
         id: document.getElementById('p-id').value || ('p_' + Date.now()),
-        name: document.getElementById('p-name').value,
+        name: name,
         brand: document.getElementById('p-brand').value || 'Universellt',
         models: document.getElementById('p-models').value || '',
         ean: document.getElementById('p-ean').value || '',
         year: document.getElementById('p-year').value || '',
         cat: document.getElementById('p-cat').value || 'Övrigt',
         shelf: document.getElementById('p-shelf').value || 'A1',
+        comment: document.getElementById('p-comment').value || '',
         user: currentUser
       };
+
       await fetch('/api/save-part', { method: 'POST', body: JSON.stringify(partObj) });
       document.getElementById('add-part-box').style.display = 'none';
       loadAllData();
@@ -639,7 +651,6 @@
       loadAllData();
     }
 
-    /* RENDER CARS & LOGS WITH PHOTO SUPPORT */
     function renderCars() {
       const box = document.getElementById('cars-list');
       box.innerHTML = (appData.cars || []).map(c => `
@@ -653,7 +664,6 @@
             ${(c.logs || []).map(l => `
               <div style="background:#0f121a; padding:8px; border-radius:6px; margin-bottom:6px; font-size:0.85rem;">
                 <b>${l.date}:</b> ${l.text}
-                ${l.photo ? `<br><img src="${l.photo}" style="max-width:120px; border-radius:4px; margin-top:4px;">` : ''}
               </div>
             `).join('')}
           </div>
@@ -690,7 +700,6 @@
       loadAllData();
     }
 
-    /* INKOMMANDE BOKNINGAR */
     function renderPublicBookings() {
       const box = document.getElementById('public-bookings-list');
       box.innerHTML = (appData.publicBookings || []).map(pb => `
@@ -730,7 +739,18 @@
         for(let i=1; i<lines.length; i++) {
           const cols = lines[i].split(',');
           if(cols[0]) {
-            newParts.push({ id:'p_'+Date.now()+'_'+i, name: cols[0].trim(), brand: (cols[1]||'Universellt').trim(), models: (cols[2]||'').trim(), ean: (cols[3]||'').trim(), year: (cols[4]||'').trim(), cat: (cols[5]||'Övrigt').trim(), shelf: (cols[6]||'A1').trim(), user: currentUser });
+            newParts.push({
+              id:'p_'+Date.now()+'_'+i,
+              name: cols[0].trim(),
+              brand: (cols[1]||'Universellt').trim(),
+              models: (cols[2]||'').trim(),
+              ean: (cols[3]||'').trim(),
+              year: (cols[4]||'').trim(),
+              cat: (cols[5]||'Övrigt').trim(),
+              shelf: (cols[6]||'A1').trim(),
+              comment: (cols[7]||'').trim(),
+              user: currentUser
+            });
           }
         }
         await fetch('/api/bulk-save-parts', { method: 'POST', body: JSON.stringify({ parts: newParts }) });
@@ -741,8 +761,8 @@
     }
 
     function exportCSV() {
-      let csv = "Namn,Märke,Modeller,EAN,Årsmodell,Kategori,Hylla\n";
-      (appData.parts||[]).forEach(p => csv += `"${p.name}","${p.brand||''}","${p.models||''}","${p.ean||''}","${p.year||''}","${p.cat||''}","${p.shelf||''}"\n`);
+      let csv = "Namn,Märke,Modeller,EAN,Årsmodell,Kategori,Hylla,Kommentar\n";
+      (appData.parts||[]).forEach(p => csv += `"${p.name}","${p.brand||''}","${p.models||''}","${p.ean||''}","${p.year||''}","${p.cat||''}","${p.shelf||''}","${p.comment||''}"\n`);
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
