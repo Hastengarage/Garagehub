@@ -26,12 +26,16 @@
     .login-box { background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 16px; width: 100%; max-width: 360px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.7); text-align: center; position: relative; }
     .close-modal { position: absolute; right: 14px; top: 12px; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; }
 
-    /* Top Bar & Public Header */
-    .header-bar { background: var(--card-bg); border-bottom: 1px solid var(--card-border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 100; }
-    .brand-title { font-size: 1.3rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .header-nav { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .nav-link { color: var(--text-muted); font-weight: 600; text-decoration: none; font-size: 0.9rem; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-    .nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    /* Header Bar */
+    .header-bar { background: var(--card-bg); border-bottom: 1px solid var(--card-border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .brand-title { font-size: 1.2rem; font-weight: 800; color: #fff; cursor: pointer; }
+    .header-nav { display: flex; align-items: center; gap: 12px; }
+
+    /* Grand Centered Hero Section */
+    .grand-hero { text-align: center; padding: 40px 16px 20px 16px; max-width: 700px; margin: 0 auto; }
+    .grand-title { font-size: 3rem; font-weight: 900; letter-spacing: 2px; color: #fff; text-transform: uppercase; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    .grand-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 16px; }
+    .grand-slogan { display: inline-block; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--accent); color: #a5b4fc; font-weight: 700; padding: 6px 16px; border-radius: 20px; font-size: 0.95rem; margin-bottom: 24px; }
 
     /* Navigation Tabs for Mechanics */
     .nav-tabs { display: flex; background: #0f121a; border-bottom: 1px solid var(--card-border); overflow-x: auto; scrollbar-width: none; }
@@ -41,14 +45,6 @@
 
     /* Container */
     .container { max-width: 1000px; margin: 0 auto; padding: 16px; width: 100%; flex: 1; }
-
-    /* Hero / Icebreaker Banner */
-    .hero-card { background: linear-gradient(135deg, #181d2e 0%, #0d1017 100%); border: 1px solid var(--card-border); border-radius: 16px; padding: 28px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    .icebreaker-badge { display: inline-block; background: rgba(99, 102, 241, 0.15); border: 1px solid var(--accent); color: #a5b4fc; font-weight: 700; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; margin-top: 14px; }
-
-    /* Features Grid */
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
-    .feature-item { background: var(--card-bg); border: 1px solid var(--card-border); padding: 16px; border-radius: 12px; }
 
     /* Cards & Inputs */
     .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
@@ -62,11 +58,10 @@
     .btn-secondary:hover { background: rgba(255,255,255,0.15); }
     .btn-danger { background: var(--danger); }
     .btn-success { background: var(--success); }
-    .btn-group { display: flex; gap: 10px; }
 
-    /* Accordion / Folders */
-    details { background: #0f121a; border: 1px solid var(--card-border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-    summary { padding: 14px 16px; font-weight: 700; cursor: pointer; user-select: none; list-style: none; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); min-height: 48px; }
+    /* Folder Structure */
+    details { background: #0f121a; border: 1px solid var(--card-border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+    summary { padding: 14px 16px; font-weight: 700; cursor: pointer; user-select: none; list-style: none; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); min-height: 50px; font-size: 1.05rem; }
     summary::-webkit-details-marker { display: none; }
     summary::after { content: "▼"; font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
     details[open] summary::after { transform: rotate(180deg); }
@@ -74,23 +69,18 @@
 
     /* Items & Badges */
     .item-row { background: #0f121a; border: 1px solid var(--card-border); padding: 14px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-    .badge-tag { background: rgba(99,102,241,0.15); color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
-    .badge-match { background: rgba(16,185,129,0.15); color: var(--success); border: 1px solid var(--success); }
+    .badge-tag { background: rgba(99,102,241,0.15); color: var(--accent); border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
 
-    /* Workshop Counter Grid */
+    /* Counter Grid */
     .counter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
     .counter-card { background: #0f121a; border: 1px solid var(--card-border); padding: 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
     .counter-ctrls { display: flex; align-items: center; gap: 10px; }
     .btn-circle { width: 44px; height: 44px; border-radius: 50%; font-size: 1.4rem; font-weight: 800; padding: 0; min-height: 44px; }
 
-    /* Mic Button */
-    .mic-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; color: var(--accent); font-size: 1.2rem; cursor: pointer; padding: 6px; }
-
     /* Footer */
     .site-footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: auto; background: var(--card-bg); display: flex; align-items: center; justify-content: center; gap: 10px; }
     .site-footer svg { opacity: 0.5; width: 28px; height: 28px; fill: var(--text-muted); }
 
-    /* Print View */
     @media print {
       body { background: #fff !important; color: #000 !important; }
       .header-bar, .nav-tabs, .btn, .no-print, #public-view { display: none !important; }
@@ -115,135 +105,98 @@
 
   <!-- Header Bar -->
   <div class="header-bar">
-    <div class="brand-title" onclick="showPublicView('home')">⚙️ GarageHub</div>
+    <div class="brand-title" onclick="showPublicView('home')">⚙️ GARAGEHUB</div>
     <div class="header-nav">
-      <span class="nav-link" onclick="showPublicView('home')">🏠 Om oss</span>
-      <span class="nav-link" onclick="showPublicView('boka')">📅 Boka Verkstad</span>
-      <span class="nav-link" onclick="showPublicView('gds')">🛠️ Hyra Verkstad (GDS)</span>
       <button class="btn btn-secondary" style="min-height:36px; padding:6px 14px; font-size:0.85rem; width:auto;" id="mech-login-btn" onclick="openLoginModal()">🔑 Mekaniker</button>
     </div>
   </div>
 
   <!-- PUBLIC LANDING PAGE VIEW -->
   <div id="public-view">
+    <div class="grand-hero">
+      <div class="grand-title">GARAGEHUB</div>
+      <div class="grand-subtitle">Reparation, service och felsökning för alla typer av fordon.</div>
+      <div class="grand-slogan">💬 "Det vi inte redan kan utantill – det löser vi tillsammans!"</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:500px; margin:0 auto 16px auto;">
+        <button class="btn" onclick="showPublicView('boka')">📅 Boka Verkstad</button>
+        <button class="btn btn-secondary" onclick="showPublicView('gds')">🛠️ Hyra Verkstad (GDS)</button>
+      </div>
+
+      <button class="btn btn-secondary" style="width:auto; min-height:38px; font-size:0.85rem; padding:6px 16px;" onclick="toggleAboutInfo()">ℹ️ Läs mer om verkstaden</button>
+    </div>
+
     <div class="container">
       
-      <!-- HOME SECTION (ICEBREAKER & ABOUT) -->
-      <div id="pub-sec-home">
-        <div class="hero-card">
-          <h1 style="font-size:1.8rem; margin-bottom:10px; color:#fff;">GarageHub – Din Lokala Märkesverkstad</h1>
-          <p style="color:var(--text-muted); line-height:1.6; font-size:1.05rem;">
-            Många års erfarenhet av att skruva, svetsa och felsöka alla typer av fordon. Från vanliga personbilar och transportbilar till släpvagnar, gräsklippare, ATV och unika projekt. Inget jobb är för stort – inget är för litet.
-          </p>
-          <div class="icebreaker-badge">
-            💬 "Det vi inte redan kan utantill – det löser vi tillsammans!"
-          </div>
-        </div>
-
-        <div class="features-grid">
-          <div class="feature-item">
-            <h3 style="margin-bottom:6px; color:var(--accent);">🚗 Alla Bilmärken & Fordon</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">Vi skruvar på allt med motor eller hjul. Alla märken och alla typer av fordon är välkomna.</p>
-          </div>
-          <div class="feature-item">
-            <h3 style="margin-bottom:6px; color:var(--success);">📦 Egna Delar Tillåtna</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">Har du köpt delar själv på Autodoc eller Trodo? Inga problem! Vi hjälper dig med monteringen.</p>
-          </div>
-          <div class="feature-item">
-            <h3 style="margin-bottom:6px; color:var(--warning);">🔍 Vet Ej Vad Som Är Fel?</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">Boka en felsökning så kollar vi upp missljud, felkoder eller vibrationer i lugn och ro.</p>
-          </div>
-          <div class="feature-item">
-            <h3 style="margin-bottom:6px; color:#a5b4fc;">🏷️ Shyssta Priser</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;">Genomskinliga priser och upp till 50 % billigare än dyra märkesverkstäder.</p>
-          </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-          <button class="btn" onclick="showPublicView('boka')">📅 Boka Service / Reparation</button>
-          <button class="btn btn-secondary" onclick="showPublicView('gds')">🛠️ Hyra Verkstaden (GDS)</button>
-        </div>
+      <!-- ABOUT POPUP / COLLAPSIBLE -->
+      <div id="pub-sec-about" style="display:none;" class="card">
+        <h3>🔧 Om GarageHub Verkstad</h3>
+        <p style="color:var(--text-muted); line-height:1.6; margin:10px 0;">
+          Många års erfarenhet av att skruva, svetsa och felsöka alla sorters fordon. Vi välkomnar alla bilmärken, transportbilar, släpvagnar, ATV och gräsklippare. Har du köpt egna delar på Autodoc eller Trodo? Inga problem – vi monterar dem åt dig!
+        </p>
       </div>
 
       <!-- PUBLIC BOOKING FORM (VERKSTAD) -->
-      <div id="pub-sec-boka" style="display:none;">
-        <div class="card">
-          <h2>📅 Boka Tid för Service eller Reparation</h2>
-          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">Fyll i formuläret så återkopplar vi snabbt med bekräftelse!</p>
+      <div id="pub-sec-boka" style="display:none;" class="card">
+        <h2>📅 Boka Verkstadstid</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">Fyll i formuläret så återkopplar vi snabbt med bekräftelse!</p>
 
-          <h4 style="color:var(--accent); margin-bottom:8px;">1. Fordonsdata</h4>
-          <div style="display:flex; gap:10px; margin-bottom:12px;">
-            <input type="text" id="pb-reg" placeholder="Reg-nummer (t.ex. ABC123)" style="margin:0;">
-            <button class="btn btn-secondary" style="width:auto; min-width:110px;" onclick="fetchPublicCar()">Hämta Bil</button>
-          </div>
-          <input type="text" id="pb-car-info" placeholder="Märke / Modell / Årsmodell (Fylls i automatiskt)">
-
-          <h4 style="color:var(--accent); margin-top:14px; margin-bottom:8px;">2. Kontaktuppgifter</h4>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <input type="text" id="pb-name" placeholder="Ditt Namn">
-            <input type="text" id="pb-phone" placeholder="Telefonnummer">
-          </div>
-          <input type="email" id="pb-email" placeholder="E-postadress">
-
-          <h4 style="color:var(--accent); margin-top:14px; margin-bottom:8px;">3. Kategori & Reservdelar</h4>
-          <select id="pb-cat">
-            <option value="Felsökning">🔍 Felsökning / Vet ej vad som är fel</option>
-            <option value="Missljud & Obalans">🔊 Missljud & Obalans</option>
-            <option value="Service & Underhåll">🛠️ Service & Underhåll (Olja, filter, tändstift)</option>
-            <option value="Bromsar & Chassi">⚙️ Bromsbyte & Hjulupphängning</option>
-            <option value="Special & Övrigt">🚜 Special & Övriga fordon (Släp, ATV, Maskin)</option>
-          </select>
-
-          <label style="font-weight:600; display:block; margin-bottom:6px;">Hur vill du göra med reservdelar?</label>
-          <select id="pb-parts-opt" onchange="togglePartsDisclaimer()">
-            <option value="Verkstaden beställer">🛠️ Verkstaden beställer alla delar (Standard)</option>
-            <option value="Egna delar medtas">📦 Jag har med mig egna reservdelar</option>
-            <option value="Vill ha offert">🔍 Vet ej / Vill ha offert på delar först</option>
-            <option value="Skrotsökning">♻️ Begagnat / Skrotsökning</option>
-          </select>
-
-          <div id="pb-own-parts-box" style="display:none; background:#0f121a; padding:12px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:12px;">
-            <input type="text" id="pb-parts-details" placeholder="Vilka delar har du köpt? (Märke, artikelnr eller länk)">
-            <p style="color:var(--warning); font-size:0.8rem;">
-              ℹ️ <b>Garanti-info vid egna delar:</b> Vi lämnar full garanti på vårt arbete. Garantin på själva reservdelen står din leverantör för.
-            </p>
-          </div>
-
-          <h4 style="color:var(--accent); margin-top:14px; margin-bottom:8px;">4. Önskat Datum & Beskrivning</h4>
-          <input type="date" id="pb-date">
-          <textarea id="pb-desc" placeholder="Beskriv felet eller vad du vill ha hjälp med..." rows="3"></textarea>
-
-          <button class="btn btn-success" onclick="submitPublicBooking('verkstad')">Skicka Bokningsförfrågan</button>
+        <h4 style="color:var(--accent); margin-bottom:8px;">1. Fordonsdata</h4>
+        <div style="display:flex; gap:10px; margin-bottom:12px;">
+          <input type="text" id="pb-reg" placeholder="Reg-nummer (t.ex. ABC123)" style="margin:0;">
+          <button class="btn btn-secondary" style="width:auto; min-width:110px;" onclick="fetchPublicCar()">Hämta Bil</button>
         </div>
+        <input type="text" id="pb-car-info" placeholder="Märke / Modell / Årsmodell">
+
+        <h4 style="color:var(--accent); margin-top:14px; margin-bottom:8px;">2. Kontaktuppgifter</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <input type="text" id="pb-name" placeholder="Ditt Namn">
+          <input type="text" id="pb-phone" placeholder="Telefonnummer">
+        </div>
+        <input type="email" id="pb-email" placeholder="E-postadress">
+
+        <h4 style="color:var(--accent); margin-top:14px; margin-bottom:8px;">3. Kategori & Reservdelar</h4>
+        <select id="pb-cat">
+          <option value="Felsökning">🔍 Felsökning / Vet ej vad som är fel</option>
+          <option value="Missljud & Obalans">🔊 Missljud & Obalans</option>
+          <option value="Service & Underhåll">🛠️ Service & Underhåll</option>
+          <option value="Bromsar & Chassi">⚙️ Bromsbyte & Chassi</option>
+          <option value="Special & Övrigt">🚜 Special & Övriga fordon</option>
+        </select>
+
+        <select id="pb-parts-opt">
+          <option value="Verkstaden beställer">🛠️ Verkstaden beställer alla delar</option>
+          <option value="Egna delar medtas">📦 Jag har med mig egna reservdelar</option>
+          <option value="Vill ha offert">🔍 Vet ej / Vill ha offert på delar först</option>
+        </select>
+
+        <h4 style="color:var(--accent); margin-top:14px; margin-bottom:8px;">4. Önskat Datum & Beskrivning</h4>
+        <input type="date" id="pb-date">
+        <textarea id="pb-desc" placeholder="Beskriv felet eller vad du vill ha hjälp med..." rows="3"></textarea>
+
+        <button class="btn btn-success" onclick="submitPublicBooking('verkstad')">Skicka Bokningsförfrågan</button>
       </div>
 
       <!-- PUBLIC GDS RENTAL FORM -->
-      <div id="pub-sec-gds" style="display:none;">
-        <div class="card">
-          <h2>🛠️ Hyra Verkstaden (GDS / Gör-Det-Själv)</h2>
-          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;">Hyra komplett verkstad med 2-pelarlyft, tryckluft och handverktyg för 150–250 kr/timme eller 1200 kr/dag.</p>
+      <div id="pub-sec-gds" style="display:none;" class="card">
+        <h2>🛠️ Hyra Verkstaden (GDS)</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;">Hyra komplett verkstad med 2-pelarlyft, tryckluft och handverktyg (150–250 kr/tim eller 1200 kr/dag).</p>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <input type="text" id="gds-name" placeholder="Ditt Namn">
-            <input type="text" id="gds-phone" placeholder="Telefonnummer">
-          </div>
-          <input type="date" id="gds-date">
-
-          <h4 style="color:var(--accent); margin-top:10px; margin-bottom:8px;">Välj tillval & specialutrustning:</h4>
-          <div style="background:#0f121a; padding:12px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:14px;">
-            <label style="display:block; margin-bottom:8px;"><input type="checkbox" id="gds-eq-lift" checked disabled> 2-pelarlyft & Handverktyg (Ingår i grundpriset)</label>
-            <label style="display:block; margin-bottom:8px;"><input type="checkbox" id="gds-eq-obd"> OBD2 Felkodsläsare / Diagnos (+150 kr)</label>
-            <label style="display:block; margin-bottom:8px;"><input type="checkbox" id="gds-eq-tire"> Däckmaskin & Balansering (+200 kr)</label>
-            <label style="display:block; margin-bottom:8px;"><input type="checkbox" id="gds-eq-jack"> Axellyft / Växellådslyft (+100 kr)</label>
-            <label style="display:block;"><input type="checkbox" id="gds-eq-weld"> Induktionsvärmare / Svets (+150 kr)</label>
-          </div>
-
-          <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:14px;">
-            📄 <b>Observera:</b> Ansvarsförbindelse och BankID-signering sker på plats innan arbetet påbörjas. Du arbetar på egen risk och städar efter dig.
-          </p>
-
-          <button class="btn btn-success" onclick="submitPublicBooking('gds')">Boka GDS Verkstadstid</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <input type="text" id="gds-name" placeholder="Ditt Namn">
+          <input type="text" id="gds-phone" placeholder="Telefonnummer">
         </div>
+        <input type="date" id="gds-date">
+
+        <h4 style="color:var(--accent); margin-top:10px; margin-bottom:8px;">Välj tillval & utrustning:</h4>
+        <div style="background:#0f121a; padding:12px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:14px;">
+          <label style="display:block; margin-bottom:8px;"><input type="checkbox" id="gds-eq-obd"> OBD2 Felkodsläsare (+150 kr)</label>
+          <label style="display:block; margin-bottom:8px;"><input type="checkbox" id="gds-eq-tire"> Däckmaskin & Balansering (+200 kr)</label>
+          <label style="display:block; margin-bottom:8px;"><input type="checkbox" id="gds-eq-jack"> Axellyft (+100 kr)</label>
+          <label style="display:block;"><input type="checkbox" id="gds-eq-weld"> Induktionsvärmare / Svets (+150 kr)</label>
+        </div>
+
+        <button class="btn btn-success" onclick="submitPublicBooking('gds')">Boka GDS Verkstadstid</button>
       </div>
 
     </div>
@@ -259,41 +212,58 @@
       <button class="tab-btn" onclick="switchTab('verktyg')">🧰 Verktygskoll</button>
       <button class="tab-btn" onclick="switchTab('inkommande')">📥 Inkommande Bokningar</button>
       <button class="tab-btn" onclick="switchTab('jobb')">📄 Jobb & Faktura</button>
-      <button class="tab-btn" onclick="switchTab('inkop')">🛒 Inköpslista</button>
     </div>
 
     <div class="container">
 
-      <!-- TAB 1: LAGERTAB (A-Z Mapp/Folder Structure) -->
+      <!-- TAB 1: LAGERTAB -->
       <div id="tab-lager" class="tab-content">
         <div class="card">
-          <div style="position:relative; margin-bottom:12px;">
-            <input type="text" id="search-parts" placeholder="🔍 Sök delar (A–Ö)..." oninput="renderParts()">
-            <button class="mic-btn" onclick="startVoice('search-parts')" title="Skitiga Fingrar Röstsökning">🎙️</button>
+          <div style="position:relative; margin-bottom:12px; display:flex; gap:8px;">
+            <input type="text" id="search-parts" placeholder="🔍 Sök delar (A–Ö, EAN, Modell)..." oninput="renderParts()" style="margin:0;">
+            <button class="btn btn-secondary" style="width:auto; min-width:120px;" onclick="triggerEanScanner()">📷 Skanna EAN</button>
+            <input type="file" id="ean-file-input" accept="image/*" capture="environment" style="display:none;" onchange="handleEanScan(event)">
           </div>
-          <div class="btn-group no-print" style="margin-bottom:12px;">
+
+          <div class="btn-group no-print" style="margin-bottom:12px; display:flex; gap:8px;">
             <button class="btn btn-secondary" onclick="document.getElementById('csv-file').click()">📤 Importera CSV</button>
             <input type="file" id="csv-file" accept=".csv" style="display:none;" onchange="importCSV(event)">
             <button class="btn btn-secondary" onclick="exportCSV()">📥 Exportera CSV</button>
-            <button class="btn" onclick="toggleAddPartModal()">+ Ny Del</button>
+            <button class="btn" onclick="toggleAddPartModal()">+ Ny / Redigera Del</button>
           </div>
 
-          <div id="add-part-box" style="display:none; background:#0f121a; padding:14px; border-radius:8px; margin-bottom:14px; border:1px solid var(--card-border);">
-            <h4 style="margin-bottom:10px;">Lägg till reservdel</h4>
+          <!-- Add / Edit Part Form -->
+          <div id="add-part-box" style="display:none; background:#0f121a; padding:16px; border-radius:10px; margin-bottom:14px; border:1px solid var(--card-border);">
+            <h4 style="margin-bottom:12px; color:var(--accent);" id="add-part-title">Lägg till reservdel</h4>
+            <input type="hidden" id="p-id">
             <input type="text" id="p-name" placeholder="Delens namn (t.ex. Bromsbelägg fram)">
+            
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <input type="text" id="p-brand" placeholder="Märke (t.ex. Volvo)">
-              <input type="text" id="p-cat" placeholder="Kategori (t.ex. Bromsar)">
+              <input type="text" id="p-brand" placeholder="Bilmärke (t.ex. Volvo)">
+              <input type="text" id="p-models" placeholder="Passar modeller (t.ex. V70, S60, XC90)">
             </div>
-            <input type="text" id="p-shelf" placeholder="Lagerplats/Hylla (t.ex. B2)">
-            <button class="btn btn-success" onclick="saveNewPart()">Spara Del</button>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <input type="text" id="p-ean" placeholder="EAN-nummer / Streckkod">
+              <input type="text" id="p-year" placeholder="Årsmodell (t.ex. 2000-2008)">
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <input type="text" id="p-cat" placeholder="Kategori (t.ex. Bromsar)">
+              <input type="text" id="p-shelf" placeholder="Lagerplats / Hylla (t.ex. B2)">
+            </div>
+
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-success" onclick="saveNewPart()">💾 Spara Del i Lagret</button>
+              <button class="btn btn-secondary" onclick="toggleAddPartModal()">Avbryt</button>
+            </div>
           </div>
 
           <div id="parts-tree"></div>
         </div>
       </div>
 
-      <!-- TAB 2: BILAR & LÖPANDE DAGBOK -->
+      <!-- TAB 2: BILAR & LÖPANDE DAGBOK WITH PHOTO LOG -->
       <div id="tab-bilar" class="tab-content" style="display:none;">
         <div class="card">
           <h3 style="margin-bottom:12px;">🚘 Mina Bilar & Löpande Mek-Dagbok</h3>
@@ -309,8 +279,6 @@
       <div id="tab-verkstad" class="tab-content" style="display:none;">
         <div class="card">
           <h3>🛠️ Verkstadsförbrukning (+ / -)</h3>
-          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:14px;">Pricka av vad du använt under passet.</p>
-
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
             <select id="log-car-select"><option value="">-- Välj Bil (Valfritt) --</option></select>
             <input type="text" id="log-mechanic" placeholder="Mekaniker / Namn">
@@ -352,32 +320,9 @@
                 <button class="btn btn-secondary btn-circle" onclick="adjCons('wd40', 1)">+</button>
               </div>
             </div>
-
-            <div class="counter-card">
-              <div><b>Glykol</b><br><small style="color:var(--text-muted)">Liter</small></div>
-              <div class="counter-ctrls">
-                <button class="btn btn-secondary btn-circle" onclick="adjCons('glycol', -1)">-</button>
-                <span id="c-glycol" style="font-weight:800; font-size:1.2rem;">0</span>
-                <button class="btn btn-secondary btn-circle" onclick="adjCons('glycol', 1)">+</button>
-              </div>
-            </div>
-
-            <div class="counter-card">
-              <div><b>Bladsäkringar</b><br><small style="color:var(--text-muted)">Styck</small></div>
-              <div class="counter-ctrls">
-                <button class="btn btn-secondary btn-circle" onclick="adjCons('fuses', -1)">-</button>
-                <span id="c-fuses" style="font-weight:800; font-size:1.2rem;">0</span>
-                <button class="btn btn-secondary btn-circle" onclick="adjCons('fuses', 1)">+</button>
-              </div>
-            </div>
           </div>
 
           <button class="btn btn-success" style="margin-top:16px;" onclick="saveWorkshopLog()">Registrera Pass & Förbrukning</button>
-        </div>
-
-        <div class="card">
-          <h4>📋 Historik förbrukning</h4>
-          <div id="workshop-history" style="margin-top:10px;"></div>
         </div>
       </div>
 
@@ -390,17 +335,23 @@
             <input type="text" id="tool-borrower" placeholder="Lånas av (Namn)">
           </div>
           <button class="btn" onclick="saveToolLend()">Låna ut verktyg</button>
-
-          <h4 style="margin-top:20px; margin-bottom:10px;">Aktiva utlån</h4>
-          <div id="tools-list"></div>
+          <div id="tools-list" style="margin-top:14px;"></div>
         </div>
       </div>
 
-      <!-- TAB 5: INKOMMANDE BOKNINGAR -->
+      <!-- TAB 5: INKOMMANDE BOKNINGAR WITH CALENDAR -->
       <div id="tab-inkommande" class="tab-content" style="display:none;">
         <div class="card">
-          <h3>📥 Inkommande Kunde-Bokningar</h3>
-          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:14px;">Bokningar som skickats in från den publika hemsidan.</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h3>📥 Inkommande Bokningar</h3>
+            <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:0.85rem;" onclick="toggleCalendarView()">📅 Växla Kalendervy</button>
+          </div>
+
+          <div id="calendar-box" style="display:none; background:#0f121a; padding:14px; border-radius:10px; margin-bottom:14px; border:1px solid var(--card-border);">
+            <h4>📅 Veckoöversikt Bokningar</h4>
+            <div id="calendar-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-top:10px; text-align:center; font-size:0.8rem;"></div>
+          </div>
+
           <div id="public-bookings-list"></div>
         </div>
       </div>
@@ -410,20 +361,15 @@
         <div class="card">
           <h3>📄 Skapa Jobb & Fakturaunderlag</h3>
 
-          <h5 style="margin:10px 0 6px 0; color:var(--accent);">1. Kunduppgifter</h5>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <input type="text" id="inv-c-name" placeholder="Kundens Namn">
             <input type="text" id="inv-c-phone" placeholder="Telefonnummer">
           </div>
-          <input type="text" id="inv-c-addr" placeholder="Gatuadress & Ort">
-
-          <h5 style="margin:10px 0 6px 0; color:var(--accent);">2. Fordonsdata</h5>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <input type="text" id="inv-car-reg" placeholder="Reg-nummer">
             <input type="text" id="inv-car-mil" placeholder="Mätarställning (Mil)">
           </div>
 
-          <h5 style="margin:10px 0 6px 0; color:var(--accent);">3. Arbete & Kalkyl</h5>
           <textarea id="inv-work-desc" placeholder="Beskrivning av utfört arbete..." rows="3"></textarea>
 
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
@@ -448,22 +394,13 @@
         </div>
       </div>
 
-      <!-- TAB 7: INKÖPSLISTA -->
-      <div id="tab-inkop" class="tab-content" style="display:none;">
-        <div class="card">
-          <h3>🛒 Mek-Inköpslista (Biltema / Jula)</h3>
-          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:12px;">Artiklar som börjar ta slut i garaget.</p>
-          <div id="shopping-list"></div>
-        </div>
-      </div>
-
     </div>
   </div>
 
-  <!-- Footer with 50% opacity Horse Head Logo -->
+  <!-- Footer -->
   <div class="site-footer">
     <svg viewBox="0 0 24 24">
-      <path d="M20 4c0 0-2-2-6-2-4 0-7 2-8 5-1 3-1 6-3 7-2 1-3 3-3 3s3 1 5 0c2-1 3-3 4-4 1-1 2-3 3-3 0 0-1 3-2 5-1 2-2 4-2 6 0 1 2 1 3 0 1-1 2-3 3-5 1-2 2-4 3-5 1-1 3-3 3-5 0-2 0-2 0-2z"/>
+      <path d="M20 4c0 0-2-2-6-2-4 0-7 2-8 5-1 3-1 6-3 7-2 1-3 3-3 3s3 1 5 0c2-1 3-3 4-4 1-1 2-3 3-3 0 0-1 3-2 5-1 2-2 4-2 6 0 1 2 1 3 0 1-1 2-3 3-5 1-1 3-3 3-5 0-2 0-2 0-2z"/>
     </svg>
     <span>🔒 GarageHub Portal | <b>2026</b></span>
   </div>
@@ -471,15 +408,18 @@
   <script>
     let currentUser = "";
     let appData = { parts: [], cars: [], workshopLogs: [], toolLends: [], jobBookings: [], publicBookings: [] };
-    let tempCons = { brake_clean: 0, oil: 0, paper: 0, wd40: 0, glycol: 0, fuses: 0 };
+    let tempCons = { brake_clean: 0, oil: 0, paper: 0, wd40: 0 };
 
-    /* NAVIGATION BETWEEN PUBLIC AND MECHANIC */
     function showPublicView(sec) {
       document.getElementById('public-view').style.display = 'block';
       document.getElementById('mech-view').style.display = 'none';
-      document.getElementById('pub-sec-home').style.display = sec === 'home' ? 'block' : 'none';
       document.getElementById('pub-sec-boka').style.display = sec === 'boka' ? 'block' : 'none';
       document.getElementById('pub-sec-gds').style.display = sec === 'gds' ? 'block' : 'none';
+    }
+
+    function toggleAboutInfo() {
+      const box = document.getElementById('pub-sec-about');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
     }
 
     function openLoginModal() { document.getElementById('login-overlay').style.display = 'flex'; }
@@ -520,11 +460,6 @@
     }
 
     /* PUBLIC BOOKING FORM LOGIC */
-    function togglePartsDisclaimer() {
-      const opt = document.getElementById('pb-parts-opt').value;
-      document.getElementById('pb-own-parts-box').style.display = opt === 'Egna delar medtas' ? 'block' : 'none';
-    }
-
     async function fetchPublicCar() {
       const reg = document.getElementById('pb-reg').value;
       if(!reg) return;
@@ -532,8 +467,6 @@
       const info = await res.json();
       if(info.success) {
         document.getElementById('pb-car-info').value = `${info.make} ${info.model} (${info.year})`;
-      } else {
-        alert('Hittade inte bilen automatiskt. Fyll i manuellt.');
       }
     }
 
@@ -547,7 +480,6 @@
         bodyData.car_info = document.getElementById('pb-car-info').value;
         bodyData.category = document.getElementById('pb-cat').value;
         bodyData.parts_option = document.getElementById('pb-parts-opt').value;
-        bodyData.parts_details = document.getElementById('pb-parts-details').value;
         bodyData.desired_date = document.getElementById('pb-date').value;
         bodyData.description = document.getElementById('pb-desc').value;
       } else {
@@ -566,12 +498,53 @@
       const res = await fetch('/api/public-booking', { method: 'POST', body: JSON.stringify(bodyData) });
       const data = await res.json();
       if(data.success) {
-        alert('Tack! Din bokning har skickats till verkstaden. Vi hör av oss inom kort.');
+        alert('Tack! Din bokning har skickats. Vi återkopplar inom kort.');
         showPublicView('home');
       }
     }
 
-    /* RENDER PARTS (A-Z Brand -> Category Tree) */
+    /* CONVERT PUBLIC BOOKING TO CAR JOB */
+    async function convertBooking(pbid) {
+      const res = await fetch('/api/convert-booking-to-car', { method: 'POST', body: JSON.stringify({ id: pbid }) });
+      const data = await res.json();
+      if(data.success) {
+        alert('✅ Bokningen har godkänts och skapats som ett nytt biljobb i Mek-Dagboken!');
+        loadAllData();
+        switchTab('bilar');
+      }
+    }
+
+    /* GENERATE SMS TEMPLATE FOR CUSTOMER */
+    function generateSms(carId) {
+      const car = (appData.cars||[]).find(c => c.id === carId);
+      if(!car) return;
+      const msg = `Tjena ${car.customer_name || 'kunden'}! Din bil ${car.title || car.reg} (${car.reg}) är nu färdigreparerad på GarageHub och redo att hämtas. Välkommen förbi!`;
+      navigator.clipboard.writeText(msg);
+      alert('📱 SMS-text kopierad till urklipp:\n\n' + msg);
+    }
+
+    /* BARCODE / EAN SCANNER TRIGGER */
+    function triggerEanScanner() {
+      document.getElementById('ean-file-input').click();
+    }
+
+    function handleEanScan(e) {
+      alert('📷 Streckkodsläsare aktiverad! Välj eller ta bild på koden.');
+    }
+
+    /* TOGGLE CALENDAR VIEW */
+    function toggleCalendarView() {
+      const box = document.getElementById('calendar-box');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      if(box.style.display === 'block') {
+        const grid = document.getElementById('calendar-grid');
+        const days = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'];
+        grid.innerHTML = days.map(d => `<div style="font-weight:700; color:var(--accent);">${d}</div>`).join('') +
+                         Array.from({length: 14}).map((_, i) => `<div style="background:#141822; padding:8px; border-radius:4px; border:1px solid var(--card-border); margin-top:4px;">Dag ${i+1}</div>`).join('');
+      }
+    }
+
+    /* RENDER PARTS */
     function renderParts() {
       const container = document.getElementById('parts-tree');
       container.innerHTML = "";
@@ -579,58 +552,47 @@
 
       let grouped = {};
       (appData.parts || []).forEach(p => {
-        if(search && !p.name.toLowerCase().includes(search) && !(p.brand||'').toLowerCase().includes(search)) return;
-        let brand = (p.brand || 'Universellt').toUpperCase();
-        let cat = (p.cat || 'Övrigt').toUpperCase();
-        if(!grouped[brand]) grouped[brand] = {};
-        if(!grouped[brand][cat]) grouped[brand][cat] = [];
-        grouped[brand][cat].push(p);
-      });
+        if(search) {
+          const matchName = (p.name||'').toLowerCase().includes(search);
+          const matchBrand = (p.brand||'').toLowerCase().includes(search);
+          const matchModels = (p.models||'').toLowerCase().includes(search);
+          const matchEan = (p.ean||'').toLowerCase().includes(search);
+          if(!matchName && !matchBrand && !matchModels && !matchEan) return;
+        }
 
-      if(Object.keys(grouped).length === 0) {
-        container.innerHTML = "<p style='color:var(--text-muted); padding:10px;'>Inga delar i lagret.</p>";
-        return;
-      }
+        let brand = (p.brand || 'UNIVERSELLT').toUpperCase();
+        if(!grouped[brand]) grouped[brand] = [];
+        grouped[brand].push(p);
+      });
 
       for(let brand in grouped) {
         let brandDetails = document.createElement('details');
-        let totalCount = 0;
-        for(let c in grouped[brand]) totalCount += grouped[brand][c].length;
+        if(search) brandDetails.open = true;
 
         let summary = document.createElement('summary');
-        summary.innerHTML = `<span>🛠️ ${brand}</span> <span class="badge-tag">${totalCount} st</span>`;
+        summary.innerHTML = `<span>🛠️ ${brand}</span> <span class="badge-tag">${grouped[brand].length} delar</span>`;
         brandDetails.appendChild(summary);
 
         let folderContent = document.createElement('div');
         folderContent.className = 'folder-content';
 
-        for(let cat in grouped[brand]) {
-          let catDetails = document.createElement('details');
-          let catSummary = document.createElement('summary');
-          catSummary.innerHTML = `<span>📂 ${cat}</span> <span style="font-size:0.8rem; color:var(--text-muted);">${grouped[brand][cat].length} st</span>`;
-          catDetails.appendChild(catSummary);
-
-          let catContent = document.createElement('div');
-          catContent.className = 'folder-content';
-
-          grouped[brand][cat].sort((a,b) => a.name.localeCompare(b.name));
-
-          grouped[brand][cat].forEach(p => {
-            let row = document.createElement('div');
-            row.className = 'item-row';
-            row.innerHTML = `
-              <div>
-                <b>${p.name}</b><br>
-                <small style="color:var(--text-muted)">Hylla: ${p.shelf || 'A1'}</small>
+        grouped[brand].forEach(p => {
+          let row = document.createElement('div');
+          row.className = 'item-row';
+          row.innerHTML = `
+            <div style="flex:1;">
+              <div style="font-size:1rem; font-weight:700; color:#fff;">${p.name}</div>
+              <div style="font-size:0.85rem; color:var(--text-muted);">
+                ${p.models ? `Modeller: ${p.models} | ` : ''}
+                ${p.ean ? `EAN: ${p.ean} | ` : ''}
+                📍 Hylla: ${p.shelf || 'A1'}
               </div>
-              <button class="btn btn-danger" style="width:auto; padding:6px 12px; min-height:36px; font-size:0.8rem;" onclick="deletePart('${p.id}')">Radera</button>
-            `;
-            catContent.appendChild(row);
-          });
-
-          catDetails.appendChild(catContent);
-          folderContent.appendChild(catDetails);
-        }
+            </div>
+            <button class="btn btn-secondary" style="width:auto; padding:4px 10px; min-height:32px; font-size:0.8rem;" onclick='editPartModal(${JSON.stringify(p).replace(/'/g, "&apos;")})'>✏️ Ändra</button>
+            <button class="btn btn-danger" style="width:auto; padding:4px 10px; min-height:32px; font-size:0.8rem;" onclick="deletePart('${p.id}')">Radera</button>
+          `;
+          folderContent.appendChild(row);
+        });
 
         brandDetails.appendChild(folderContent);
         container.appendChild(brandDetails);
@@ -642,12 +604,32 @@
       box.style.display = box.style.display === 'none' ? 'block' : 'none';
     }
 
-    async function saveNewPart() {
-      const name = document.getElementById('p-name').value;
-      if(!name) return alert('Ange namn!');
-      const newP = { id: 'p_' + Date.now(), name, brand: document.getElementById('p-brand').value || 'Universellt', cat: document.getElementById('p-cat').value || 'Övrigt', shelf: document.getElementById('p-shelf').value || 'A1', user: currentUser };
-      await fetch('/api/save-part', { method: 'POST', body: JSON.stringify(newP) });
+    function editPartModal(p) {
       toggleAddPartModal();
+      document.getElementById('p-id').value = p.id;
+      document.getElementById('p-name').value = p.name || "";
+      document.getElementById('p-brand').value = p.brand || "";
+      document.getElementById('p-models').value = p.models || "";
+      document.getElementById('p-ean').value = p.ean || "";
+      document.getElementById('p-year').value = p.year || "";
+      document.getElementById('p-cat').value = p.cat || "";
+      document.getElementById('p-shelf').value = p.shelf || "";
+    }
+
+    async function saveNewPart() {
+      const partObj = {
+        id: document.getElementById('p-id').value || ('p_' + Date.now()),
+        name: document.getElementById('p-name').value,
+        brand: document.getElementById('p-brand').value || 'Universellt',
+        models: document.getElementById('p-models').value || '',
+        ean: document.getElementById('p-ean').value || '',
+        year: document.getElementById('p-year').value || '',
+        cat: document.getElementById('p-cat').value || 'Övrigt',
+        shelf: document.getElementById('p-shelf').value || 'A1',
+        user: currentUser
+      };
+      await fetch('/api/save-part', { method: 'POST', body: JSON.stringify(partObj) });
+      document.getElementById('add-part-box').style.display = 'none';
       loadAllData();
     }
 
@@ -657,43 +639,36 @@
       loadAllData();
     }
 
-    /* RENDER CARS & LÖPANDE DAGBOK */
+    /* RENDER CARS & LOGS WITH PHOTO SUPPORT */
     function renderCars() {
       const box = document.getElementById('cars-list');
       box.innerHTML = (appData.cars || []).map(c => `
         <div class="card" style="margin-bottom:14px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h4>🚘 ${c.title || c.reg} (${c.reg})</h4>
-            <span class="badge-tag">${c.status || '🔵 Bokad'}</span>
-          </div>
-          
-          <h5 style="margin-top:10px; color:var(--accent);">📖 Löpande Mek-Dagbok</h5>
-          <div id="car-logs-${c.id}" style="margin:8px 0;">
-            ${(c.logs || []).map(l => `<div style="background:#0f121a; padding:8px; border-radius:6px; margin-bottom:6px; font-size:0.85rem;"><b>${l.date}:</b> ${l.text} (${l.hours||0}h, Delar: ${l.parts_used||'Inga'})</div>`).join('') || '<small style="color:var(--text-muted)">Inga loggar än.</small>'}
+            <h4>🚘 ${c.title || c.reg} (${c.reg}) ${c.customer_name ? '- Kund: '+c.customer_name : ''}</h4>
+            <span class="badge-tag">${c.status || '🔵 I Verkstan'}</span>
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+          <div id="car-logs-${c.id}" style="margin:10px 0;">
+            ${(c.logs || []).map(l => `
+              <div style="background:#0f121a; padding:8px; border-radius:6px; margin-bottom:6px; font-size:0.85rem;">
+                <b>${l.date}:</b> ${l.text}
+                ${l.photo ? `<br><img src="${l.photo}" style="max-width:120px; border-radius:4px; margin-top:4px;">` : ''}
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
             <input type="text" id="log-text-${c.id}" placeholder="Vad har gjorts idag?" style="margin:0;">
             <input type="number" id="log-hours-${c.id}" placeholder="Timmar" style="margin:0;">
           </div>
-          <button class="btn btn-secondary" style="margin-top:8px;" onclick="addCarLog('${c.id}')">+ Lägg till i dagbok</button>
-          <button class="btn btn-success" style="margin-top:8px;" onclick="transferLogToInvoice('${c.id}')">⚡ Skapa Faktura från Dagbok</button>
+          
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn btn-secondary" onclick="addCarLog('${c.id}')">+ Lägg till i dagbok</button>
+            <button class="btn btn-secondary" onclick="generateSms('${c.id}')">📱 SMS-mall för hämtning</button>
+          </div>
         </div>
-      `).join('') || "<p style='color:var(--text-muted)'>Inga bilar registrerade.</p>";
-
-      const sel = document.getElementById('log-car-select');
-      sel.innerHTML = '<option value="">-- Välj Bil (Valfritt) --</option>' + (appData.cars||[]).map(c=>`<option value="${c.reg}">${c.title || c.reg}</option>`).join('');
-    }
-
-    async function addCarByReg() {
-      const reg = document.getElementById('car-reg-input').value;
-      if(!reg) return;
-      const res = await fetch(`/api/car-info?reg=${reg}`);
-      const info = await res.json();
-      const carObj = { id:'c_'+Date.now(), reg, title: info.make ? `${info.make} ${info.model}` : reg, status:'🔵 Bokad', logs:[], user: currentUser };
-      await fetch('/api/save-car', { method: 'POST', body: JSON.stringify(carObj) });
-      document.getElementById('car-reg-input').value = "";
-      loadAllData();
+      `).join('') || "<p style='color:var(--text-muted)'>Inga aktiva bilar.</p>";
     }
 
     async function addCarLog(carId) {
@@ -704,43 +679,15 @@
       loadAllData();
     }
 
-    function transferLogToInvoice(carId) {
-      const car = (appData.cars||[]).find(c=>c.id===carId);
-      if(!car) return;
-      switchTab('jobb');
-      document.getElementById('inv-car-reg').value = car.reg;
-      let fullDesc = (car.logs||[]).map(l => `${l.date}: ${l.text}`).join('\n');
-      document.getElementById('inv-work-desc').value = fullDesc;
-      let totalHours = (car.logs||[]).reduce((sum, l) => sum + (parseFloat(l.hours)||0), 0);
-      document.getElementById('inv-labor-hours').value = totalHours;
-      calcInvoice();
-    }
-
-    /* CONSUMPTION LOGIC */
-    function adjCons(item, val) {
-      tempCons[item] = Math.max(0, tempCons[item] + val);
-      document.getElementById(`c-${item}`).innerText = tempCons[item];
-    }
-
-    async function saveWorkshopLog() {
-      const mechanic = document.getElementById('log-mechanic').value || currentUser;
-      const car = document.getElementById('log-car-select').value;
-      const log = { id: 'w_'+Date.now(), date: new Date().toLocaleString(), mechanic, car, items: {...tempCons} };
-      await fetch('/api/save-workshop-log', { method: 'POST', body: JSON.stringify(log) });
-      tempCons = { brake_clean: 0, oil: 0, paper: 0, wd40: 0, glycol: 0, fuses: 0 };
-      for(let k in tempCons) document.getElementById(`c-${k}`).innerText = '0';
-      alert('Pass registrerat!');
+    async function addCarByReg() {
+      const reg = document.getElementById('car-reg-input').value;
+      if(!reg) return;
+      const res = await fetch(`/api/car-info?reg=${reg}`);
+      const info = await res.json();
+      const carObj = { id:'c_'+Date.now(), reg, title: info.make ? `${info.make} ${info.model}` : reg, status:'🔵 I Verkstan', logs:[], user: currentUser };
+      await fetch('/api/save-car', { method: 'POST', body: JSON.stringify(carObj) });
+      document.getElementById('car-reg-input').value = "";
       loadAllData();
-    }
-
-    function renderWorkshopLogs() {
-      const box = document.getElementById('workshop-history');
-      box.innerHTML = (appData.workshopLogs || []).map(l => `
-        <div class="item-row">
-          <div><b>${l.mechanic}</b> (${l.date}) ${l.car ? '- Bil: '+l.car : ''}<br>
-          <small style="color:var(--text-muted)">Brake Clean: ${l.items.brake_clean||0} | Olja: ${l.items.oil||0}L | Papper: ${l.items.paper||0}</small></div>
-        </div>
-      `).join('') || "<p style='color:var(--text-muted)'>Ingen historik.</p>";
     }
 
     /* INKOMMANDE BOKNINGAR */
@@ -748,70 +695,29 @@
       const box = document.getElementById('public-bookings-list');
       box.innerHTML = (appData.publicBookings || []).map(pb => `
         <div class="card">
-          <div style="display:flex; justify-content:space-between;">
-            <h4>${pb.type === 'gds' ? '🛠️ GDS-Verkstadsuthyrning' : '🚗 Verkstadsbokning'}: ${pb.customer_name}</h4>
-            <span class="badge-tag">${pb.desired_date}</span>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h4>${pb.type === 'gds' ? '🛠️ GDS-Verkstad' : '🚗 Verkstadsbokning'}: ${pb.customer_name}</h4>
+            <span class="badge-tag">${pb.status || 'Inkommen'}</span>
           </div>
           <p style="color:var(--text-muted); font-size:0.9rem; margin:6px 0;">
-            📞 <b>Tel:</b> ${pb.phone} | ✉️ <b>E-post:</b> ${pb.email||'Ej angiven'}<br>
-            ${pb.reg ? `🚘 <b>Reg:</b> ${pb.reg} (${pb.car_info||''})<br>` : ''}
-            ${pb.category ? `📋 <b>Kategori:</b> ${pb.category}<br>` : ''}
-            ${pb.parts_option ? `📦 <b>Delar:</b> ${pb.parts_option} (${pb.parts_details||''})<br>` : ''}
-            ${pb.equip_needed ? `🧰 <b>Tillval:</b> ${pb.equip_needed.join(', ')}<br>` : ''}
-            💬 <b>Beskrivning:</b> ${pb.description||'Ingen beskrivning'}
+            📞 <b>Tel:</b> ${pb.phone} | 🚘 <b>Reg:</b> ${pb.reg||'Ej angivet'} (${pb.car_info||''})<br>
+            📅 <b>Önskat datum:</b> ${pb.desired_date||'När som helst'}<br>
+            💬 <b>Beskrivning:</b> ${pb.description||'Ingen'}
           </p>
+          ${pb.status !== 'Godkänd & Omvandlad' ? `<button class="btn btn-success" style="margin-top:6px;" onclick="convertBooking('${pb.id}')">✅ Godkänn & Skapa Biljobb i Dagbok</button>` : ''}
         </div>
-      `).join('') || "<p style='color:var(--text-muted)'>Inga inkommande bokningar för tillfället.</p>";
-    }
-
-    /* TOOLS & INVOICE CALCULATOR */
-    async function saveToolLend() {
-      const name = document.getElementById('tool-name').value;
-      const borrower = document.getElementById('tool-borrower').value;
-      if(!name || !borrower) return alert('Fyll i fälten!');
-      await fetch('/api/save-tool-lend', { method: 'POST', body: JSON.stringify({ id:'t_'+Date.now(), name, borrower, date: new Date().toLocaleDateString(), returned: false }) });
-      loadAllData();
-    }
-
-    function renderTools() {
-      const box = document.getElementById('tools-list');
-      box.innerHTML = (appData.toolLends || []).filter(t => !t.returned).map(t => `
-        <div class="item-row">
-          <div><b>${t.name}</b> - Utlånad till: <b>${t.borrower}</b> (${t.date})</div>
-          <button class="btn btn-success" style="width:auto; padding:6px 12px; min-height:36px; font-size:0.8rem;" onclick="returnTool('${t.id}')">Återlämnad</button>
-        </div>
-      `).join('') || "<p style='color:var(--text-muted)'>Inga utlånade verktyg.</p>";
-    }
-
-    async function returnTool(id) {
-      await fetch('/api/return-tool', { method: 'POST', body: JSON.stringify({ id }) });
-      loadAllData();
+      `).join('') || "<p style='color:var(--text-muted)'>Inga inkommande bokningar.</p>";
     }
 
     function calcInvoice() {
       const hours = parseFloat(document.getElementById('inv-labor-hours').value) || 0;
       const rate = parseFloat(document.getElementById('inv-hourly-rate').value) || 0;
       const discPct = parseFloat(document.getElementById('inv-discount-pct').value) || 0;
-
       const normTotal = hours * rate;
       const finalTotal = normTotal * (1 - discPct/100);
-      const saved = normTotal - finalTotal;
-
       document.getElementById('inv-res-norm').innerText = normTotal.toLocaleString() + " kr";
       document.getElementById('inv-res-final').innerText = finalTotal.toLocaleString() + " kr";
-      document.getElementById('inv-res-saved').innerText = saved.toLocaleString() + " kr";
-    }
-
-    function startVoice(targetId) {
-      if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return alert('Röstinmatning stöds ej.');
-      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const rec = new Speech();
-      rec.lang = 'sv-SE';
-      rec.onresult = (e) => {
-        document.getElementById(targetId).value = e.results[0][0].transcript;
-        renderParts();
-      };
-      rec.start();
+      document.getElementById('inv-res-saved').innerText = (normTotal - finalTotal).toLocaleString() + " kr";
     }
 
     function importCSV(e) {
@@ -824,7 +730,7 @@
         for(let i=1; i<lines.length; i++) {
           const cols = lines[i].split(',');
           if(cols[0]) {
-            newParts.push({ id:'p_'+Date.now()+'_'+i, name: cols[0].trim(), brand: (cols[1]||'Universellt').trim(), cat: (cols[2]||'Övrigt').trim(), shelf: (cols[3]||'A1').trim(), user: currentUser });
+            newParts.push({ id:'p_'+Date.now()+'_'+i, name: cols[0].trim(), brand: (cols[1]||'Universellt').trim(), models: (cols[2]||'').trim(), ean: (cols[3]||'').trim(), year: (cols[4]||'').trim(), cat: (cols[5]||'Övrigt').trim(), shelf: (cols[6]||'A1').trim(), user: currentUser });
           }
         }
         await fetch('/api/bulk-save-parts', { method: 'POST', body: JSON.stringify({ parts: newParts }) });
@@ -835,8 +741,8 @@
     }
 
     function exportCSV() {
-      let csv = "Namn,Märke,Kategori,Hylla\n";
-      (appData.parts||[]).forEach(p => csv += `"${p.name}","${p.brand||''}","${p.cat||''}","${p.shelf||''}"\n`);
+      let csv = "Namn,Märke,Modeller,EAN,Årsmodell,Kategori,Hylla\n";
+      (appData.parts||[]).forEach(p => csv += `"${p.name}","${p.brand||''}","${p.models||''}","${p.ean||''}","${p.year||''}","${p.cat||''}","${p.shelf||''}"\n`);
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
