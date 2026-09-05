@@ -170,19 +170,51 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"success": True, "message": "Bokning mottagen!"}).encode('utf-8'))
             return
 
-        elif parsed_url.path == '/api/save-part':
-            db["parts"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
+        elif parsed_url.path == '/api/convert-booking-to-car':
+            pbid = body.get('id')
+            pb_item = None
+            for pb in db["publicBookings"]:
+                if pb.get('id') == pbid:
+                    pb["status"] = "Godkänd & Omvandlad"
+                    pb_item = pb
+                    break
+            
+            if pb_item:
+                new_car = {
+                    "id": "c_" + str(int(os.times().system * 1000000000) if hasattr(os, 'times') else "456"),
+                    "reg": pb_item.get("reg", "OKÄNT"),
+                    "title": pb_item.get("car_info") or pb_item.get("reg", "Fordonsjobb"),
+                    "customer_name": pb_item.get("customer_name", ""),
+                    "customer_phone": pb_item.get("phone", ""),
+                    "status": "🔵 I Verkstan",
+                    "logs": [{
+                        "date": pb_item.get("date_created", ""),
+                        "text": f"Bokning mottagen ({pb_item.get('category')}): {pb_item.get('description')}",
+                        "hours": 0,
+                        "photo": ""
+                    }],
+                    "user": "admin"
+                }
+                db["cars"].append(new_car)
+                save_db(db)
+                self.send_json_response()
+                self.wfile.write(json.dumps({"success": True, "carId": new_car["id"]}).encode('utf-8'))
+            else:
+                self.send_json_response()
+                self.wfile.write(json.dumps({"success": False}).encode('utf-8'))
             return
 
-        elif parsed_url.path == '/api/edit-part':
+        elif parsed_url.path == '/api/save-part':
             pid = body.get('id')
+            existing_idx = -1
             for i, p in enumerate(db["parts"]):
                 if p.get('id') == pid:
-                    db["parts"][i] = body
+                    existing_idx = i
                     break
+            if existing_idx >= 0:
+                db["parts"][existing_idx] = body
+            else:
+                db["parts"].append(body)
             save_db(db)
             self.send_json_response()
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
@@ -224,22 +256,11 @@ class CustomHandler(SimpleHTTPRequestHandler):
             log_text = body.get('text')
             log_date = body.get('date')
             hours = body.get('hours', 0)
-            parts_used = body.get('parts_used', '')
+            photo = body.get('photo', '')
             for c in db["cars"]:
                 if c.get('id') == car_id:
                     if "logs" not in c: c["logs"] = []
-                    c["logs"].append({"date": log_date, "text": log_text, "hours": hours, "parts_used": parts_used})
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
-
-        elif parsed_url.path == '/api/update-car-status':
-            car_id = body.get('carId')
-            new_status = body.get('status')
-            for c in db["cars"]:
-                if c.get('id') == car_id:
-                    c["status"] = new_status
+                    c["logs"].append({"date": log_date, "text": log_text, "hours": hours, "photo": photo})
             save_db(db)
             self.send_json_response()
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
@@ -264,13 +285,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
             for t in db["toolLends"]:
                 if t.get('id') == tid:
                     t["returned"] = True
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
-
-        elif parsed_url.path == '/api/save-job-booking':
-            db["jobBookings"].append(body)
             save_db(db)
             self.send_json_response()
             self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
