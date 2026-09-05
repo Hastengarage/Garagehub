@@ -32,10 +32,9 @@
     .header-nav { display: flex; align-items: center; gap: 12px; }
 
     /* Grand Centered Hero Section */
-    .grand-hero { text-align: center; padding: 40px 16px 20px 16px; max-width: 700px; margin: 0 auto; }
-    .grand-title { font-size: 3.2rem; font-weight: 900; letter-spacing: 3px; color: #fff; text-transform: uppercase; margin-bottom: 8px; }
-    .grand-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 16px; }
-    .grand-slogan { display: inline-block; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--accent); color: #a5b4fc; font-weight: 700; padding: 6px 16px; border-radius: 20px; font-size: 0.95rem; margin-bottom: 24px; }
+    .grand-hero { text-align: center; padding: 48px 16px 28px 16px; max-width: 700px; margin: 0 auto; }
+    .grand-title { font-size: 3.2rem; font-weight: 900; letter-spacing: 3px; color: #fff; text-transform: uppercase; margin-bottom: 10px; }
+    .grand-subtitle { color: var(--text-muted); font-size: 1.15rem; margin-bottom: 24px; line-height: 1.5; }
 
     /* Navigation Tabs for Mechanics */
     .nav-tabs { display: flex; background: #0f121a; border-bottom: 1px solid var(--card-border); overflow-x: auto; scrollbar-width: none; }
@@ -114,8 +113,7 @@
   <div id="public-view">
     <div class="grand-hero">
       <div class="grand-title">GARAGEHUB</div>
-      <div class="grand-subtitle">Reparation, service och felsökning för alla typer av fordon.</div>
-      <div class="grand-slogan">💬 "Det vi inte redan kan utantill – det löser vi tillsammans!"</div>
+      <div class="grand-subtitle">Vi utför service, reparation och felsökning på alla slags fordon och maskiner.</div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:500px; margin:0 auto 16px auto;">
         <button class="btn" onclick="showPublicView('boka')">📅 Boka Verkstad</button>
@@ -131,7 +129,7 @@
       <div id="pub-sec-about" style="display:none;" class="card">
         <h3>Om GarageHub Verkstad</h3>
         <p style="color:var(--text-muted); line-height:1.6; margin:10px 0;">
-          Många års erfarenhet av att skruva, svetsa och felsöka alla sorters fordon. Vi välkomnar alla bilmärken, transportbilar, släpvagnar, ATV och gräsklippare. Har du köpt egna delar på Autodoc eller Trodo? Inga problem – vi monterar dem åt dig!
+          Många års erfarenhet av service, reparation och felsökning för alla slags fordon och maskiner. Vi välkomnar personbilar, transportbilar, släpvagnar, ATV, gräsklippare och övriga maskiner. Har du köpt egna reservdelar? Vi hjälper dig gärna med monteringen.
         </p>
       </div>
 
@@ -140,7 +138,7 @@
         <h2>📅 Boka Verkstadstid</h2>
         <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">Fyll i formuläret så återkopplar vi snabbt med bekräftelse!</p>
 
-        <h4 style="color:var(--accent); margin-bottom:8px;">1. Fordonsdata</h4>
+        <h4 style="color:var(--accent); margin-bottom:8px;">1. Fordons- / Maskindata</h4>
         <div style="display:flex; gap:10px; margin-bottom:12px;">
           <input type="text" id="pb-reg" placeholder="Reg-nummer (t.ex. ABC123)" style="margin:0;">
           <button class="btn btn-secondary" style="width:auto; min-width:110px;" onclick="fetchPublicCar()">Hämta Bil</button>
@@ -160,7 +158,7 @@
           <option value="Missljud & Obalans">🔊 Missljud & Obalans</option>
           <option value="Service & Underhåll">🛠️ Service & Underhåll</option>
           <option value="Bromsar & Chassi">⚙️ Bromsbyte & Chassi</option>
-          <option value="Special & Övrigt">🚜 Special & Övriga fordon</option>
+          <option value="Special & Övrigt">🚜 Special & Övriga fordon/maskiner</option>
         </select>
 
         <select id="pb-parts-opt">
@@ -252,7 +250,6 @@
               <input type="text" id="p-shelf" placeholder="Lagerplats / Hylla (t.ex. B2)">
             </div>
 
-            <!-- KOMMENTARSFÄLT FÖR SPECIFIK DEL -->
             <input type="text" id="p-comment" placeholder="💬 Kommentar / Anteckning (t.ex. Höger bak, Begagnad, Nyskick)">
 
             <div style="display:flex; gap:10px;">
@@ -534,7 +531,7 @@
       }
     }
 
-    /* RENDER PARTS WITH COMMENT DISPLAY */
+    /* RENDER PARTS */
     function renderParts() {
       const container = document.getElementById('parts-tree');
       container.innerHTML = "";
