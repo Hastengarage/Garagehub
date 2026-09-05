@@ -1,354 +1,611 @@
-from http.server import SimpleHTTPRequestHandler, HTTPServer
-import json
-import urllib.parse
-import urllib.request
-import hashlib
-import re
-import os
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GarageHub Portal | 2026</title>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --card-bg: #141822;
+      --card-border: #232a3b;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
 
-MONGO_URI = os.environ.get('MONGO_URI')
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 70px; min-height: 100vh; display: flex; flex-direction: column; }
 
-use_mongo = False
-mongo_client = None
-mongo_db = None
+    /* Login Overlay */
+    #login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-box { background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 16px; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); text-align: center; }
 
-if MONGO_URI:
-    try:
-        from pymongo import MongoClient
-        mongo_client = MongoClient(MONGO_URI)
-        mongo_db = mongo_client['garagehub']
-        mongo_client.admin.command('ping')
-        use_mongo = True
-        print("✓ Ansluten till MongoDB Atlas molndatabas!")
-    except Exception as e:
-        print(f"Anslutningsfel MongoDB, använder lokal fil istället: {e}")
+    /* Top Bar Status */
+    .header-bar { background: var(--card-bg); border-bottom: 1px solid var(--card-border); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .brand-title { font-size: 1.25rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .status-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
+    .pill.active { border-color: var(--success); color: var(--success); }
+    .pill.warn { border-color: var(--warning); color: var(--warning); }
 
-DATA_FILE = 'data.json'
+    /* Nav Tabs */
+    .nav-tabs { display: flex; background: #0f121a; border-bottom: 1px solid var(--card-border); overflow-x: auto; scrollbar-width: none; }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn { padding: 14px 18px; background: none; border: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 600; white-space: nowrap; cursor: pointer; border-bottom: 3px solid transparent; min-height: 48px; }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(99, 102, 241, 0.05); }
 
-def load_db():
-    if use_mongo:
-        try:
-            users_doc = {u['username']: u for u in mongo_db.users.find({}, {'_id': 0})}
-            parts_list = list(mongo_db.parts.find({}, {'_id': 0}))
-            cars_list = list(mongo_db.cars.find({}, {'_id': 0}))
-            market_list = list(mongo_db.market.find({}, {'_id': 0}))
-            vip_market_list = list(mongo_db.vipMarket.find({}, {'_id': 0}))
-            workshop_logs = list(mongo_db.workshopLogs.find({}, {'_id': 0})) if 'workshopLogs' in mongo_db.list_collection_names() else []
-            tool_lends = list(mongo_db.toolLends.find({}, {'_id': 0})) if 'toolLends' in mongo_db.list_collection_names() else []
-            job_bookings = list(mongo_db.jobBookings.find({}, {'_id': 0})) if 'jobBookings' in mongo_db.list_collection_names() else []
+    /* Main Container */
+    .container { max-width: 1000px; margin: 0 auto; padding: 16px; width: 100%; flex: 1; }
 
-            if 'admin' not in users_doc:
-                admin_data = {
-                    "username": "admin",
-                    "hash": hashlib.sha256("garage2026".encode('utf-8')).hexdigest(),
-                    "is_admin": True,
-                    "is_vip": True
-                }
-                mongo_db.users.update_one({"username": "admin"}, {"$set": admin_data}, upsert=True)
-                users_doc["admin"] = admin_data
+    /* Cards & Inputs */
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    input, select, textarea { width: 100%; background: #0b0d13; border: 1px solid var(--card-border); color: #fff; padding: 12px 14px; border-radius: 8px; font-size: 1rem; min-height: 48px; margin-bottom: 10px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); outline: none; }
 
-            return {
-                "users": users_doc,
-                "parts": parts_list,
-                "cars": cars_list,
-                "market": market_list,
-                "vipMarket": vip_market_list,
-                "workshopLogs": workshop_logs,
-                "toolLends": tool_lends,
-                "jobBookings": job_bookings
-            }
-        except Exception as e:
-            print(f"Fel vid hämtning från MongoDB: {e}")
+    /* Buttons */
+    .btn { background: var(--accent); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; transition: background 0.2s; }
+    .btn:hover { background: var(--accent-hover); }
+    .btn-secondary { background: rgba(255,255,255,0.08); color: #fff; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+    .btn-danger { background: var(--danger); }
+    .btn-success { background: var(--success); }
+    .btn-group { display: flex; gap: 8px; }
 
-    if not os.path.exists(DATA_FILE):
-        default_db = {
-            "users": {
-                "admin": {
-                    "hash": hashlib.sha256("garage2026".encode('utf-8')).hexdigest(),
-                    "is_admin": True,
-                    "is_vip": True
-                }
-            },
-            "parts": [], "cars": [], "market": [], "vipMarket": [],
-            "workshopLogs": [], "toolLends": [], "jobBookings": []
-        }
-        save_db(default_db)
-        return default_db
-    try:
-        with open(DATA_FILE, 'r', encoding='utf-8') as f:
-            d = json.load(f)
-            d.setdefault("workshopLogs", [])
-            d.setdefault("toolLends", [])
-            d.setdefault("jobBookings", [])
-            return d
-    except Exception:
-        return {"users": {}, "parts": [], "cars": [], "market": [], "vipMarket": [], "workshopLogs": [], "toolLends": [], "jobBookings": []}
+    /* Collapsible Folder / Accordion Structure */
+    details { background: #0f121a; border: 1px solid var(--card-border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+    summary { padding: 14px 16px; font-weight: 700; cursor: pointer; user-select: none; list-style: none; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); min-height: 48px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "▼"; font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+    details[open] summary::after { transform: rotate(180deg); }
+    .folder-content { padding: 12px; border-top: 1px solid var(--card-border); background: var(--card-bg); }
 
-def save_db(db):
-    if use_mongo:
-        try:
-            for uname, udata in db.get("users", {}).items():
-                data_to_save = dict(udata)
-                data_to_save["username"] = uname
-                mongo_db.users.update_one({"username": uname}, {"$set": data_to_save}, upsert=True)
-            
-            mongo_db.parts.delete_many({})
-            if db.get("parts"): mongo_db.parts.insert_many(db["parts"])
-            
-            mongo_db.cars.delete_many({})
-            if db.get("cars"): mongo_db.cars.insert_many(db["cars"])
+    /* Item Card */
+    .item-row { background: #0f121a; border: 1px solid var(--card-border); padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .badge-tag { background: rgba(99,102,241,0.15); color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .badge-match { background: rgba(16,185,129,0.15); color: var(--success); border: 1px solid var(--success); }
 
-            mongo_db.market.delete_many({})
-            if db.get("market"): mongo_db.market.insert_many(db["market"])
+    /* Workshop Counter Grid */
+    .counter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .counter-card { background: #0f121a; border: 1px solid var(--card-border); padding: 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .counter-ctrls { display: flex; align-items: center; gap: 10px; }
+    .btn-circle { width: 44px; height: 44px; border-radius: 50%; font-size: 1.4rem; font-weight: 800; padding: 0; min-height: 44px; }
 
-            mongo_db.vipMarket.delete_many({})
-            if db.get("vipMarket"): mongo_db.vipMarket.insert_many(db["vipMarket"])
+    /* Speech Button */
+    .mic-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; color: var(--accent); font-size: 1.2rem; cursor: pointer; padding: 6px; }
 
-            mongo_db.workshopLogs.delete_many({})
-            if db.get("workshopLogs"): mongo_db.workshopLogs.insert_many(db["workshopLogs"])
+    /* Printable Invoice View */
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .header-bar, .nav-tabs, .btn, .no-print { display: none !important; }
+      .container { max-width: 100% !important; padding: 0 !important; }
+      .card { border: none !important; background: transparent !important; color: #000 !important; }
+      .print-invoice { display: block !important; border: 1px solid #000; padding: 20px; font-family: Arial, sans-serif; }
+    }
 
-            mongo_db.toolLends.delete_many({})
-            if db.get("toolLends"): mongo_db.toolLends.insert_many(db["toolLends"])
+    /* Footer */
+    .site-footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: auto; background: var(--card-bg); display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .site-footer svg { opacity: 0.5; width: 26px; height: 26px; fill: var(--text-muted); }
+  </style>
+</head>
+<body>
 
-            mongo_db.jobBookings.delete_many({})
-            if db.get("jobBookings"): mongo_db.jobBookings.insert_many(db["jobBookings"])
-            return
-        except Exception as e:
-            print(f"Fel vid sparning till MongoDB: {e}")
+  <!-- Login Modal -->
+  <div id="login-overlay">
+    <div class="login-box">
+      <h2 style="margin-bottom:16px;">🔑 GarageHub Logga in</h2>
+      <input type="text" id="login-user" placeholder="Användarnamn">
+      <input type="password" id="login-pass" placeholder="Lösenord">
+      <button class="btn" onclick="handleLogin()">Logga in</button>
+      <p id="login-err" style="color:var(--danger); margin-top:10px; font-size:0.85rem; display:none;">Fel användarnamn eller lösenord</p>
+    </div>
+  </div>
 
-    with open(DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(db, f, ensure_ascii=False, indent=2)
+  <!-- Header Bar -->
+  <div class="header-bar">
+    <div class="brand-title">⚙️ GarageHub</div>
+    <div class="status-pills">
+      <div class="pill active">🟢 Garage: Aktivt</div>
+      <div class="pill warn" id="pill-low-stock">🛒 Inköpslarm: 0</div>
+      <div class="pill" id="pill-tools">🧰 Lånade verktyg: 0</div>
+    </div>
+  </div>
 
-class CustomHandler(SimpleHTTPRequestHandler):
-    def do_POST(self):
-        parsed_url = urllib.parse.urlparse(self.path)
-        content_length = int(self.headers.get('Content-Length', 0))
-        post_data = self.rfile.read(content_length) if content_length > 0 else b'{}'
-        body = json.loads(post_data.decode('utf-8'))
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('lager')">📦 Lager (A–Ö)</button>
+    <button class="tab-btn" onclick="switchTab('bilar')">🚘 Bilar & Projekt</button>
+    <button class="tab-btn" onclick="switchTab('verkstad')">🛠️ Verkstadslogg</button>
+    <button class="tab-btn" onclick="switchTab('verktyg')">🧰 Verktygskoll</button>
+    <button class="tab-btn" onclick="switchTab('jobb')">📄 Jobb & Faktura</button>
+    <button class="tab-btn" onclick="switchTab('inkop')">🛒 Inköpslista</button>
+  </div>
+
+  <!-- Container -->
+  <div class="container">
+
+    <!-- TAB 1: LAGERTAB (Hierarkisk Brand -> Category -> A-Z) -->
+    <div id="tab-lager" class="tab-content">
+      <div class="card">
+        <div style="position:relative; margin-bottom:12px;">
+          <input type="text" id="search-parts" placeholder="🔍 Sök delar (A–Ö)..." oninput="renderParts()">
+          <button class="mic-btn" onclick="startVoice('search-parts')" title="Skitiga Fingrar Röstsökning">🎙️</button>
+        </div>
+        <div class="btn-group no-print" style="margin-bottom:12px;">
+          <button class="btn btn-secondary" onclick="document.getElementById('csv-file').click()">📤 Importera CSV</button>
+          <input type="file" id="csv-file" accept=".csv" style="display:none;" onchange="importCSV(event)">
+          <button class="btn btn-secondary" onclick="exportCSV()">📥 Exportera CSV</button>
+          <button class="btn" onclick="toggleAddPartModal()">+ Ny Del</button>
+        </div>
+
+        <!-- Add Part Form -->
+        <div id="add-part-box" style="display:none; background:#0f121a; padding:14px; border-radius:8px; margin-bottom:14px; border:1px solid var(--card-border);">
+          <h4 style="margin-bottom:10px;">Lägg till reservdel</h4>
+          <input type="text" id="p-name" placeholder="Delens namn (t.ex. Bromsbelägg fram)">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <input type="text" id="p-brand" placeholder="Märke (t.ex. Volvo)">
+            <input type="text" id="p-cat" placeholder="Kategori (t.ex. Bromsar)">
+          </div>
+          <input type="text" id="p-shelf" placeholder="Lagerplats/Hylla (t.ex. B2)">
+          <button class="btn btn-success" onclick="saveNewPart()">Spara Del</button>
+        </div>
+
+        <!-- Folder Structure Container -->
+        <div id="parts-tree"></div>
+      </div>
+    </div>
+
+    <!-- TAB 2: BILAR & PROJEKT -->
+    <div id="tab-bilar" class="tab-content" style="display:none;">
+      <div class="card">
+        <h3 style="margin-bottom:12px;">🚘 Mina Bilar</h3>
+        <div style="display:flex; gap:10px; margin-bottom:14px;">
+          <input type="text" id="car-reg-input" placeholder="Reg-nummer (t.ex. ABC123)" style="margin:0;">
+          <button class="btn" style="width:auto; min-width:120px;" onclick="addCarByReg()">Sök & Lägg till</button>
+        </div>
+        <div id="cars-list"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: VERKSTADSLOGG (Förbrukning + / -) -->
+    <div id="tab-verkstad" class="tab-content" style="display:none;">
+      <div class="card">
+        <h3>🛠️ Verkstadsförbrukning</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:14px;">Pricka av vad som använts under passet.</p>
         
-        db = load_db()
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+          <select id="log-car-select"><option value="">-- Välj Bil (Valfritt) --</option></select>
+          <input type="text" id="log-mechanic" placeholder="Mekaniker / Namn">
+        </div>
 
-        if parsed_url.path == '/api/login':
-            user = body.get('user', '').strip().lower()
-            pass_hash = hashlib.sha256(body.get('pass', '').encode('utf-8')).hexdigest()
+        <div class="counter-grid">
+          <div class="counter-card">
+            <div><b>Brake Clean</b><br><small style="color:var(--text-muted)">Sprayburkar</small></div>
+            <div class="counter-ctrls">
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('brake_clean', -1)">-</button>
+              <span id="c-brake_clean" style="font-weight:800; font-size:1.2rem;">0</span>
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('brake_clean', 1)">+</button>
+            </div>
+          </div>
 
-            self.send_json_response()
-            if user in db["users"] and db["users"][user]["hash"] == pass_hash:
-                u_info = db["users"][user]
-                self.wfile.write(json.dumps({"success": True, "isAdmin": u_info.get("is_admin", False), "isVip": u_info.get("is_vip", False)}).encode('utf-8'))
-            else:
-                self.wfile.write(json.dumps({"success": False}).encode('utf-8'))
-            return
+          <div class="counter-card">
+            <div><b>Motorolja</b><br><small style="color:var(--text-muted)">Liter</small></div>
+            <div class="counter-ctrls">
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('oil', -1)">-</button>
+              <span id="c-oil" style="font-weight:800; font-size:1.2rem;">0</span>
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('oil', 1)">+</button>
+            </div>
+          </div>
 
-        elif parsed_url.path == '/api/save-part':
-            db["parts"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+          <div class="counter-card">
+            <div><b>Torkrulle / Papper</b><br><small style="color:var(--text-muted)">Antal rullar</small></div>
+            <div class="counter-ctrls">
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('paper', -1)">-</button>
+              <span id="c-paper" style="font-weight:800; font-size:1.2rem;">0</span>
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('paper', 1)">+</button>
+            </div>
+          </div>
 
-        elif parsed_url.path == '/api/edit-part':
-            pid = body.get('id')
-            for i, p in enumerate(db["parts"]):
-                if p.get('id') == pid:
-                    db["parts"][i] = body
-                    break
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+          <div class="counter-card">
+            <div><b>WD-40 / 5-56</b><br><small style="color:var(--text-muted)">Sprayburkar</small></div>
+            <div class="counter-ctrls">
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('wd40', -1)">-</button>
+              <span id="c-wd40" style="font-weight:800; font-size:1.2rem;">0</span>
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('wd40', 1)">+</button>
+            </div>
+          </div>
 
-        elif parsed_url.path == '/api/delete-part':
-            pid = body.get('id')
-            db["parts"] = [p for p in db["parts"] if p.get('id') != pid]
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+          <div class="counter-card">
+            <div><b>Glykol / Kylvätska</b><br><small style="color:var(--text-muted)">Liter</small></div>
+            <div class="counter-ctrls">
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('glycol', -1)">-</button>
+              <span id="c-glycol" style="font-weight:800; font-size:1.2rem;">0</span>
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('glycol', 1)">+</button>
+            </div>
+          </div>
 
-        elif parsed_url.path == '/api/bulk-save-parts':
-            parts_to_add = body.get('parts', [])
-            db["parts"].extend(parts_to_add)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True, "count": len(parts_to_add)}).encode('utf-8'))
-            return
+          <div class="counter-card">
+            <div><b>Bladsäkringar</b><br><small style="color:var(--text-muted)">Styck</small></div>
+            <div class="counter-ctrls">
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('fuses', -1)">-</button>
+              <span id="c-fuses" style="font-weight:800; font-size:1.2rem;">0</span>
+              <button class="btn btn-secondary btn-circle" onclick="adjCons('fuses', 1)">+</button>
+            </div>
+          </div>
+        </div>
 
-        elif parsed_url.path == '/api/mount-part':
-            part_id = body.get('partId')
-            car_reg = body.get('carReg')
-            car_title = body.get('carTitle')
-            for p in db["parts"]:
-                if p.get('id') == part_id:
-                    p["mountedTo"] = car_title
-                    p["mountedToReg"] = car_reg
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+        <button class="btn btn-success" style="margin-top:16px;" onclick="saveWorkshopLog()">Registrera Pass & Förbrukning</button>
+      </div>
 
-        elif parsed_url.path == '/api/save-car':
-            db["cars"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+      <div class="card">
+        <h4>📋 Historik förbrukning</h4>
+        <div id="workshop-history" style="margin-top:10px;"></div>
+      </div>
+    </div>
 
-        elif parsed_url.path == '/api/delete-car':
-            cid = body.get('id')
-            db["cars"] = [c for c in db["cars"] if c.get('id') != cid]
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+    <!-- TAB 4: VERKTYGSKOLL -->
+    <div id="tab-verktyg" class="tab-content" style="display:none;">
+      <div class="card">
+        <h3>🧰 Verktygskoll (Låna Specialverktyg)</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0;">
+          <input type="text" id="tool-name" placeholder="Verktyg (t.ex. Momentnyckel)">
+          <input type="text" id="tool-borrower" placeholder="Lånas av (Namn)">
+        </div>
+        <button class="btn" onclick="saveToolLend()">Låna ut verktyg</button>
 
-        elif parsed_url.path == '/api/add-car-task':
-            car_id = body.get('carId')
-            task_type = body.get('type')
-            text = body.get('text')
-            for c in db["cars"]:
-                if c.get('id') == car_id:
-                    if task_type not in c: c[task_type] = []
-                    c[task_type].append({"text": text, "done": False})
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+        <h4 style="margin-top:20px; margin-bottom:10px;">Aktiva lån</h4>
+        <div id="tools-list"></div>
+      </div>
+    </div>
 
-        elif parsed_url.path == '/api/toggle-car-task':
-            car_id = body.get('carId')
-            task_type = body.get('type')
-            idx = body.get('taskIdx')
-            for c in db["cars"]:
-                if c.get('id') == car_id and task_type in c and idx < len(c[task_type]):
-                    c[task_type][idx]["done"] = not c[task_type][idx].get("done", False)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+    <!-- TAB 5: JOBBOKNING & FAKTURA -->
+    <div id="tab-jobb" class="tab-content" style="display:none;">
+      <div class="card">
+        <h3>📄 Skapa Jobb & Fakturaunderlag</h3>
+        
+        <h5 style="margin:10px 0 6px 0; color:var(--accent);">1. Kunduppgifter</h5>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <input type="text" id="inv-c-name" placeholder="Kundens Namn">
+          <input type="text" id="inv-c-phone" placeholder="Telefonnummer">
+        </div>
+        <input type="text" id="inv-c-addr" placeholder="Gatuadress & Ort">
 
-        elif parsed_url.path == '/api/save-workshop-log':
-            db["workshopLogs"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+        <h5 style="margin:10px 0 6px 0; color:var(--accent);">2. Fordonsdata</h5>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <input type="text" id="inv-car-reg" placeholder="Reg-nummer">
+          <input type="text" id="inv-car-mil" placeholder="Mätarställning (Mil)">
+        </div>
 
-        elif parsed_url.path == '/api/save-tool-lend':
-            db["toolLends"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+        <h5 style="margin:10px 0 6px 0; color:var(--accent);">3. Arbete & Kalkyl</h5>
+        <textarea id="inv-work-desc" placeholder="Beskrivning av utfört arbete..." rows="2"></textarea>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <input type="number" id="inv-labor-hours" placeholder="Arbetstimmar" oninput="calcInvoice()">
+          <input type="number" id="inv-hourly-rate" placeholder="Timpris Ordinarie (kr)" value="1200" oninput="calcInvoice()">
+        </div>
 
-        elif parsed_url.path == '/api/return-tool':
-            tid = body.get('id')
-            for t in db["toolLends"]:
-                if t.get('id') == tid:
-                    t["returned"] = True
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+        <div style="background:#0f121a; padding:12px; border-radius:8px; border:1px solid var(--card-border); margin:10px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span><b>Garage-Rabatt (%):</b></span>
+            <input type="number" id="inv-discount-pct" value="50" style="width:80px; margin:0; text-align:center;" oninput="calcInvoice()">
+          </div>
+        </div>
 
-        elif parsed_url.path == '/api/save-job-booking':
-            db["jobBookings"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+        <!-- Calculation Result -->
+        <div style="background:rgba(16,185,129,0.1); border:1px solid var(--success); padding:14px; border-radius:8px; margin-bottom:14px;">
+          <div>Ordinarie Verkstadspris: <b id="inv-res-norm">0 kr</b></div>
+          <div style="font-size:1.2rem; font-weight:800; color:var(--success); margin-top:4px;">Ditt Pris (Efter Rabatt): <span id="inv-res-final">0 kr</span></div>
+          <div style="color:var(--text-muted); font-size:0.85rem;">Kunden sparar: <b id="inv-res-saved">0 kr</b></div>
+        </div>
 
-        elif parsed_url.path == '/api/save-market':
-            if body.get('isVip'): db["vipMarket"].append(body)
-            else: db["market"].append(body)
-            save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+        <button class="btn btn-success" onclick="printInvoice()">🖨️ Skriv ut Faktura / Kvitto</button>
+      </div>
+    </div>
 
-        elif parsed_url.path == '/api/admin/toggle-perm':
-            target_user = body.get('targetUser')
-            if target_user in db["users"]:
-                db["users"][target_user]["is_vip"] = not db["users"][target_user].get("is_vip", False)
-                save_db(db)
-            self.send_json_response()
-            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
-            return
+    <!-- TAB 6: INKÖPSLISTA -->
+    <div id="tab-inkop" class="tab-content" style="display:none;">
+      <div class="card">
+        <h3>🛒 Mek-Inköpslista (Biltema / Jula)</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:12px;">Saker som behöver fyllas på i garaget.</p>
+        <div id="shopping-list"></div>
+      </div>
+    </div>
 
-    def do_GET(self):
-        parsed_url = urllib.parse.urlparse(self.path)
+  </div>
 
-        if parsed_url.path == '/api/data':
-            query_params = urllib.parse.parse_qs(parsed_url.query)
-            req_user = query_params.get('user', [''])[0].strip().lower()
-            
-            db = load_db()
-            u_info = db["users"].get(req_user, {})
-            is_admin = u_info.get("is_admin", False)
+  <!-- Footer -->
+  <div class="site-footer">
+    <svg viewBox="0 0 24 24">
+      <path d="M20 4c0 0-2-2-6-2-4 0-7 2-8 5-1 3-1 6-3 7-2 1-3 3-3 3s3 1 5 0c2-1 3-3 4-4 1-1 2-3 3-3 0 0-1 3-2 5-1 2-2 4-2 6 0 1 2 1 3 0 1-1 2-3 3-5 1-2 2-4 3-5 1-1 3-3 3-5 0-2 0-2 0-2z"/>
+    </svg>
+    <span>🔒 GarageHub Portal | <b>2026</b></span>
+  </div>
 
-            visible_parts = [p for p in db["parts"] if is_admin or p.get('user', '').lower() == req_user]
-            visible_cars = [c for c in db["cars"] if is_admin or c.get('user', '').lower() == req_user]
+  <script>
+    let currentUser = "";
+    let appData = { parts: [], cars: [], workshopLogs: [], toolLends: [], jobBookings: [] };
+    let tempCons = { brake_clean: 0, oil: 0, paper: 0, wd40: 0, glycol: 0, fuses: 0 };
 
-            users_list = []
-            if is_admin:
-                for uname, udata in db["users"].items():
-                    users_list.append({"user": uname, "isAdmin": udata.get("is_admin", False), "isVip": udata.get("is_vip", False)})
+    async function handleLogin() {
+      const u = document.getElementById('login-user').value;
+      const p = document.getElementById('login-pass').value;
+      const res = await fetch('/api/login', { method: 'POST', body: JSON.stringify({ user: u, pass: p }) });
+      const data = await res.json();
+      if(data.success) {
+        currentUser = u.toLowerCase();
+        document.getElementById('login-overlay').style.display = 'none';
+        loadAllData();
+      } else {
+        document.getElementById('login-err').style.display = 'block';
+      }
+    }
 
-            self.send_json_response()
-            self.wfile.write(json.dumps({
-                "parts": visible_parts,
-                "cars": visible_cars,
-                "market": db.get("market", []),
-                "vipMarket": db.get("vipMarket", []) if (is_admin or u_info.get("is_vip")) else [],
-                "workshopLogs": db.get("workshopLogs", []),
-                "toolLends": db.get("toolLends", []),
-                "jobBookings": db.get("jobBookings", []),
-                "users": users_list
-            }).encode('utf-8'))
-            return
+    async function loadAllData() {
+      const res = await fetch(`/api/data?user=${currentUser}`);
+      appData = await res.json();
+      renderParts();
+      renderCars();
+      renderWorkshopLogs();
+      renderTools();
+      updatePills();
+    }
 
-        elif parsed_url.path == '/api/car-info':
-            query_params = urllib.parse.parse_qs(parsed_url.query)
-            reg_nr = query_params.get('reg', [''])[0].strip().upper().replace(" ", "")
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).style.display = 'block';
+      event.target.classList.add('active');
+    }
 
-            self.send_json_response()
-            car_data = self.fetch_real_car_data(reg_nr)
-            self.wfile.write(json.dumps(car_data).encode('utf-8'))
-            return
+    /* RENDER PARTS - Grouped Brand -> Category -> A-Z */
+    function renderParts() {
+      const container = document.getElementById('parts-tree');
+      container.innerHTML = "";
+      const search = document.getElementById('search-parts').value.toLowerCase();
 
-        return super().do_GET()
+      // Collect all tasks from cars for auto-matching
+      let allCarTasks = [];
+      (appData.cars || []).forEach(c => {
+        (c.tasks || []).forEach(t => { if(!t.done) allCarTasks.push({ car: c.title || c.reg, text: t.text.toLowerCase() }); });
+      });
 
-    def send_json_response(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
+      // Filter & Group
+      let grouped = {};
+      (appData.parts || []).forEach(p => {
+        if(search && !p.name.toLowerCase().includes(search) && !(p.brand||'').toLowerCase().includes(search)) return;
+        let brand = (p.brand || 'Universellt').toUpperCase();
+        let cat = (p.cat || 'Övrigt').toUpperCase();
+        if(!grouped[brand]) grouped[brand] = {};
+        if(!grouped[brand][cat]) grouped[brand][cat] = [];
+        grouped[brand][cat].push(p);
+      });
 
-    def fetch_real_car_data(self, reg):
-        reg = reg.strip().upper().replace(" ", "")
-        if not reg or len(reg) < 5: return {"success": False}
+      if(Object.keys(grouped).length === 0) {
+        container.innerHTML = "<p style='color:var(--text-muted); padding:10px;'>Inga delar i lagret ännu.</p>";
+        return;
+      }
 
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        try:
-            url = f"https://biluppgifter.se/fordon/{reg}"
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, timeout=5) as response:
-                html = response.read().decode('utf-8', errors='ignore')
-                title_match = re.search(r'<title>(.*?)</title>', html, re.IGNORECASE)
-                if title_match and reg in title_match.group(1).upper():
-                    clean_title = title_match.group(1).split('- Biluppgifter')[0].replace(reg, '').replace('-', '').strip()
-                    year_match = re.search(r'\b(19\d\d|20\d\d)\b', clean_title)
-                    year = year_match.group(1) if year_match else ""
-                    parts = re.sub(r'\b(19\d\d|20\d\d)\b', '', clean_title).strip().split()
-                    
-                    fuel = "Bensin"
-                    if "diesel" in html.lower(): fuel = "Diesel"
-                    elif "el" in html.lower() or "hybrid" in html.lower(): fuel = "El/Hybrid"
+      // Render Brand Accordions
+      for(let brand in grouped) {
+        let brandDetails = document.createElement('details');
+        let totalBrandParts = 0;
+        for(let c in grouped[brand]) totalBrandParts += grouped[brand][c].length;
 
-                    return {"success": True, "reg": reg, "make": parts[0] if parts else "", "model": " ".join(parts[1:]) if len(parts) > 1 else "", "year": year, "fuel": fuel}
-        except Exception: pass
-        return {"success": False}
+        let summary = document.createElement('summary');
+        summary.innerHTML = `<span>🛠️ ${brand}</span> <span class="badge-tag">${totalBrandParts} st</span>`;
+        brandDetails.appendChild(summary);
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8080))
-    server = HTTPServer(('0.0.0.0', port), CustomHandler)
-    server.serve_forever()
+        let folderContent = document.createElement('div');
+        folderContent.className = 'folder-content';
+
+        // Render Category Accordions
+        for(let cat in grouped[brand]) {
+          let catDetails = document.createElement('details');
+          let catSummary = document.createElement('summary');
+          catSummary.innerHTML = `<span>📂 ${cat}</span> <span style="font-size:0.8rem; color:var(--text-muted);">${grouped[brand][cat].length} st</span>`;
+          catDetails.appendChild(catSummary);
+
+          let catContent = document.createElement('div');
+          catContent.className = 'folder-content';
+
+          // Sort A-Z
+          grouped[brand][cat].sort((a,b) => a.name.localeCompare(b.name));
+
+          grouped[brand][cat].forEach(p => {
+            let isMatched = allCarTasks.some(t => t.text.includes(p.name.toLowerCase()));
+            let row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+              <div>
+                <b>${p.name}</b> ${isMatched ? '<span class="badge-tag badge-match">💡 Matchar biljobb</span>' : ''}<br>
+                <small style="color:var(--text-muted)">Hylla: ${p.shelf || 'Ej angiven'}</small>
+              </div>
+              <button class="btn btn-danger" style="width:auto; padding:6px 12px; min-height:36px; font-size:0.8rem;" onclick="deletePart('${p.id}')">Radera</button>
+            `;
+            catContent.appendChild(row);
+          });
+
+          catDetails.appendChild(catContent);
+          folderContent.appendChild(catDetails);
+        }
+
+        brandDetails.appendChild(folderContent);
+        container.appendChild(brandDetails);
+      }
+    }
+
+    function toggleAddPartModal() {
+      const box = document.getElementById('add-part-box');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function saveNewPart() {
+      const name = document.getElementById('p-name').value;
+      if(!name) return alert('Ange namn!');
+      const newP = {
+        id: 'p_' + Date.now(),
+        name: name,
+        brand: document.getElementById('p-brand').value || 'Universellt',
+        cat: document.getElementById('p-cat').value || 'Övrigt',
+        shelf: document.getElementById('p-shelf').value || 'A1',
+        user: currentUser
+      };
+      await fetch('/api/save-part', { method: 'POST', body: JSON.stringify(newP) });
+      toggleAddPartModal();
+      loadAllData();
+    }
+
+    async function deletePart(id) {
+      if(!confirm('Radera del?')) return;
+      await fetch('/api/delete-part', { method: 'POST', body: JSON.stringify({ id }) });
+      loadAllData();
+    }
+
+    /* CONSUMPTION COUNTERS */
+    function adjCons(item, val) {
+      tempCons[item] = Math.max(0, tempCons[item] + val);
+      document.getElementById(`c-${item}`).innerText = tempCons[item];
+    }
+
+    async function saveWorkshopLog() {
+      const mechanic = document.getElementById('log-mechanic').value || currentUser;
+      const car = document.getElementById('log-car-select').value;
+      const log = { id: 'w_'+Date.now(), date: new Date().toLocaleString(), mechanic, car, items: {...tempCons} };
+      await fetch('/api/save-workshop-log', { method: 'POST', body: JSON.stringify(log) });
+      tempCons = { brake_clean: 0, oil: 0, paper: 0, wd40: 0, glycol: 0, fuses: 0 };
+      for(let k in tempCons) document.getElementById(`c-${k}`).innerText = '0';
+      alert('Verkstadspass registrerat!');
+      loadAllData();
+    }
+
+    function renderWorkshopLogs() {
+      const box = document.getElementById('workshop-history');
+      box.innerHTML = (appData.workshopLogs || []).map(l => `
+        <div class="item-row">
+          <div><b>${l.mechanic}</b> (${l.date}) ${l.car ? '- Bil: '+l.car : ''}<br>
+          <small style="color:var(--text-muted)">Brake Clean: ${l.items.brake_clean||0}st | Olja: ${l.items.oil||0}L | Papper: ${l.items.paper||0}st</small></div>
+        </div>
+      `).join('') || "<p style='color:var(--text-muted)'>Ingen historik.</p>";
+    }
+
+    /* TOOL LENDING */
+    async function saveToolLend() {
+      const name = document.getElementById('tool-name').value;
+      const borrower = document.getElementById('tool-borrower').value;
+      if(!name || !borrower) return alert('Fyll i alla fält!');
+      await fetch('/api/save-tool-lend', { method: 'POST', body: JSON.stringify({ id:'t_'+Date.now(), name, borrower, date: new Date().toLocaleDateString(), returned: false }) });
+      loadAllData();
+    }
+
+    function renderTools() {
+      const box = document.getElementById('tools-list');
+      box.innerHTML = (appData.toolLends || []).filter(t => !t.returned).map(t => `
+        <div class="item-row">
+          <div><b>${t.name}</b> - Utlånad till: <b>${t.borrower}</b> (${t.date})</div>
+          <button class="btn btn-success" style="width:auto; padding:6px 12px; min-height:36px; font-size:0.8rem;" onclick="returnTool('${t.id}')">Återlämnad</button>
+        </div>
+      `).join('') || "<p style='color:var(--text-muted)'>Inga utlånade verktyg.</p>";
+    }
+
+    async function returnTool(id) {
+      await fetch('/api/return-tool', { method: 'POST', body: JSON.stringify({ id }) });
+      loadAllData();
+    }
+
+    /* INVOICE CALCULATOR */
+    function calcInvoice() {
+      const hours = parseFloat(document.getElementById('inv-labor-hours').value) || 0;
+      const rate = parseFloat(document.getElementById('inv-hourly-rate').value) || 0;
+      const discPct = parseFloat(document.getElementById('inv-discount-pct').value) || 0;
+
+      const normTotal = hours * rate;
+      const finalTotal = normTotal * (1 - discPct/100);
+      const saved = normTotal - finalTotal;
+
+      document.getElementById('inv-res-norm').innerText = normTotal.toLocaleString() + " kr";
+      document.getElementById('inv-res-final').innerText = finalTotal.toLocaleString() + " kr";
+      document.getElementById('inv-res-saved').innerText = saved.toLocaleString() + " kr";
+    }
+
+    function printInvoice() {
+      window.print();
+    }
+
+    /* VOICE INPUT */
+    function startVoice(targetId) {
+      if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return alert('Röstinmatning stöds ej i din webbläsare.');
+      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const rec = new Speech();
+      rec.lang = 'sv-SE';
+      rec.onresult = (e) => {
+        document.getElementById(targetId).value = e.results[0][0].transcript;
+        renderParts();
+      };
+      rec.start();
+    }
+
+    /* CSV IMPORT & EXPORT */
+    function importCSV(e) {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = async (evt) => {
+        const lines = evt.target.result.split('\n');
+        let newParts = [];
+        for(let i=1; i<lines.length; i++) {
+          const cols = lines[i].split(',');
+          if(cols[0]) {
+            newParts.push({ id:'p_'+Date.now()+'_'+i, name: cols[0].trim(), brand: (cols[1]||'Universellt').trim(), cat: (cols[2]||'Övrigt').trim(), shelf: (cols[3]||'A1').trim(), user: currentUser });
+          }
+        }
+        await fetch('/api/bulk-save-parts', { method: 'POST', body: JSON.stringify({ parts: newParts }) });
+        alert(`${newParts.length} delar importerade!`);
+        loadAllData();
+      };
+      reader.readAsText(file);
+    }
+
+    function exportCSV() {
+      let csv = "Namn,Märke,Kategori,Hylla\n";
+      (appData.parts||[]).forEach(p => csv += `"${p.name}","${p.brand||''}","${p.cat||''}","${p.shelf||''}"\n`);
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `garagehub_lager_${Date.now()}.csv`;
+      a.click();
+    }
+
+    function updatePills() {
+      const activeTools = (appData.toolLends || []).filter(t => !t.returned).length;
+      document.getElementById('pill-tools').innerText = `🧰 Lånade verktyg: ${activeTools}`;
+    }
+
+    function renderCars() {
+      const box = document.getElementById('cars-list');
+      box.innerHTML = (appData.cars || []).map(c => `
+        <div class="item-row">
+          <div><b>${c.title || c.reg}</b> - ${c.make||''} ${c.model||''} (${c.year||''})</div>
+        </div>
+      `).join('') || "<p style='color:var(--text-muted)'>Inga bilar tillagda.</p>";
+      
+      const sel = document.getElementById('log-car-select');
+      sel.innerHTML = '<option value="">-- Välj Bil (Valfritt) --</option>' + (appData.cars||[]).map(c=>`<option value="${c.reg}">${c.title || c.reg}</option>`).join('');
+    }
+
+    async function addCarByReg() {
+      const reg = document.getElementById('car-reg-input').value;
+      if(!reg) return;
+      const res = await fetch(`/api/car-info?reg=${reg}`);
+      const info = await res.json();
+      const carObj = { id:'c_'+Date.now(), reg, title: info.make ? `${info.make} ${info.model}` : reg, make: info.make||'', model: info.model||'', year: info.year||'', tasks:[], user: currentUser };
+      await fetch('/api/save-car', { method: 'POST', body: JSON.stringify(carObj) });
+      document.getElementById('car-reg-input').value = "";
+      loadAllData();
+    }
+  </script>
+</body>
+</html>
