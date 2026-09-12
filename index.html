@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GarageHub - Verkstad, Lager & Offert</title>
+    <title>GarageHub - Lager & Offert</title>
     <style>
         :root {
             --bg: #0d1117;
@@ -11,7 +11,6 @@
             --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
             --coral-pop: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
             --success-gradient: linear-gradient(135deg, #34d399 0%, #059669 100%);
-            --vault-gradient: linear-gradient(135deg, #c084fc 0%, #9333ea 100%);
             --text: #f1f5f9;
             --subtext: #94a3b8;
             --border: rgba(255, 255, 255, 0.1);
@@ -20,9 +19,6 @@
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
-                              radial-gradient(circle at 80% 80%, rgba(225, 29, 72, 0.05) 0%, transparent 40%);
-            background-attachment: fixed;
             color: var(--text);
             margin: 0;
             padding: 24px;
@@ -34,35 +30,13 @@
 
         .container { max-width: 960px; margin: 0 auto; width: 100%; flex: 1; }
 
-        .header-title { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-        .gear-btn-wrapper { position: relative; }
-
-        .gear-btn {
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border: 2px solid #38bdf8;
-            color: #38bdf8;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.25);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .gear-btn svg { width: 26px; height: 26px; fill: #38bdf8; }
-        .gear-btn:hover { transform: scale(1.1) rotate(60deg); }
-
-        .brand-logo-container { display: flex; align-items: center; gap: 14px; }
-        .concept-1-logo { width: 52px; height: 52px; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); }
-
+        .header-title { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+        .brand-logo { width: 42px; height: 42px; fill: #38bdf8; }
         .header-title h1 {
             background: linear-gradient(135deg, #ffffff 30%, #fb7185 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin: 0;
             font-weight: 800;
         }
@@ -71,9 +45,9 @@
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border);
-            padding: 28px;
-            border-radius: 24px;
-            margin-bottom: 24px;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 20px;
             box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.5);
         }
 
@@ -81,12 +55,12 @@
         
         input, textarea, select {
             width: 100%;
-            padding: 12px 16px;
-            margin: 6px 0 14px 0;
+            padding: 10px 14px;
+            margin: 4px 0 12px 0;
             background: rgba(11, 14, 20, 0.7);
             border: 1px solid var(--border);
             color: #fff;
-            border-radius: 14px;
+            border-radius: 12px;
             box-sizing: border-box;
         }
 
@@ -94,8 +68,8 @@
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
 
@@ -103,8 +77,8 @@
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border);
             color: var(--subtext);
-            padding: 10px 18px;
-            border-radius: 14px;
+            padding: 8px 16px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             white-space: nowrap;
@@ -120,8 +94,8 @@
             background: var(--accent-gradient);
             color: #0f172a;
             border: none;
-            padding: 12px 20px;
-            border-radius: 14px;
+            padding: 10px 18px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             display: inline-block;
@@ -134,123 +108,73 @@
         .hidden { display: none !important; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        @media(max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        @media(max-width: 650px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
 
-        .price-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 14px;
-            margin-top: 14px;
-        }
-
-        .price-card {
-            background: rgba(15, 23, 42, 0.6);
+        /* TRÄDVY FÖR LAGER */
+        .brand-folder {
+            background: rgba(15, 23, 42, 0.7);
             border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .brand-header {
+            padding: 14px 18px;
+            background: rgba(30, 41, 59, 0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+        .brand-content { padding: 14px; }
+
+        .part-card {
+            background: rgba(11, 14, 20, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
         }
 
-        .price-tag { font-size: 1.3rem; font-weight: 800; color: #34d399; margin: 4px 0; }
-        .badge { background: rgba(56, 189, 248, 0.15); padding: 4px 12px; border-radius: 16px; font-size: 0.85em; color: #38bdf8; }
-
-        /* OFFERT OCH SPRÄNGSKISS-STYLING */
         .quote-box {
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 20px;
-            margin-top: 16px;
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 14px;
         }
-
         .quote-line {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .diagram-viewer {
-            background: #000;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 16px;
-            text-align: center;
-        }
-
-        .diagram-svg {
-            width: 100%;
-            max-height: 260px;
-            background: #090d16;
-            border-radius: 12px;
-        }
-
-        .inventory-tag {
-            display: inline-block;
-            background: #059669;
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            margin-left: 6px;
-        }
-
-        /* UTSKRIFTSTYLING */
         @media print {
             body { background: #fff; color: #000; }
-            .tabs-nav, .header-title, .secret-corner, button, .demo-bar { display: none !important; }
+            .tabs-nav, .header-title, button { display: none !important; }
             .card { background: #fff; border: none; box-shadow: none; color: #000; }
             h2, h3, h4 { color: #000; }
             .quote-box { background: #fff; border: 1px solid #000; color: #000; }
-            .quote-line { border-bottom: 1px solid #ccc; }
         }
-
-        .secret-corner { position: fixed; bottom: 0; right: 0; width: 45px; height: 45px; cursor: pointer; z-index: 9999; }
-        footer { margin-top: auto; padding: 16px 0; text-align: center; opacity: 0.25; color: var(--text); font-size: 0.425rem; }
     </style>
 </head>
 <body>
 
-<div class="secret-corner" onclick="openTab('vault')"></div>
-
 <div class="container">
     <div class="header-title">
-        <div class="gear-btn-wrapper">
-            <button class="gear-btn" onclick="toggleApplyForm()" title="Ansök om medlemskap">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
-                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
-                </svg>
-            </button>
-        </div>
-
-        <div class="brand-logo-container">
-            <svg class="concept-1-logo" viewBox="0 0 100 100">
-                <defs>
-                    <linearGradient id="c1Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#38bdf8"/>
-                        <stop offset="60%" stop-color="#818cf8"/>
-                        <stop offset="100%" stop-color="#fb7185"/>
-                    </linearGradient>
-                </defs>
-                <path d="M 80 35 A 38 38 0 1 0 82 65 L 55 65 L 55 50 L 88 50 L 95 38 L 78 38 Z" fill="url(#c1Grad)"/>
-                <path d="M 55 50 L 90 25" stroke="#fb7185" stroke-width="5" stroke-linecap="round"/>
-            </svg>
-            <h1>GarageHub</h1>
-        </div>
-    </div>
-
-    <!-- ANSÖKAN -->
-    <div id="applySection" class="card hidden">
-        <h2>Ansök om Medlemskap</h2>
-        <input type="text" id="appApplicantName" placeholder="Ditt Namn">
-        <textarea id="appReason" rows="3" placeholder="Motivering..."></textarea>
-        <button class="btn btn-success btn-block" onclick="sendApplication()">Skicka Ansökan</button>
+        <svg class="brand-logo" viewBox="0 0 100 100">
+            <path d="M 80 35 A 38 38 0 1 0 82 65 L 55 65 L 55 50 L 88 50 L 95 38 L 78 38 Z"/>
+        </svg>
+        <h1>GarageHub</h1>
     </div>
 
     <!-- INLOGGNINGSSKÄRM -->
     <div id="authCard" class="card">
         <h2>Inloggning</h2>
-        <p style="color:var(--subtext); font-size:0.9em;">Logga in för att få tillgång till verkstaden, lagret och offertgeneratorn.</p>
         <input type="text" id="loginUser" placeholder="Användarnamn" value="Admin">
         <input type="password" id="loginPass" placeholder="Lösenord" value="••••••••">
         <button class="btn btn-block" onclick="login()">Logga in</button>
@@ -258,216 +182,130 @@
 
     <!-- HUVUDPANEL -->
     <div id="mainPanel" class="card hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <h2>Välkommen <span id="userNameDisplay">Admin</span>!</h2>
-            <button class="btn btn-danger" style="padding:6px 14px;" onclick="logout()">Logga ut</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h2>Verkstadsportal</h2>
+            <button class="btn btn-danger" style="padding:4px 12px;" onclick="logout()">Logga ut</button>
         </div>
 
-        <!-- FLIKAR -->
         <div class="tabs-nav">
-            <button class="tab-btn active" id="btn-tab-quote" onclick="openTab('quote')">🧾 Skapa Offert</button>
-            <button class="tab-btn" id="btn-tab-inventory" onclick="openTab('inventory')">📦 Privata Lagret</button>
-            <button class="tab-btn" id="btn-tab-guide" onclick="openTab('guide')">🛠️ Reparationsguide</button>
-            <button class="tab-btn" id="btn-tab-pricing" onclick="openTab('pricing')">🏷️ Prislista</button>
-            <button class="tab-btn" id="btn-tab-vault" onclick="openTab('vault')">🔐 Vault</button>
-            <button class="tab-btn" id="btn-tab-owner" onclick="openTab('owner')">👑 Admin</button>
+            <button class="tab-btn active" id="btn-tab-inventory" onclick="openTab('inventory')">📦 Privata Lagret</button>
+            <button class="tab-btn" id="btn-tab-addpart" onclick="openTab('addpart')">➕ Lägg till Reservdel</button>
+            <button class="tab-btn" id="btn-tab-quote" onclick="openTab('quote')">🧾 Skapa Offert</button>
+            <button class="tab-btn" id="btn-tab-data" onclick="openTab('data')">💾 Spara / Importera Data</button>
         </div>
 
-        <!-- FLIK 1: AUTOMATISK OFFERTGENERATOR -->
-        <div id="tab-quote" class="tab-content">
-            <h3>🧾 Automatisk Offert- & Kalkylgenerator</h3>
-            <p style="color:var(--subtext); font-size:0.85em;">Beräknar arbetstid, kontrollerar ditt interna lager och stämmer av mot grossist.</p>
+        <!-- FLIK 1: PRIVATA LAGRET -->
+        <div id="tab-inventory" class="tab-content">
+            <h3>📦 Mitt Privata Lager</h3>
+            <input type="text" id="inventorySearch" placeholder="Sök på del, bilmärke, modell eller hylla..." onkeyup="renderInventoryTree()">
             
+            <div id="inventoryTreeContainer" style="margin-top:14px;">
+                <!-- Trädstruktur ritas dynamiskt här -->
+            </div>
+        </div>
+
+        <!-- FLIK 2: LÄGG TILL RESERVDEL -->
+        <div id="tab-addpart" class="tab-content hidden">
+            <h3>➕ Registrera Ny Reservdel i Lagret</h3>
+            <div class="grid-2">
+                <div>
+                    <label>Delens Namn *</label>
+                    <input type="text" id="partName" placeholder="T.ex. Bromsskivor Fram Venterade">
+                </div>
+                <div>
+                    <label>Bilmärke & Modell(er) * (Separera med komma för flera)</label>
+                    <input type="text" id="partCar" placeholder="T.ex. Volvo V70, XC70, S60">
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div>
+                    <label>Antal i Lager *</label>
+                    <input type="number" id="partStock" value="1">
+                </div>
+                <div>
+                    <label>Hyllplats *</label>
+                    <input type="text" id="partShelf" placeholder="T.ex. Hylla A-12">
+                </div>
+                <div>
+                    <label>Försäljningspris (kr) *</label>
+                    <input type="number" id="partPrice" placeholder="T.ex. 1200">
+                </div>
+            </div>
+
+            <label>💬 Kommentarsfält / Anteckningar</label>
+            <textarea id="partComment" rows="3" placeholder="T.ex. Passar endast D5 motorer. Nya i kartong."></textarea>
+
+            <button class="btn btn-success btn-block" onclick="addNewPart()">Spara i Lagret</button>
+        </div>
+
+        <!-- FLIK 3: AUTOMATISK OFFERTGENERATOR -->
+        <div id="tab-quote" class="tab-content hidden">
+            <h3>🧾 Skapa Offert</h3>
             <div class="grid-2">
                 <div>
                     <label>Reg-nummer / Bilmodell</label>
-                    <input type="text" id="quoteReg" placeholder="T.ex. MLB 123 (Volvo) eller Porsche 911" value="Porsche 911 GT3">
+                    <input type="text" id="quoteReg" placeholder="T.ex. MLB 123 (Volvo V70)">
                 </div>
                 <div>
-                    <label>Typ av Arbete</label>
-                    <select id="quoteJobType" onchange="calculateQuote()">
-                        <option value="brakes_front">Bromsbyte Fram (Skivor + Belägg)</option>
-                        <option value="brakes_all">Bromsbyte Runt om (Skivor + Belägg)</option>
-                        <option value="generator">Generatorbyte</option>
-                        <option value="timing_belt">Kamremsbyte Komplett</option>
+                    <label>Arbetstyp</label>
+                    <select id="quoteJobType">
+                        <option value="brakes">Bromsbyte Fram (1.5 tim)</option>
+                        <option value="service">Bas Service (1.0 tim)</option>
+                        <option value="timing_belt">Kamremsbyte (3.5 tim)</option>
                     </select>
                 </div>
             </div>
-
-            <button class="btn btn-block btn-success" onclick="calculateQuote()">⚡ Generera Kalkyl & Offert</button>
+            <button class="btn btn-block btn-success" onclick="calculateQuote()">Generera Offert</button>
 
             <div id="quoteResult" class="quote-box hidden">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4 style="margin:0;" id="qTitle">Offert för Porsche 911</h4>
-                    <span class="badge" id="qRegBadge">MLB 123</span>
-                </div>
-                <hr style="border-color:var(--border); margin:12px 0;">
-
-                <div class="quote-line">
-                    <span>Arbetstid: <strong id="qHours">1.5</strong> tim x <span id="qRate">800</span> kr/tim</span>
-                    <strong id="qLaborCost">1 200 kr</strong>
-                </div>
-
-                <div class="quote-line">
-                    <div>
-                        <span id="qPartName">Bromsskivor + Klossar</span>
-                        <span id="qStockStatus" class="inventory-tag">Finns i ditt lager</span>
-                    </div>
-                    <strong id="qPartCost">2 400 kr</strong>
-                </div>
-
-                <div class="quote-line" style="font-size:1.2rem; font-weight:800; color:#34d399; border-top:2px solid var(--border); margin-top:10px; padding-top:10px;">
-                    <span>Totalt (Inkl. moms & påslag):</span>
-                    <span id="qTotal">3 600 kr</span>
-                </div>
-
-                <div style="margin-top:16px; display:flex; gap:10px;">
-                    <button class="btn btn-success" style="flex:1;" onclick="window.print()">🖨️ Skriv ut Offert (PDF/Papper)</button>
-                    <button class="btn" style="flex:1;" onclick="alert('Offert godkänd & sparad i systemet!')">💾 Spara Offert</button>
-                </div>
+                <h4 id="qTitle">Offert</h4>
+                <div class="quote-line"><span>Arbetstid:</span><strong id="qLaborCost">0 kr</strong></div>
+                <div class="quote-line"><span>Reservdel:</span><strong id="qPartCost">0 kr</strong></div>
+                <div class="quote-line" style="font-size:1.2rem; color:#34d399;"><span>Totalt:</span><strong id="qTotal">0 kr</strong></div>
+                <button class="btn btn-success" style="margin-top:10px;" onclick="window.print()">🖨️ Skriv ut Offert</button>
             </div>
         </div>
 
-        <!-- FLIK 2: PRIVATA LAGRET -->
-        <div id="tab-inventory" class="tab-content hidden">
-            <h3>📦 Mitt Privata Garage-Lager</h3>
-            <p style="color:var(--subtext); font-size:0.85em;">Sök direkt bland dina bromsar, generatorer och reservdelar på hyllan.</p>
+        <!-- FLIK 4: SPARA & IMPORTERA DATA -->
+        <div id="tab-data" class="tab-content hidden">
+            <h3>💾 Spara & Importera Lagerdata</h3>
+            <p style="color:var(--subtext);">Spara ner hela ditt lager till en fil på datorn eller ladda upp en sparad lista.</p>
             
-            <input type="text" id="inventorySearch" placeholder="Sök på del, märke eller bilmodell (T.ex. Porsche, Volvo, Skivor)..." onkeyup="searchInventory()">
-
-            <div id="inventoryList">
-                <!-- Fylls dynamiskt av JS -->
-            </div>
-        </div>
-
-        <!-- FLIK 3: STEG-FÖR-STEG REPARATIONSGUIDE -->
-        <div id="tab-guide" class="tab-content hidden">
-            <h3>🛠️ Visuell Steg-för-Steg Guide</h3>
-            
-            <div class="grid-2">
-                <div>
-                    <label>Välj Modell</label>
-                    <select id="guideCar" onchange="loadGuideStep(0)">
-                        <option value="volvo_v70">Volvo V70 / D5 (Kamrem)</option>
-                        <option value="porsche_911">Porsche 911 / Carrera (Bromsar)</option>
-                    </select>
+            <div class="grid-2" style="margin-top:14px;">
+                <div class="card" style="background:rgba(15, 23, 42, 0.6);">
+                    <h4>Export (Spara Fil)</h4>
+                    <p style="font-size:0.85rem; color:var(--subtext);">Ladda ner alla dina sparade reservdelar som en säkerhetsfil.</p>
+                    <button class="btn btn-success btn-block" onclick="exportData()">💾 Ladda ner Lagerfil (.json)</button>
                 </div>
-                <div>
-                    <label>Aktivt Steg i Guiden</label>
-                    <div style="font-weight:bold; padding-top:12px;" id="stepIndicator">Steg 1 av 3</div>
+
+                <div class="card" style="background:rgba(15, 23, 42, 0.6);">
+                    <h4>Import (Ladda UPP Fil)</h4>
+                    <p style="font-size:0.85rem; color:var(--subtext);">Välj en tidigare sparad `.json`-lagerfil från datorn.</p>
+                    <input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
+                    <button class="btn btn-block" onclick="importData()">📤 Importera Lager data</button>
                 </div>
             </div>
-
-            <div class="diagram-viewer">
-                <svg class="diagram-svg" viewBox="0 0 400 200" id="svgGuideDiagram">
-                    <!-- SVG Sprängskiss ritas dynamiskt -->
-                </svg>
-                
-                <h4 id="guideStepTitle" style="margin-top:14px;">Steg 1: Demontera Hjul och Skyddskåpa</h4>
-                <p id="guideStepDesc" style="color:var(--subtext); font-size:0.9rem;">Lossa bultarna och ta bort den yttre plastkåpan för att komma åt spännrullen.</p>
-
-                <div class="grid-2" style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; text-align:left; font-size:0.85rem; margin-top:12px;">
-                    <div>🛠️ <strong>Nödvändiga Verktyg:</strong> <span id="guideTools">13 mm hylsa, Torx T30</span></div>
-                    <div>⚡ <strong>Åtdragningsmoment:</strong> <span id="guideTorque">25 Nm + 90°</span></div>
-                </div>
-            </div>
-
-            <div style="display:flex; justify-content:space-between; margin-top:16px;">
-                <button class="btn" onclick="prevGuideStep()">⬅️ Föregående Steg</button>
-                <button class="btn btn-success" onclick="nextGuideStep()">Nästa Steg ➔</button>
-            </div>
-        </div>
-
-        <!-- FLIK 4: PRISLISTA -->
-        <div id="tab-pricing" class="tab-content hidden">
-            <h3>🏷️ Fasta Garagepriser (-30% under snittet)</h3>
-            <div class="price-grid">
-                <div class="price-card">
-                    <h4 style="margin:0; color:#38bdf8;">Bas Oljeservice</h4>
-                    <div class="price-tag">1 195 kr</div>
-                    <p style="font-size:0.85rem; color:var(--subtext);">Olja, filter & säkerhetskoll.</p>
-                </div>
-                <div class="price-card">
-                    <h4 style="margin:0; color:#38bdf8;">Kamremsbyte Komplett</h4>
-                    <div class="price-tag">5 595 kr</div>
-                    <p style="font-size:0.85rem; color:var(--subtext);">Rem, rulle & vattenpump.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- FLIK 5: VAULT -->
-        <div id="tab-vault" class="tab-content hidden">
-            <h3 style="color:#c084fc;">🔐 Hemliga Vault: Marknad</h3>
-            <p style="color:var(--subtext);">Krypterad marknadsplats och privata meddelanden.</p>
-        </div>
-
-        <!-- FLIK 6: ADMINPANEL -->
-        <div id="tab-owner" class="tab-content hidden">
-            <h3 style="color:#38bdf8;">👑 Admin: Hantera Ansökningar</h3>
-            <div id="applicationsContainer"><p style="color:var(--subtext);">Inga väntande ansökningar.</p></div>
         </div>
     </div>
 </div>
 
-<footer>
-    <div>GarageHub System — EST 2026</div>
-</footer>
-
 <script>
-    // PRIVAT LAGERDATABAS (Inbyggd)
-    const privateInventory = [
-        { id: 1, name: "Bromsskivor Fram (Brembo High Performance)", car: "Porsche 911 / Cayman", stock: 2, price: 2400, shelf: "Hylla A-12" },
-        { id: 2, name: "Bromsklossar Keramiska", car: "Porsche 911 / Boxster", stock: 4, price: 1100, shelf: "Hylla A-13" },
-        { id: 3, name: "Kamremssats med Vattenpump", car: "Volvo V70 / XC90 D5", stock: 1, price: 1450, shelf: "Hylla B-04" },
-        { id: 4, name: "Generator 140A Denso", car: "Volvo V70 / S60 T5", stock: 1, price: 1850, shelf: "Hylla C-01" },
-        { id: 5, name: "Oliefilter Mann-Filter W719", car: "VW Golf / Passat TDI", stock: 8, price: 120, shelf: "Hylla D-02" }
+    // STANDARDLAGER OM INGET FINNS SPARAT
+    let inventory = JSON.parse(localStorage.getItem('garagehub_inventory')) || [
+        { id: 1, name: "Bromsskivor Fram Brembo", car: "Porsche 911, Porsche Cayman", stock: 2, shelf: "Hylla A-12", price: 2400, comment: "Nyskick i kartong." },
+        { id: 2, name: "Kamremssats med Vattenpump", car: "Volvo V70, Volvo XC90", stock: 1, shelf: "Hylla B-04", price: 1450, comment: "Passar D5 motorer 2002-2008." },
+        { id: 3, name: "Tändstift Set 4-pack", car: "Saab 9-3, Saab 9-5", stock: 5, shelf: "Hylla S-01", price: 450, comment: "NGK Original." }
     ];
 
-    // REPARATIONSGUIDE-DATA MED SKISSER
-    const guidesData = {
-        porsche_911: [
-            {
-                title: "Steg 1: Demontera Hjul & Ok-bultar",
-                desc: "Lossa bromsokets två bakre infästningsbultar. Häng upp oket i en krok så att bromsslangen inte skadas.",
-                tools: "19mm Hylsa, Torx T50, Momentnyckel",
-                torque: "110 Nm (Ok) / 130 Nm (Hjulbultar)",
-                svg: `<circle cx="100" cy="100" r="70" stroke="#38bdf8" stroke-width="8" fill="none"/>
-                      <rect x="150" y="60" width="30" height="80" fill="#fb7185"/>
-                      <text x="180" y="105" fill="#fff" font-size="12">Ok-bult 110Nm</text>`
-            },
-            {
-                title: "Steg 2: Avlägsna Låsskruv & Skiva",
-                desc: "Skruva ur den lilla stjärnskruven som håller skivan mot navet. Dra skivan rakt ut.",
-                tools: "PNS Stjärnskruvmejsel, Kopparpasta",
-                torque: "10 Nm (Låsskruv)",
-                svg: `<circle cx="100" cy="100" r="70" stroke="#34d399" stroke-width="4" fill="none"/>
-                      <circle cx="100" cy="100" r="30" stroke="#818cf8" stroke-width="6" fill="none"/>
-                      <circle cx="100" cy="70" r="5" fill="#fb7185"/>
-                      <text x="115" y="75" fill="#fff" font-size="12">Låsskruv</text>`
-            }
-        ],
-        volvo_v70: [
-            {
-                title: "Steg 1: Frilägg Kamremskåpa & Spännrulle",
-                desc: "Lossa plastclipsen på motorns högra sida. Vrid den mekaniska spännrullen motsols för att lätta på remspänningen.",
-                tools: "13mm Ringnyckel, Torx T30",
-                torque: "24 Nm (Spännrulle)",
-                svg: `<circle cx="80" cy="70" r="30" stroke="#38bdf8" stroke-width="6" fill="none"/>
-                      <circle cx="160" cy="130" r="40" stroke="#38bdf8" stroke-width="6" fill="none"/>
-                      <path d="M 80 40 L 160 90 L 160 170 L 80 100 Z" stroke="#fb7185" stroke-width="3" fill="none"/>`
-            }
-        ]
-    };
-
-    let currentGuideCar = "porsche_911";
-    let currentGuideIndex = 0;
+    function saveToStorage() {
+        localStorage.setItem('garagehub_inventory', JSON.stringify(inventory));
+    }
 
     function login() {
         document.getElementById('authCard').classList.add('hidden');
         document.getElementById('mainPanel').classList.remove('hidden');
-        renderInventory(privateInventory);
-        loadGuideStep(0);
-        calculateQuote();
+        renderInventoryTree();
     }
 
     function logout() {
@@ -475,137 +313,181 @@
         document.getElementById('authCard').classList.remove('hidden');
     }
 
-    function toggleApplyForm() { 
-        document.getElementById('applySection').classList.toggle('hidden'); 
-    }
-
-    function sendApplication() { 
-        alert('Ansökan skickad till Admin!'); 
-        toggleApplyForm(); 
-    }
-
     function openTab(tabName) {
-        const contents = document.querySelectorAll('.tab-content');
-        contents.forEach(c => c.classList.add('hidden'));
-
-        const btns = document.querySelectorAll('.tab-btn');
-        btns.forEach(b => b.classList.remove('active'));
-
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(`tab-${tabName}`).classList.remove('hidden');
         document.getElementById(`btn-tab-${tabName}`).classList.add('active');
     }
 
-    // AUTOMATISK OFFERT-KALKYLATOR
-    function calculateQuote() {
-        const reg = document.getElementById('quoteReg').value || 'M24 SUV';
-        const job = document.getElementById('quoteJobType').value;
-        const resultBox = document.getElementById('quoteResult');
+    // LÄGG TILL NY DEL
+    function addNewPart() {
+        const name = document.getElementById('partName').value.trim();
+        const car = document.getElementById('partCar').value.trim();
+        const stock = parseInt(document.getElementById('partStock').value) || 1;
+        const shelf = document.getElementById('partShelf').value.trim() || 'Ej angiven';
+        const price = parseInt(document.getElementById('partPrice').value) || 0;
+        const comment = document.getElementById('partComment').value.trim();
 
-        let hours = 1.5;
-        let partName = "Bromsskivor + Klossar Fram";
-        let partPrice = 2400;
-        let inStock = true;
-
-        if (job === 'brakes_all') {
-            hours = 2.8;
-            partName = "Bromsskivor + Klossar Runt Om";
-            partPrice = 4500;
-        } else if (job === 'generator') {
-            hours = 1.8;
-            partName = "Generator 140A OE-Kvalitet";
-            partPrice = 2200;
-            inStock = false;
-        } else if (job === 'timing_belt') {
-            hours = 3.5;
-            partName = "Kamremssats + Vattenpump";
-            partPrice = 1850;
-        }
-
-        const hourlyRate = 800; // Din verkstadstaxa
-        const laborCost = hours * hourlyRate;
-        const total = laborCost + partPrice;
-
-        document.getElementById('qTitle').innerText = `Offert: ${reg}`;
-        document.getElementById('qRegBadge').innerText = reg;
-        document.getElementById('qHours').innerText = hours;
-        document.getElementById('qLaborCost').innerText = laborCost.toLocaleString() + " kr";
-        document.getElementById('qPartName').innerText = partName;
-        document.getElementById('qPartCost').innerText = partPrice.toLocaleString() + " kr";
-        document.getElementById('qTotal').innerText = total.toLocaleString() + " kr";
-
-        const stockBadge = document.getElementById('qStockStatus');
-        if (inStock) {
-            stockBadge.innerText = "Finns i ditt lager";
-            stockBadge.style.background = "#059669";
-        } else {
-            stockBadge.innerText = "Beställs till verkstad (1-2 dagar)";
-            stockBadge.style.background = "#e11d48";
-        }
-
-        resultBox.classList.remove('hidden');
-    }
-
-    // LAGER-SÖKNING
-    function renderInventory(items) {
-        const container = document.getElementById('inventoryList');
-        container.innerHTML = '';
-
-        if (items.length === 0) {
-            container.innerHTML = '<p style="color:var(--subtext); padding:10px;">Inga reservdelar matchade din sökning.</p>';
+        if (!name || !car) {
+            alert('Vänligen fyll i både delens namn och bilmodell!');
             return;
         }
 
-        items.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'price-card';
-            div.style.marginBottom = '10px';
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4 style="margin:0; color:#38bdf8;">${item.name}</h4>
-                    <span class="badge">${item.shelf}</span>
+        const newPart = {
+            id: Date.now(),
+            name: name,
+            car: car,
+            stock: stock,
+            shelf: shelf,
+            price: price,
+            comment: comment
+        };
+
+        inventory.push(newPart);
+        saveToStorage();
+        alert('Reservdelen har sparats i lagret!');
+
+        // Rensa formulär
+        document.getElementById('partName').value = '';
+        document.getElementById('partCar').value = '';
+        document.getElementById('partComment').value = '';
+        
+        openTab('inventory');
+        renderInventoryTree();
+    }
+
+    // NORMERA MÄRKESNAMN (Rensar stor/liten bokstav)
+    function normalizeBrand(carString) {
+        const firstWord = carString.trim().split(' ')[0].toLowerCase();
+        return firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+    }
+
+    // BYGG FÄLLBAR TRÄDVY FÖR LAGER
+    function renderInventoryTree() {
+        const container = document.getElementById('inventoryTreeContainer');
+        const query = document.getElementById('inventorySearch').value.toLowerCase();
+        container.innerHTML = '';
+
+        // Gruppera delar per Märke
+        const grouped = {};
+
+        inventory.forEach(item => {
+            if (query && !item.name.toLowerCase().includes(query) && 
+                !item.car.toLowerCase().includes(query) && 
+                !item.shelf.toLowerCase().includes(query)) {
+                return;
+            }
+
+            const brand = normalizeBrand(item.car);
+            if (!grouped[brand]) grouped[brand] = [];
+            grouped[brand].push(item);
+        });
+
+        const brands = Object.keys(grouped);
+        if (brands.length === 0) {
+            container.innerHTML = '<p style="color:var(--subtext); padding:10px;">Inga reservdelar hittades.</p>';
+            return;
+        }
+
+        brands.forEach((brand, index) => {
+            const folder = document.createElement('div');
+            folder.className = 'brand-folder';
+
+            const itemsCount = grouped[brand].length;
+            folder.innerHTML = `
+                <div class="brand-header" onclick="toggleFolder('${brand}-${index}')">
+                    <span>🚗 ${brand}</span>
+                    <span style="font-size:0.85em; color:var(--subtext);">${itemsCount} del(ar)</span>
                 </div>
-                <p style="margin:4px 0; font-size:0.85rem; color:var(--subtext);">Passar: ${item.car}</p>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-                    <span class="price-tag">${item.price} kr</span>
-                    <span style="font-weight:bold; color:${item.stock > 0 ? '#34d399' : '#fb7185'};">
-                        ${item.stock > 0 ? item.stock + ' st i lager' : 'Slut i lager'}
-                    </span>
+                <div id="folder-${brand}-${index}" class="brand-content ${query ? '' : 'hidden'}">
+                    ${grouped[brand].map(part => `
+                        <div class="part-card">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong style="color:#38bdf8;">${part.name}</strong>
+                                <span style="background:rgba(56,189,248,0.15); color:#38bdf8; padding:2px 8px; border-radius:10px; font-size:0.8em;">${part.shelf}</span>
+                            </div>
+                            <p style="margin:4px 0; font-size:0.85em; color:var(--subtext);">Passar: ${part.car}</p>
+                            ${part.comment ? `<p style="margin:4px 0; font-size:0.8em; color:#e2e8f0; font-style:italic;">💬 ${part.comment}</p>` : ''}
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-size:0.9em;">
+                                <span style="color:#34d399; font-weight:bold;">${part.price} kr</span>
+                                <span>Antal: <strong>${part.stock} st</strong></span>
+                                <button onclick="deletePart(${part.id})" style="background:none; border:none; color:#fb7185; cursor:pointer;">🗑️ Ta bort</button>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             `;
-            container.appendChild(div);
+            container.appendChild(folder);
         });
     }
 
-    function searchInventory() {
-        const query = document.getElementById('inventorySearch').value.toLowerCase();
-        const filtered = privateInventory.filter(i => 
-            i.name.toLowerCase().includes(query) || 
-            i.car.toLowerCase().includes(query)
-        );
-        renderInventory(filtered);
+    function toggleFolder(id) {
+        document.getElementById(`folder-${id}`).classList.toggle('hidden');
     }
 
-    // STEG-FÖR-STEG GUIDE LOGIK
-    function loadGuideStep(index) {
-        const car = document.getElementById('guideCar').value;
-        const steps = guidesData[car] || guidesData['porsche_911'];
-        
-        if (index < 0) index = 0;
-        if (index >= steps.length) index = steps.length - 1;
-
-        currentGuideIndex = index;
-        const current = steps[index];
-
-        document.getElementById('stepIndicator').innerText = `Steg ${index + 1} av ${steps.length}`;
-        document.getElementById('guideStepTitle').innerText = current.title;
-        document.getElementById('guideStepDesc').innerText = current.desc;
-        document.getElementById('guideTools').innerText = current.tools;
-        document.getElementById('guideTorque').innerText = current.torque;
-        document.getElementById('svgGuideDiagram').innerHTML = current.svg;
+    function deletePart(id) {
+        if (confirm('Vill du ta bort den här reservdelen från lagret?')) {
+            inventory = inventory.filter(p => p.id !== id);
+            saveToStorage();
+            renderInventoryTree();
+        }
     }
 
-    function nextGuideStep() { loadGuideStep(currentGuideIndex + 1); }
-    function prevGuideStep() { loadGuideStep(currentGuideIndex - 1); }
+    // OFFERTGENERATOR
+    function calculateQuote() {
+        const reg = document.getElementById('quoteReg').value || 'Fordon';
+        const job = document.getElementById('quoteJobType').value;
+        let labor = 1200;
+        let part = 1500;
+
+        if (job === 'service') { labor = 800; part = 600; }
+        if (job === 'timing_belt') { labor = 2800; part = 1850; }
+
+        document.getElementById('qTitle').innerText = `Offert: ${reg}`;
+        document.getElementById('qLaborCost').innerText = `${labor} kr`;
+        document.getElementById('qPartCost').innerText = `${part} kr`;
+        document.getElementById('qTotal').innerText = `${labor + part} kr`;
+        document.getElementById('quoteResult').classList.remove('hidden');
+    }
+
+    // EXPORT & IMPORT
+    function exportData() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(inventory, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `garagehub_lager_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    function importData() {
+        const fileInput = document.getElementById('importFile');
+        if (!fileInput.files.length) {
+            alert('Vänligen välj en fil att importera först!');
+            return;
+        }
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (Array.isArray(imported)) {
+                    inventory = imported;
+                    saveToStorage();
+                    renderInventoryTree();
+                    alert('Lagret har importerats och uppdaterats!');
+                    openTab('inventory');
+                } else {
+                    alert('Felaktigt filformat.');
+                }
+            } catch (err) {
+                alert('Kunde inte läsa filen.');
+            }
+        };
+        reader.readAsText(file);
+    }
 </script>
 </body>
 </html>
