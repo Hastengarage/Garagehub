@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GarageHub - Lager & Offert</title>
+    <title>GarageHub - Verkstad & Lager</title>
     <style>
         :root {
             --bg: #0d1117;
@@ -62,6 +62,32 @@
             color: #fff;
             border-radius: 12px;
             box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 10px 0 16px 0;
+            background: rgba(11, 14, 20, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
         }
 
         .tabs-nav {
@@ -210,7 +236,7 @@
             <div class="grid-2">
                 <div>
                     <label>Delens Namn *</label>
-                    <input type="text" id="partName" placeholder="T.ex. Bromsskivor Fram Venterade">
+                    <input type="text" id="partName" placeholder="T.ex. Bromsskivor Fram Ventilterade">
                 </div>
                 <div>
                     <label>Bilmärke & Modell(er) * (Separera med komma för flera)</label>
@@ -245,25 +271,62 @@
             <div class="grid-2">
                 <div>
                     <label>Reg-nummer / Bilmodell</label>
-                    <input type="text" id="quoteReg" placeholder="T.ex. MLB 123 (Volvo V70)">
+                    <input type="text" id="quoteReg" placeholder="T.ex. MLB 123 (Audi A4 2.0 TDI)">
                 </div>
                 <div>
-                    <label>Arbetstyp</label>
-                    <select id="quoteJobType">
-                        <option value="brakes">Bromsbyte Fram (1.5 tim)</option>
-                        <option value="service">Bas Service (1.0 tim)</option>
-                        <option value="timing_belt">Kamremsbyte (3.5 tim)</option>
-                    </select>
+                    <label>Verkstadstimtaxa (kr/tim)</label>
+                    <input type="number" id="quoteHourlyRate" value="800" onchange="calculateQuote()">
                 </div>
             </div>
-            <button class="btn btn-block btn-success" onclick="calculateQuote()">Generera Offert</button>
+
+            <div class="grid-2">
+                <div>
+                    <label>Exakt Arbetstid enligt manual (Timmar)</label>
+                    <input type="number" step="0.1" id="quoteLaborHours" value="1.5" onchange="calculateQuote()">
+                </div>
+                <div>
+                    <label>Reservdelspris (kr)</label>
+                    <input type="number" id="quotePartPrice" value="1500" onchange="calculateQuote()">
+                </div>
+            </div>
+
+            <label>⚙️ Tilläggstider (Bocka i vid behov):</label>
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="addFrontService" onchange="calculateQuote()">
+                    Front i serviceläge / Demontering (+2.0 timmar)
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="addRustTime" onchange="calculateQuote()">
+                    Fastrostade bultar / Extra arbetstid (+0.5 timmar)
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="addAcService" onchange="calculateQuote()">
+                    AC-tömning & återfyllning (+1.0 timme)
+                </label>
+            </div>
+
+            <button class="btn btn-block btn-success" onclick="calculateQuote()">⚡ Räkna Ut Offert</button>
 
             <div id="quoteResult" class="quote-box hidden">
-                <h4 id="qTitle">Offert</h4>
-                <div class="quote-line"><span>Arbetstid:</span><strong id="qLaborCost">0 kr</strong></div>
-                <div class="quote-line"><span>Reservdel:</span><strong id="qPartCost">0 kr</strong></div>
-                <div class="quote-line" style="font-size:1.2rem; color:#34d399;"><span>Totalt:</span><strong id="qTotal">0 kr</strong></div>
-                <button class="btn btn-success" style="margin-top:10px;" onclick="window.print()">🖨️ Skriv ut Offert</button>
+                <h4 id="qTitle">Offert: MLB 123</h4>
+                <div class="quote-line">
+                    <span>Beräknad arbetstid:</span>
+                    <strong id="qHoursDisplay">1.5 timmar</strong>
+                </div>
+                <div class="quote-line">
+                    <span>Arbetskostnad (<span id="qRateDisplay">800</span> kr/tim):</span>
+                    <strong id="qLaborCost">1 200 kr</strong>
+                </div>
+                <div class="quote-line">
+                    <span>Reservdelar:</span>
+                    <strong id="qPartCost">1 500 kr</strong>
+                </div>
+                <div class="quote-line" style="font-size:1.2rem; color:#34d399; margin-top:8px; border-top:2px solid var(--border); padding-top:8px;">
+                    <span>Totalt inkl. moms:</span>
+                    <strong id="qTotal">2 700 kr</strong>
+                </div>
+                <button class="btn btn-success" style="margin-top:14px; width:100%;" onclick="window.print()">🖨️ Skriv ut Offert / Spara PDF</button>
             </div>
         </div>
 
@@ -283,7 +346,7 @@
                     <h4>Import (Ladda UPP Fil)</h4>
                     <p style="font-size:0.85rem; color:var(--subtext);">Välj en tidigare sparad `.json`-lagerfil från datorn.</p>
                     <input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
-                    <button class="btn btn-block" onclick="importData()">📤 Importera Lager data</button>
+                    <button class="btn btn-block" onclick="importData()">📤 Importera Lagerdata</button>
                 </div>
             </div>
         </div>
@@ -306,6 +369,7 @@
         document.getElementById('authCard').classList.add('hidden');
         document.getElementById('mainPanel').classList.remove('hidden');
         renderInventoryTree();
+        calculateQuote();
     }
 
     function logout() {
@@ -369,7 +433,6 @@
         const query = document.getElementById('inventorySearch').value.toLowerCase();
         container.innerHTML = '';
 
-        // Gruppera delar per Märke
         const grouped = {};
 
         inventory.forEach(item => {
@@ -434,20 +497,28 @@
         }
     }
 
-    // OFFERTGENERATOR
+    // FLEXIBEL OFFERTGENERATOR
     function calculateQuote() {
         const reg = document.getElementById('quoteReg').value || 'Fordon';
-        const job = document.getElementById('quoteJobType').value;
-        let labor = 1200;
-        let part = 1500;
+        const rate = parseFloat(document.getElementById('quoteHourlyRate').value) || 0;
+        let hours = parseFloat(document.getElementById('quoteLaborHours').value) || 0;
+        const partPrice = parseFloat(document.getElementById('quotePartPrice').value) || 0;
 
-        if (job === 'service') { labor = 800; part = 600; }
-        if (job === 'timing_belt') { labor = 2800; part = 1850; }
+        // Tilläggstider
+        if (document.getElementById('addFrontService').checked) hours += 2.0;
+        if (document.getElementById('addRustTime').checked) hours += 0.5;
+        if (document.getElementById('addAcService').checked) hours += 1.0;
+
+        const laborCost = hours * rate;
+        const total = laborCost + partPrice;
 
         document.getElementById('qTitle').innerText = `Offert: ${reg}`;
-        document.getElementById('qLaborCost').innerText = `${labor} kr`;
-        document.getElementById('qPartCost').innerText = `${part} kr`;
-        document.getElementById('qTotal').innerText = `${labor + part} kr`;
+        document.getElementById('qHoursDisplay').innerText = `${hours.toFixed(1)} timmar`;
+        document.getElementById('qRateDisplay').innerText = rate;
+        document.getElementById('qLaborCost').innerText = `${laborCost.toLocaleString()} kr`;
+        document.getElementById('qPartCost').innerText = `${partPrice.toLocaleString()} kr`;
+        document.getElementById('qTotal').innerText = `${total.toLocaleString()} kr`;
+
         document.getElementById('quoteResult').classList.remove('hidden');
     }
 
