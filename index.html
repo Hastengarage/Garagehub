@@ -31,7 +31,6 @@
         .container { max-width: 960px; margin: 0 auto; width: 100%; flex: 1; }
 
         .header-title { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
-        .brand-logo { width: 42px; height: 42px; fill: #38bdf8; }
         .header-title h1 {
             background: linear-gradient(135deg, #ffffff 30%, #fb7185 100%);
             -webkit-background-clip: text;
@@ -165,6 +164,16 @@
             margin-bottom: 8px;
         }
 
+        .art-badge {
+            background: rgba(129, 140, 248, 0.2);
+            color: #818cf8;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
         .quote-box {
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--border);
@@ -192,9 +201,6 @@
 
 <div class="container">
     <div class="header-title">
-        <svg class="brand-logo" viewBox="0 0 100 100">
-            <path d="M 80 35 A 38 38 0 1 0 82 65 L 55 65 L 55 50 L 88 50 L 95 38 L 78 38 Z"/>
-        </svg>
         <h1>GarageHub</h1>
     </div>
 
@@ -223,7 +229,7 @@
         <!-- FLIK 1: PRIVATA LAGRET -->
         <div id="tab-inventory" class="tab-content">
             <h3>📦 Mitt Privata Lager</h3>
-            <input type="text" id="inventorySearch" placeholder="Sök på del, bilmärke, modell eller hylla..." onkeyup="renderInventoryTree()">
+            <input type="text" id="inventorySearch" placeholder="Sök på del, artikelnummer/EAN, märke, modell eller hylla..." onkeyup="renderInventoryTree()">
             
             <div id="inventoryTreeContainer" style="margin-top:14px;">
                 <!-- Trädstruktur ritas dynamiskt här -->
@@ -239,23 +245,30 @@
                     <input type="text" id="partName" placeholder="T.ex. Bromsskivor Fram Ventilterade">
                 </div>
                 <div>
-                    <label>Bilmärke & Modell(er) * (Separera med komma för flera)</label>
-                    <input type="text" id="partCar" placeholder="T.ex. Volvo V70, XC70, S60">
+                    <label>Artikelnummer / EAN / OE *</label>
+                    <input type="text" id="partArtNo" placeholder="T.ex. 30788490 eller 52-3002">
                 </div>
             </div>
 
-            <div class="grid-3">
+            <div class="grid-2">
+                <div>
+                    <label>Bilmärke & Modell(er) * (Separera med komma för flera)</label>
+                    <input type="text" id="partCar" placeholder="T.ex. Volvo V70, XC70, S60">
+                </div>
+                <div>
+                    <label>Hyllplats *</label>
+                    <input type="text" id="partShelf" placeholder="T.ex. Hylla A-12 eller A1">
+                </div>
+            </div>
+
+            <div class="grid-2">
                 <div>
                     <label>Antal i Lager *</label>
                     <input type="number" id="partStock" value="1">
                 </div>
                 <div>
-                    <label>Hyllplats *</label>
-                    <input type="text" id="partShelf" placeholder="T.ex. Hylla A-12">
-                </div>
-                <div>
-                    <label>Försäljningspris (kr) *</label>
-                    <input type="number" id="partPrice" placeholder="T.ex. 1200">
+                    <label>Försäljningspris (kr)</label>
+                    <input type="number" id="partPrice" placeholder="T.ex. 1200" value="0">
                 </div>
             </div>
 
@@ -354,12 +367,133 @@
 </div>
 
 <script>
-    // STANDARDLAGER OM INGET FINNS SPARAT
-    let inventory = JSON.parse(localStorage.getItem('garagehub_inventory')) || [
-        { id: 1, name: "Bromsskivor Fram Brembo", car: "Porsche 911, Porsche Cayman", stock: 2, shelf: "Hylla A-12", price: 2400, comment: "Nyskick i kartong." },
-        { id: 2, name: "Kamremssats med Vattenpump", car: "Volvo V70, Volvo XC90", stock: 1, shelf: "Hylla B-04", price: 1450, comment: "Passar D5 motorer 2002-2008." },
-        { id: 3, name: "Tändstift Set 4-pack", car: "Saab 9-3, Saab 9-5", stock: 5, shelf: "Hylla S-01", price: 450, comment: "NGK Original." }
+    // INBYGGDA DELAR MED EXAKTA ARTIKELNUMMER
+    const defaultData = [
+        { id: 101, name: "Strålkastare", artNo: "07-11", car: "Audi A4", stock: 1, shelf: "A1", price: 0, comment: "El/kaross" },
+        { id: 102, name: "Oljefilter", artNo: "f106701", car: "Volvo 740", stock: 1, shelf: "Ej angiven", price: 0, comment: "Passar många äldre volvo samt ford/opel" },
+        { id: 103, name: "Stabilisatorstag", artNo: "55530-2e000", car: "Kia Sportage", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 04-10" },
+        { id: 104, name: "Bränslefilter", artNo: "52-3002", car: "Volkswagen Golf mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "Många olika modeller i VAG koncern" },
+        { id: 105, name: "Oljefilter", artNo: "52-309", car: "Volvo 740", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 82-92" },
+        { id: 106, name: "Spindelled", artNo: "4047437462090", car: "Volvo V40", stock: 1, shelf: "Ej angiven", price: 0, comment: "Nedre framaxel" },
+        { id: 107, name: "Oljefilter", artNo: "OC217/6", car: "Volkswagen Golf IV", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 95-05" },
+        { id: 108, name: "Packning insugsrör", artNo: "8653639", car: "Volvo S40/S60", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 109, name: "Oljefilter", artNo: "071115562c", car: "Volkswagen Golf/Audi", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 110, name: "Oljefilter", artNo: "30788490", car: "Volvo V70/XC90 mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 111, name: "Oljefilter", artNo: "ox 258 d", car: "Kia/Hyundai Sportage", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 112, name: "Luftfilter", artNo: "5908242687018", car: "Toyota/Lexus Yaris", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 113, name: "Bromsbelägg", artNo: "40010063", car: "Kia Picanto", stock: 1, shelf: "Ej angiven", price: 0, comment: "Endast till en sida" },
+        { id: 114, name: "Bromsbelägg", artNo: "9f0052", car: "Volvo C30 mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 04-10" },
+        { id: 115, name: "Bränslefilter", artNo: "313214475", car: "Volvo V40 mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 08-18" },
+        { id: 116, name: "Oljefilter", artNo: "50-528", car: "Nissan Micra", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 08-" },
+        { id: 117, name: "Bromsbelägg", artNo: "JQ101146", car: "Volkswagen Golf", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 118, name: "Stabilisatorstag", artNo: "72-312", car: "Volvo S60 V70 mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 00-10" },
+        { id: 119, name: "Fjäder", artNo: "px1-668", car: "Opel Combo", stock: 1, shelf: "Ej angiven", price: 0, comment: "Framaxel" },
+        { id: 120, name: "Bränslefilter", artNo: "B31011pr", car: "Nissan Almera mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 121, name: "Dammskyddssats", artNo: "5902473456542", car: "Kia Ceed", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 122, name: "Oljefilterhus", artNo: "6511800138", car: "Mercedes Sprinter mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 2013" },
+        { id: 123, name: "Avgashängare", artNo: "llsk9999l0", car: "Universal", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 124, name: "Oljefilter", artNo: "ox 414 d1", car: "Toyota RAV 4", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 125, name: "Bromsbelägg", artNo: "Ej angiven", car: "Citroën Berlingo", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 126, name: "Styrled", artNo: "72-883", car: "Volvo V70", stock: 1, shelf: "Ej angiven", price: 0, comment: "Passar flera volvo modeller" },
+        { id: 127, name: "Oljefilter", artNo: "Ej angiven", car: "Yamaha Grizzly/Kodiak", stock: 1, shelf: "0", price: 0, comment: "" },
+        { id: 128, name: "LED-styrenhet", artNo: "p121260", car: "Audi A4 B8 mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 129, name: "Gasstötdämpare", artNo: "5901159227698", car: "Volkswagen Golf IV/Bora", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 97-05" },
+        { id: 130, name: "Bagagelås", artNo: "34885-10", car: "BMW E87", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 131, name: "Styrled", artNo: "7901797096861", car: "Opel Combo", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 01-11" },
+        { id: 132, name: "Tändstift", artNo: "ITR6F13", car: "NGK Laser", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 133, name: "Tändstift", artNo: "BKR5E-11", car: "NGK V-Line", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 134, name: "Spolarmunstycke", artNo: "06-18", car: "Mercedes Sprinter/Crafter", stock: 1, shelf: "0", price: 0, comment: "" },
+        { id: 135, name: "Gummibussning", artNo: "Ej angiven", car: "Universal (Vet ej)", stock: 1, shelf: "Ej angiven", price: 0, comment: "Lappen borta, märke Febest, vet ej på påsen" },
+        { id: 136, name: "Fjäder/Topplagring", artNo: "55330-2L000", car: "Kia Ceed", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 06-12" },
+        { id: 137, name: "Bromsbelägg", artNo: "4057276260511", car: "Nissan Primera", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 96-02" },
+        { id: 138, name: "Bränslepump", artNo: "Ej angiven", car: "Universal", stock: 1, shelf: "Ej angiven", price: 0, comment: "Svart med blå tejp" },
+        { id: 139, name: "Mätarhus", artNo: "94-11", car: "Ford Focus", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 140, name: "Baklyste", artNo: "2k1945096 H", car: "Volkswagen Caddy", stock: 1, shelf: "Ej angiven", price: 0, comment: "Höger sida" },
+        { id: 141, name: "Bromsbelägg", artNo: "DBP1824", car: "Volvo S40", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 04-12" },
+        { id: 142, name: "Vipparm", artNo: "4005108612977", car: "Volvo C30/V70", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 08-11" },
+        { id: 143, name: "Stabilisatorstag", artNo: "3322937575824", car: "Nissan Almera", stock: 1, shelf: "Ej angiven", price: 0, comment: "Flera modeller" },
+        { id: 144, name: "Kupéfilter", artNo: "wp9208", car: "Citroën C8", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 02-10" },
+        { id: 145, "name": "Oljefilter", artNo: "LS892", car: "Renault Clio", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 98-12" },
+        { id: 146, "name": "Oljefilter adapter", artNo: "Ej angiven", car: "Universal Turbo", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 147, "name": "ABS-givare", artNo: "3m5t-2b372-AB", car: "Volvo/Ford", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 148, "name": "Turbo", artNo: "5955703", car: "Garrett GT1752", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 99-02" },
+        { id: 149, "name": "Bromsbelägg", artNo: "JQ101149", car: "Kia Sportage", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 10-" },
+        { id: 150, "name": "Spolarvätskepump", artNo: "Ej angiven", car: "Universal", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 151, "name": "Kupévärmare", artNo: "Ej angiven", car: "Biltema Universal", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 152, "name": "Backljus", artNo: "Ej angiven", car: "Briodlights", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 153, "name": "ABS-Sensor", artNo: "HCA-CT-029", car: "Citroën/Peugeot", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 154, "name": "Avgasklammer", artNo: "79-2354", car: "Biltema 54mm", stock: 2, shelf: "Ej angiven", price: 0, comment: "2st" },
+        { id: 155, "name": "Bromsbelägg", artNo: "353000b-sx", car: "Nissan Primera", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 156, "name": "Bromsbelägg", artNo: "13.0460-2868.2", car: "Volvo/Ford C1", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 157, "name": "Parkeringsbromsknapp", artNo: "8K1927225DWEP", car: "Volkswagen A4/A5/Q5", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 08-17" },
+        { id: 158, "name": "Kamaxeltätning", artNo: "1397381", car: "Volvo flera", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 159, "name": "Fönsterantenn", artNo: "10-125e", car: "Universal", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 160, "name": "Spolarmunstycke", artNo: "31290075", car: "Volvo C30/C70/V50/V70", stock: 1, shelf: "Ej angiven", price: 0, comment: "Årsmodell 04-16" },
+        { id: 161, "name": "Motor parkeringsbroms", artNo: "32363464", car: "Volvo V60 mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "Passar flera modeller" },
+        { id: 162, "name": "Kupéfilter", artNo: "ADF122521", car: "Volvo/Ford", stock: 1, shelf: "Ej angiven", price: 0, comment: "Flera modeller" },
+        { id: 163, "name": "ABS Sensor", artNo: "pm0018872", car: "BMW 1 & 3 serien", stock: 1, shelf: "Ej angiven", price: 0, comment: "E81" },
+        { id: 164, "name": "Bakaxel", artNo: "Ej angiven", car: "Universal", stock: 1, shelf: "A1", price: 0, comment: "Kategori: Övrigt" },
+        { id: 165, "name": "Bromsbackar", artNo: "skbs-0405139", car: "Volkswagen Crafter", stock: 2, shelf: "Ej angiven", price: 0, comment: "Endast 2st" },
+        { id: 166, "name": "Mikrobrytare", artNo: "3q0713128", car: "Volkswagen Golf/Passat B8", stock: 1, shelf: "Ej angiven", price: 0, comment: "Mikrobrytare växelväljare" },
+        { id: 167, "name": "Motorvärmarsats", artNo: "Ej angiven", car: "DEFA", stock: 1, shelf: "Ej angiven", price: 0, comment: "Båda delarna finnes" },
+        { id: 168, "name": "Stabilisatorstag", artNo: "14008040", car: "Volvo/Ford", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 169, "name": "Bromsokshållare", artNo: "01dnng", car: "Volkswagen Caddy/Golf/Passat", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 170, "name": "Kylarslang", artNo: "Ej angiven", car: "Mercedes Sprinter mm", stock: 1, shelf: "Ej angiven", price: 0, comment: "" },
+        { id: 171, "name": "Bränslepump", artNo: "GRJ235", car: "Volvo V40", stock: 1, shelf: "A1", price: 0, comment: "Bränslesystem" },
+        { id: 172, "name": "Fönsterhiss Knappsats", artNo: "98026370ZD", car: "Peugeot 508", stock: 1, shelf: "A1", price: 0, comment: "V Fram passar flera modeller" },
+        { id: 173, "name": "Låskista", artNo: "9135HP", car: "Peugeot 508", stock: 1, shelf: "A1", price: 0, comment: "V Fram passar flera modeller" },
+        { id: 174, "name": "Bromsbelägg", artNo: "ADN14244", car: "Nissan Almera", stock: 1, shelf: "A1", price: 0, comment: "Bak" },
+        { id: 175, "name": "Oljefilter", artNo: "LS892", car: "Citroën Berlingo", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 176, "name": "Genomslagsgummi", artNo: "4056111072432", car: "Kia Ceed", stock: 1, shelf: "A1", price: 0, comment: "Bak" },
+        { id: 177, "name": "Bränslefilter", artNo: "ADV182321", car: "Opel Astra", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 178, "name": "Fönsterhissmotor", artNo: "9688808280", car: "Peugeot 508", stock: 1, shelf: "A1", price: 0, comment: "V Fram" },
+        { id: 179, "name": "Stabilisatorstag", artNo: "VKDS318021", car: "Citroën C3", stock: 1, shelf: "A1", price: 0, comment: "Bak" },
+        { id: 180, "name": "Handbromsvajer", artNo: "K13406", car: "Mercedes Sprinter", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 181, "name": "Stötdämpare", artNo: "2049G", car: "Kia Ceed", stock: 1, shelf: "A1", price: 0, comment: "Fram" },
+        { id: 182, "name": "Luftfilter", artNo: "F202901", car: "Citroën C3", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 183, "name": "Kupéfilter", artNo: "BCF159", car: "Peugeot 308", stock: 1, shelf: "A1", price: 0, comment: "Flera modeller" },
+        { id: 184, "name": "Kupéfilter", artNo: "371324", car: "Peugeot 508", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 185, "name": "Luftfilter", artNo: "ADN12215", car: "Nissan Almera", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 186, "name": "Kupéfilter", artNo: "4210117", car: "Nissan X-Trail", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 187, "name": "Kylare", artNo: "Ej angiven", car: "Universal", stock: 1, shelf: "A1", price: 0, comment: "Elfläkt sitter monterad" },
+        { id: 188, "name": "Länkarm", artNo: "4059191286348", car: "Audi A4 / VW Passat / Skoda Superb", stock: 1, shelf: "A1", price: 0, comment: "Passar GEN B5.56.B7" },
+        { id: 189, "name": "Länkarm", artNo: "807604", car: "Renault Megane", stock: 1, shelf: "A1", price: 0, comment: "Flera modeller" },
+        { id: 190, "name": "Kamkedjesats", artNo: "8033001815290", car: "Nissan Navara", stock: 1, shelf: "A1", price: 0, comment: "Flera modeller" },
+        { id: 191, "name": "Bromsskivor", artNo: "4059191319198", car: "Audi A4", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 192, "name": "Fjäderbenslager", artNo: "Ej angiven", car: "Okänd (Vet ej)", stock: 1, shelf: "A1", price: 0, comment: "Ingen info på delen" },
+        { id: 193, "name": "Krängningshämmarbussning", artNo: "5908281446522", car: "Kia Sorento", stock: 1, shelf: "A1", price: 0, comment: "Flera modeller" },
+        { id: 194, "name": "Airbag Motstånd", artNo: "Ej angiven", car: "Universal", stock: 3, shelf: "A1", price: 0, comment: "3st" },
+        { id: 195, "name": "Drivaxel", artNo: "4019064257286", car: "Volvo V70", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 196, "name": "Krockkudde", artNo: "8686705", car: "Volvo S60", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 197, "name": "Stabilisatorstag", artNo: "1K0411315K", car: "Volkswagen Passat", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 198, "name": "Länkarmsbult", artNo: "00228296", car: "Saab 9-5", stock: 2, shelf: "A1", price: 0, comment: "Antal: 2st" },
+        { id: 199, "name": "Bärarm", artNo: "0524-MZ3R", car: "Volvo S40", stock: 2, shelf: "A1", price: 0, comment: "2 stycken" },
+        { id: 200, "name": "Stötdämpare", artNo: "4010501", car: "Volkswagen Passat", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 201, "name": "Säkringsbox", artNo: "Ej angiven", car: "Citroën Berlingo", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 202, "name": "Bagagefjädrar", artNo: "AE-CT-014", car: "Citroën C4", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 203, "name": "Bromsbelägg", artNo: "1K0698151", car: "Volkswagen Passat", stock: 1, shelf: "A1", price: 0, comment: "Bara 2st belägg" },
+        { id: 204, "name": "Stabilisatorstag", artNo: "C1 PLATTFORMEN", car: "Volvo S40", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 205, "name": "Oljefilter", artNo: "03G115466", car: "Audi A4", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 206, "name": "Batterisäkringsdosa", artNo: "Ej angiven", car: "Citroën Berlingo", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 207, "name": "Extraljusrelä", artNo: "160477", car: "Universal", stock: 1, shelf: "A1", price: 0, comment: "100 Ampere" },
+        { id: 208, "name": "Styrenhet Airbag", artNo: "21658440", car: "Volvo V90", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 209, "name": "Värmeelement", artNo: "1313327", car: "Volvo S40", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 210, "name": "Avgasklammer", artNo: "Ej angiven", car: "Universal", stock: 6, shelf: "A1", price: 0, comment: "2st 64mm, 1st 54mm, 2st 58mm, 1st 45mm" },
+        { id: 211, "name": "Avgas skarvmuff", artNo: "Ej angiven", car: "Universal", stock: 1, shelf: "A1", price: 0, comment: "100x55x59,5" },
+        { id: 212, "name": "Kupévärmare", artNo: "Ej angiven", car: "Biltema Universal", stock: 1, shelf: "A1", price: 0, comment: "1st Biltema" },
+        { id: 213, "name": "Oljeplugg", artNo: "Ej angiven", car: "Universal", stock: 1, shelf: "A1", price: 0, comment: "Ny" },
+        { id: 214, "name": "Tempmätare", artNo: "Ej angiven", car: "Universal", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 215, "name": "Pluskabel batteri", artNo: "31376606", car: "Volvo V70", stock: 1, shelf: "A1", price: 0, comment: "Volvo original" },
+        { id: 216, "name": "Oljetryckssats", artNo: "N1751", car: "Saab 9-3 / 9-5", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 217, "name": "Luftfilter", artNo: "8A0004", car: "Volkswagen Passat", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 218, "name": "Luftmassemätare", artNo: "19207202", car: "Chevrolet Silverado", stock: 1, shelf: "A1", price: 0, comment: "" },
+        { id: 219, "name": "Kamaxelgivare", artNo: "0232101031", car: "Volkswagen / Audi A4", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 220, "name": "Handbromsvajer", artNo: "30793828", car: "Volvo XC90", stock: 1, shelf: "A1", price: 0, comment: "Passar flera modeller" },
+        { id: 221, "name": "Bromsok", artNo: "ZFMZ-011", car: "Mazda", stock: 1, shelf: "A1", price: 0, comment: "Osäker på passningsinfo, forska på artnr" },
+        { id: 222, "name": "Rattaxelknut", artNo: "skk-pe-002", car: "Citroën Berlingo", stock: 1, shelf: "A1", price: 0, comment: "Flera modeller" }
     ];
+
+    let inventory = JSON.parse(localStorage.getItem('garagehub_inventory')) || defaultData;
 
     function saveToStorage() {
         localStorage.setItem('garagehub_inventory', JSON.stringify(inventory));
@@ -387,6 +521,7 @@
     // LÄGG TILL NY DEL
     function addNewPart() {
         const name = document.getElementById('partName').value.trim();
+        const artNo = document.getElementById('partArtNo').value.trim() || 'Ej angiven';
         const car = document.getElementById('partCar').value.trim();
         const stock = parseInt(document.getElementById('partStock').value) || 1;
         const shelf = document.getElementById('partShelf').value.trim() || 'Ej angiven';
@@ -401,6 +536,7 @@
         const newPart = {
             id: Date.now(),
             name: name,
+            artNo: artNo,
             car: car,
             stock: stock,
             shelf: shelf,
@@ -414,6 +550,7 @@
 
         // Rensa formulär
         document.getElementById('partName').value = '';
+        document.getElementById('partArtNo').value = '';
         document.getElementById('partCar').value = '';
         document.getElementById('partComment').value = '';
         
@@ -436,7 +573,9 @@
         const grouped = {};
 
         inventory.forEach(item => {
+            const artNoStr = item.artNo ? item.artNo.toString().toLowerCase() : '';
             if (query && !item.name.toLowerCase().includes(query) && 
+                !artNoStr.includes(query) &&
                 !item.car.toLowerCase().includes(query) && 
                 !item.shelf.toLowerCase().includes(query)) {
                 return;
@@ -468,12 +607,15 @@
                         <div class="part-card">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <strong style="color:#38bdf8;">${part.name}</strong>
-                                <span style="background:rgba(56,189,248,0.15); color:#38bdf8; padding:2px 8px; border-radius:10px; font-size:0.8em;">${part.shelf}</span>
+                                <div>
+                                    <span class="art-badge">Art: ${part.artNo}</span>
+                                    <span style="background:rgba(56,189,248,0.15); color:#38bdf8; padding:2px 8px; border-radius:10px; font-size:0.8em; margin-left:4px;">${part.shelf}</span>
+                                </div>
                             </div>
                             <p style="margin:4px 0; font-size:0.85em; color:var(--subtext);">Passar: ${part.car}</p>
                             ${part.comment ? `<p style="margin:4px 0; font-size:0.8em; color:#e2e8f0; font-style:italic;">💬 ${part.comment}</p>` : ''}
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-size:0.9em;">
-                                <span style="color:#34d399; font-weight:bold;">${part.price} kr</span>
+                                <span style="color:#34d399; font-weight:bold;">${part.price > 0 ? part.price + ' kr' : 'Pris ej satt'}</span>
                                 <span>Antal: <strong>${part.stock} st</strong></span>
                                 <button onclick="deletePart(${part.id})" style="background:none; border:none; color:#fb7185; cursor:pointer;">🗑️ Ta bort</button>
                             </div>
